@@ -13,7 +13,7 @@ const criteria: SpeedAcceptanceCriteria = {
   minCoverage: 0.9,
   minPerClassRecall: 0.8,
   maxRealTimeFalsePositiveRate: 0.1,
-  maxMedianMultiplierAbsolutePercentError: 0.2,
+  maxMedianMultiplierAbsoluteLog2Error: Math.log2(1.2),
   minVariableSegmentAccuracy: 0.8,
 };
 console.log(JSON.stringify(scoreSpeedBenchmark(manifest.cases, predictionFile.predictions, criteria), null, 2));
