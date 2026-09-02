@@ -29,6 +29,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("source", type=Path)
     parser.add_argument("output", type=Path)
     parser.add_argument("--duration", type=float, default=5.116)
+    parser.add_argument("--captions-from-generation", action="store_true")
     return parser.parse_args()
 
 
@@ -54,25 +55,33 @@ def centered_text(
 def main() -> int:
     args = parse_args()
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    overlay_path = args.output.with_name("overlay.png")
-    overlay = Image.new("RGBA", (480, 854), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(overlay)
-    font = ImageFont.truetype(str(FONT), 26)
-    centered_text(draw, HEADER, 454, font, overlay.width)
-    for index, line in enumerate(BODY):
-        centered_text(draw, line, 535 + index * 35, font, overlay.width)
-    overlay.save(overlay_path)
+    inputs = ["-i", str(args.generated)]
+    if args.captions_from_generation:
+        filter_complex = f"[0:v]trim=duration={args.duration},setpts=PTS-STARTPTS[v]"
+        audio_input = "1:a:0"
+    else:
+        overlay_path = args.output.with_name("overlay.png")
+        overlay = Image.new("RGBA", (480, 854), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(overlay)
+        font = ImageFont.truetype(str(FONT), 26)
+        centered_text(draw, HEADER, 454, font, overlay.width)
+        for index, line in enumerate(BODY):
+            centered_text(draw, line, 535 + index * 35, font, overlay.width)
+        overlay.save(overlay_path)
+        inputs.extend(["-loop", "1", "-i", str(overlay_path)])
+        filter_complex = (
+            f"[0:v]trim=duration={args.duration},setpts=PTS-STARTPTS[base];"
+            "[base][1:v]overlay=0:0:shortest=1[v]"
+        )
+        audio_input = "2:a:0"
+    inputs.extend(["-i", str(args.source)])
 
     subprocess.run(
         [
             "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-            "-i", str(args.generated),
-            "-loop", "1", "-i", str(overlay_path),
-            "-i", str(args.source),
-            "-filter_complex",
-            f"[0:v]trim=duration={args.duration},setpts=PTS-STARTPTS[base];"
-            "[base][1:v]overlay=0:0:shortest=1[v]",
-            "-map", "[v]", "-map", "2:a:0",
+            *inputs,
+            "-filter_complex", filter_complex,
+            "-map", "[v]", "-map", audio_input,
             "-t", str(args.duration),
             "-c:v", "libx264", "-preset", "medium", "-crf", "18",
             "-pix_fmt", "yuv420p",

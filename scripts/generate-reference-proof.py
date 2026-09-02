@@ -46,6 +46,23 @@ Keep exactly one lifter, one blue incline bench, two identical 105-pound dumbbel
 CONSTRAINTS
 No cuts, transitions, camera move, zoom, reframing, speed ramp, slow motion, time lapse, freeze, reverse, loop, repeated frames, or invented exercise. No barbell, extra dumbbell, changing plate count, floating weights, rubbery motion, hand swaps, duplicated limbs, fused fingers, warped anatomy, changing face, changing hair, changing clothes, disappearing people, teleporting equipment, or impossible physics. Do not generate captions, checklist text, subtitles, foreground typography, logos, watermarks, music, dialogue, or voice. Output picture only; the exact approved text overlay and source audio are added afterward."""
 
+TEXT_PROMPT_SEEDANCE_CAPTIONS = TEXT_PROMPT.replace(
+    "Do not generate captions, checklist text, subtitles, foreground typography, logos, watermarks, music, dialogue, or voice. Output picture only; the exact approved text overlay and source audio are added afterward.",
+    """Render the complete caption block directly inside the generated video. The text must remain visible and unchanged for the full shot. Use bold white sans-serif lettering with a thick black outline, centered in the lower-middle of frame, with generous line spacing and no background box. Spell and punctuate every line exactly as follows, preserving this order and capitalization:
+
+Getting lean is EASY.
+
+Fast till noon.
+Last meal at 8.
+Whole foods only.
+Water only.
+10-12k steps.
+Gym 4 times a week.
+7-9 hrs sleep.
+
+The heading sits above the seven-line list with a small gap. Keep the entire block legible, stable, uncropped, and clear of the lifter's face and dumbbells. Do not add, remove, reword, duplicate, animate, morph, or misspell any character. Do not generate any other foreground typography, subtitles, logos, watermarks, music, dialogue, or voice. The approved source audio is added afterward.""",
+)
+
 
 def atomic_json(path: Path, value: dict[str, Any]) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
@@ -101,9 +118,15 @@ def is_content_policy_rejection(error: Exception) -> bool:
     )
 
 
+def generation_prompt(args: argparse.Namespace) -> str:
+    if args.generation_mode == "reference":
+        return REFERENCE_PROMPT
+    return TEXT_PROMPT_SEEDANCE_CAPTIONS if args.caption_mode == "seedance" else TEXT_PROMPT
+
+
 def build_spec(args: argparse.Namespace, source_hash: str) -> dict[str, Any]:
     model = TEXT_MODEL if args.generation_mode == "text" else REFERENCE_MODEL
-    prompt = TEXT_PROMPT if args.generation_mode == "text" else REFERENCE_PROMPT
+    prompt = generation_prompt(args)
     spec = {
         "schemaVersion": "0.2.0",
         "sourceContentSha256": source_hash,
@@ -121,12 +144,11 @@ def build_spec(args: argparse.Namespace, source_hash: str) -> dict[str, Any]:
         "resolution": args.resolution,
         "aspectRatio": "9:16",
         "generatedAudio": False,
-        "finishing": [
-            f"trim_to_{args.final_duration_ms}ms",
-            "restore_attested_source_audio",
-            "render_exact_text_overlay",
-        ],
+        "captionMode": args.caption_mode,
+        "finishing": [f"trim_to_{args.final_duration_ms}ms", "restore_attested_source_audio"],
     }
+    if args.caption_mode == "deterministic":
+        spec["finishing"].append("render_exact_text_overlay")
     if args.generation_mode == "text":
         spec["generationPromptSha256"] = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
     return spec
@@ -161,6 +183,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--final-duration-ms", type=int, default=5116)
     parser.add_argument("--resolution", choices=sorted(DIMENSIONS), default="480p")
     parser.add_argument("--generation-mode", choices=("reference", "text"), default="reference")
+    parser.add_argument("--caption-mode", choices=("deterministic", "seedance"), default="deterministic")
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -220,7 +243,7 @@ def main() -> int:
         import fal_client
 
         client = fal_client.SyncClient(key=vault_secret("fal-key"))
-        prompt = TEXT_PROMPT if args.generation_mode == "text" else REFERENCE_PROMPT
+        prompt = generation_prompt(args)
         model = spec["internalRoute"]
         arguments = {
             "prompt": prompt,
