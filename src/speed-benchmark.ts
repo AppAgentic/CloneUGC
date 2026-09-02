@@ -34,7 +34,7 @@ export interface SpeedAcceptanceCriteria {
   minCoverage: number;
   minPerClassRecall: number;
   maxRealTimeFalsePositiveRate: number;
-  maxMedianMultiplierAbsoluteLog2Error: number;
+  maxMedianMultiplierAbsolutePercentError: number;
   minVariableSegmentAccuracy: number;
 }
 
@@ -45,7 +45,7 @@ export interface SpeedBenchmarkScore {
   classAccuracy: number;
   perClassRecall: Partial<Record<PlaybackRateClass, number>>;
   realTimeFalsePositiveRate: number;
-  medianMultiplierAbsoluteLog2Error: number | null;
+  medianMultiplierAbsolutePercentError: number | null;
   variableSegmentAccuracy: number | null;
   passed: boolean;
   failures: string[];
@@ -137,7 +137,7 @@ export function scoreSpeedBenchmark(
   const multiplierErrors = cases.flatMap((item) => {
     const expected = item.expectedMultiplier;
     const predicted = predictionById.get(item.id)?.estimatedMultiplier;
-    return expected === undefined || predicted === undefined ? [] : [Math.abs(Math.log2(predicted / expected))];
+    return expected === undefined || predicted === undefined ? [] : [Math.abs(predicted - expected) / expected];
   });
 
   let variableSegmentCorrect = 0;
@@ -162,7 +162,7 @@ export function scoreSpeedBenchmark(
     classAccuracy: ratio(correct.length, committed.length),
     perClassRecall,
     realTimeFalsePositiveRate: ratio(falsePositiveRealTime.length, realTime.length),
-    medianMultiplierAbsoluteLog2Error: median(multiplierErrors),
+    medianMultiplierAbsolutePercentError: median(multiplierErrors),
     variableSegmentAccuracy: variableSegmentTotal === 0 ? null : ratio(variableSegmentCorrect, variableSegmentTotal),
   };
   const failures: string[] = [];
@@ -172,7 +172,7 @@ export function scoreSpeedBenchmark(
     if (recall < criteria.minPerClassRecall) failures.push(`${className} recall below gate`);
   }
   if (score.realTimeFalsePositiveRate > criteria.maxRealTimeFalsePositiveRate) failures.push("real-time false-positive rate above gate");
-  if (score.medianMultiplierAbsoluteLog2Error === null || score.medianMultiplierAbsoluteLog2Error > criteria.maxMedianMultiplierAbsoluteLog2Error) {
+  if (score.medianMultiplierAbsolutePercentError === null || score.medianMultiplierAbsolutePercentError > criteria.maxMedianMultiplierAbsolutePercentError) {
     failures.push("multiplier error above gate or unmeasured");
   }
   if (score.variableSegmentAccuracy !== null && score.variableSegmentAccuracy < criteria.minVariableSegmentAccuracy) {

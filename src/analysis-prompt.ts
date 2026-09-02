@@ -1,13 +1,5 @@
 export const SOURCE_FORENSICS_PROMPT_VERSION = "analysis-v4";
 
-export const TEMPORAL_OBSERVER_PROMPT_VERSION = "temporal-observer-v1";
-
-export const TEMPORAL_OBSERVER_PROMPT = `Observe temporal events in the complete inspection video. Do not classify playback speed, estimate a speed multiplier, or decide whether motion looks natural.
-
-Return only directly visible event intervals. For each event include: id, type, clockId, inspectionStartMs, inspectionEndMs, confidence, directlyObserved, and a short description. Type must be exactly one of blink, gesture, gait_step, action_cycle, object_fall, physical_settling, camera_tremor, speech_phrase, mechanical_cycle, or other. Prefer events lasting at least one second in the inspection timeline: full gestures, gait steps or traversals, action cycles, object release-to-impact, physical settling, speech phrases, and mechanical cycles. Blinks and other sub-second micro-events are allowed only when their onset and offset are both visibly resolved.
-
-Use different clockId values for physically independent scene layers or mechanisms. Do not split one action into multiple independent clocks. Do not use nominal FPS, editing energy, or a speed verdict as evidence. If an event boundary is hidden, sampled too coarsely, or inferred rather than seen, mark directlyObserved false. Return an empty event list when no useful event can be measured.`;
-
 export const SOURCE_FORENSICS_PROMPT = `Analyze the complete reference video for reconstruction evidence. Return structured observations with normalized and original timestamps, confidence, and direct-observation versus inference labels.
 
 Required timeline analysis:

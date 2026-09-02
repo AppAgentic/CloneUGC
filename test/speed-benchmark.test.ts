@@ -20,7 +20,7 @@ const criteria: SpeedAcceptanceCriteria = {
   minCoverage: 0.9,
   minPerClassRecall: 0.8,
   maxRealTimeFalsePositiveRate: 0.1,
-  maxMedianMultiplierAbsoluteLog2Error: Math.log2(1.2),
+  maxMedianMultiplierAbsolutePercentError: 0.2,
   minVariableSegmentAccuracy: 0.8,
 };
 
@@ -43,7 +43,7 @@ test("scores class, coverage, multiplier, false-positive, and variable-segment g
   assert.equal(score.classAccuracy, 1);
   assert.equal(score.realTimeFalsePositiveRate, 0);
   assert.equal(score.variableSegmentAccuracy, 1);
-  assert.ok((score.medianMultiplierAbsoluteLog2Error ?? 1) <= Math.log2(1.12));
+  assert.ok((score.medianMultiplierAbsolutePercentError ?? 1) <= 0.1);
 });
 
 test("does not let abstentions or real-time false alarms hide behind accuracy", () => {
@@ -57,7 +57,7 @@ test("does not let abstentions or real-time false alarms hide behind accuracy", 
   assert.equal(score.passed, false);
   assert.equal(score.coverage, 0.5);
   assert.equal(score.realTimeFalsePositiveRate, 1);
-  assert.ok((score.medianMultiplierAbsoluteLog2Error ?? 0) > Math.log2(1.2));
+  assert.ok((score.medianMultiplierAbsolutePercentError ?? 0) > 0.2);
   assert.match(score.failures.join("\n"), /coverage|real-time|slowed_down|variable/);
 });
 
