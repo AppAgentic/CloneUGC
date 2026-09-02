@@ -3,7 +3,7 @@ import test from "node:test";
 import { SOURCE_FORENSICS_PROMPT, SOURCE_FORENSICS_PROMPT_VERSION } from "../src/analysis-prompt.ts";
 
 test("source-forensics prompt requires playback-rate and edit-segment analysis", () => {
-  assert.equal(SOURCE_FORENSICS_PROMPT_VERSION, "analysis-v3");
+  assert.equal(SOURCE_FORENSICS_PROMPT_VERSION, "analysis-v4");
   for (const required of [
     "real_time, sped_up, slowed_down, variable, or unknown",
     "startMs, endMs, durationMs",
@@ -11,8 +11,10 @@ test("source-forensics prompt requires playback-rate and edit-segment analysis",
     "loop points",
     "motion blur",
     "audio pitch/cadence",
-    "complete and partial cycles",
-    "background person or object",
+    "two independent temporal anchors",
+    "Do not require a repeated action",
+    "plausible natural-duration range",
+    "Return unknown when fewer than two useful anchors exist",
     "60 fps versus 24 fps",
   ]) {
     assert.match(SOURCE_FORENSICS_PROMPT, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
