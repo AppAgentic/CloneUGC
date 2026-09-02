@@ -6,8 +6,6 @@
   "packageManager": "pnpm@10.33.1",
   "scripts": {
     "benchmark:sample": "node --experimental-strip-types scripts/score-analysis.ts fixtures/benchmark/sample-analysis-case.json",
-    "benchmark:speed:build": "python3 scripts/build-speed-corpus.py",
-    "benchmark:speed:score": "node --experimental-strip-types scripts/score-speed.ts",
     "check": "pnpm typecheck && pnpm test && pnpm benchmark:sample",
     "test": "node --experimental-strip-types --test test/*.test.ts",
     "typecheck": "tsc --noEmit"
