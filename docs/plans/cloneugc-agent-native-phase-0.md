@@ -48,6 +48,23 @@ The first durable schema should include:
 
 Each revision is immutable and content-addressed. Generation estimates and approvals bind to the exact revision hash.
 
+### Gemini video-understanding strategy
+
+Use Gemini Agentic Video through the Files and Interactions APIs as the first forensic-analysis provider. The shared adapter is currently live on the exact model `gemini-3.7-flash`; Google's current guide also lists `gemini-3.8-flash`, and a same-day analysis-only canary verified that it supports the required Agentic Video contract. Before the corpus analysis bake-off, compare 3.7 and 3.8 on one permission-safe calibration clip using identical prompts and a blind annotation, then pin one exact model identifier across every lane and repeat. Never use a moving model alias or mix models inside the corpus benchmark. Keep processing mode explicit and persist the model, mode, latency, token breakdown, file provenance, interaction lineage, prompt version, and evidence timestamps with every candidate Fidelity Map.
+
+For CloneUGC's short references, agentic processing is a targeted semantic precision pass rather than a blanket replacement for static inspection:
+
+1. Normalize the analysis copy to a constant frame rate while preserving the original timebase mapping. Run deterministic media probes, scene detection, OCR, and audio inspection first. Hard-cut timestamps and measured media properties come from these probes, with both normalized frame index and original-source timestamp retained.
+2. Run a static broad pass to inventory the complete clip: shots, subjects, objects, text, audio, environment, and coarse beats. Benchmark default and higher static sampling rates because a short clip may get cheaper frame coverage without an agentic loop.
+3. Escalate focused questions to Agentic Video for split-second gestures, periodic or fast motion, counting, ambiguous transitions, and the CloneUGC hypotheses that it may improve action causality, occlusion, and continuity-conflict analysis. Gemini labels and interprets detected cuts; it is not the timestamp system of record for unambiguous hard cuts.
+4. Generate follow-up questions from a versioned policy over unresolved evidence categories. A human who has watched the clip may not author lane-specific prompts.
+5. Reuse the uploaded file and stateful interaction for follow-up questions instead of uploading or re-tokenizing the source independently for every dimension.
+6. Persist the structured provider response and processing steps as a private evidence artifact before producing a bounded human-readable summary. The current shared CLI truncates summaries at 6,000 UTF-8 characters, so its displayed JSON summary is useful for inspection but is not the durable Fidelity Map source.
+7. Merge the structured outputs into an evidence graph before compiling the Fidelity Map. Every accepted claim must retain a timestamp or interval, normalized frame index where applicable, confidence, analysis mode, and source prompt. Conflicts and missing evidence remain explicit; disputed claims cannot reach the compiler.
+8. If Agentic Video times out, is safety-blocked, exhausts its budget, or loses its interaction state, preserve the static map with an explicit degraded-analysis reason. An expired file may be re-uploaded under a new lineage event; it must never be silently treated as the same provider interaction.
+
+This routing is deliberate. Google's September 2026 Agentic Video release adds dynamic timeline navigation, adaptive frame rate and resolution, transcript/audio inspection, sub-second moment retrieval, anomaly detection, and action/object counting. Those published capabilities map directly to reconstruction forensics. Improved causality, occlusion, and continuity analysis remain CloneUGC hypotheses to test, while static processing remains faster and cheaper for broad coverage of a short clip.
+
 ## Phase 0: Prove The Compiler Before The Platform
 
 ### Corpus
@@ -58,6 +75,22 @@ Use three permission-safe 8–12 second vertical references:
 2. movement or dance with meaningful camera/blocking;
 3. natural product integration.
 
+The first benchmark clip must still satisfy the rights and duration rules. A public social link may be analyzed to test ingestion and understanding, but it is not eligible for paid recreation until the user attests to sufficient rights. Clips longer than the product's 30-second limit must be rejected or physically trimmed to an explicitly selected permission-safe excerpt before any Agentic Video or generation request. The excerpt retains its offset into the original source.
+
+### Analysis bake-off
+
+Before seeing any model output or spending on generation, create a blind human annotation for each reference. The annotation must include cut/transition intervals, action events, repeated-action counts, continuity facts, on-screen text, audio/dialogue events, and rights-risk items. Then compare:
+
+- **Static default:** deterministic probes plus one broad pass with the pinned Gemini Flash model at the default sampling rate;
+- **Static high-FPS:** the same probes and prompt with static sampling at 5 FPS and 10 FPS, subject to the same resolution and cost accounting;
+- **Hybrid:** the winning static configuration plus at most two policy-generated Agentic Video follow-ups, merged through the evidence graph.
+
+Run each model lane at least three times per clip and report claim stability. Measure shot-boundary precision/recall at ±100, ±250, and ±500 ms; mean absolute timing error; action-event timing error; Preserve/Change/Exclude schema completeness; continuity-fact precision/recall; rights-risk recall; unsupported-claim rate; latency; input/output/thought/tool-use tokens; and estimated analysis cost. Treat gradual transitions as annotated intervals rather than point events. An unsupported claim is one lacking a valid evidence interval/frame or contradicted by the blind annotation after adjudication.
+
+Retain the exact model identifier, prompts, raw provider interactions, deterministic-probe outputs, hashes, and run IDs so disagreements can be audited. Provisional interactive budgets are no more than two agentic follow-ups, $0.05 total analysis cost per reference, and 45 seconds p95 end-to-end analysis latency; Phase 0 replaces these with measured ceilings before product scaffolding.
+
+Select the hybrid lane only if its sub-second motion, causality, counting, occlusion, or continuity evidence improves against the human annotation without increasing unsupported claims or breaching the budgets. If it does not, keep the winning static configuration for that reference family and route Agentic Video only when a user's question requires it. Three reference clips remain a deliberately thin thesis test, not a production-quality claim.
+
 ### Comparison
 
 For each reference, produce two otherwise controlled variants:
@@ -67,9 +100,11 @@ For each reference, produce two otherwise controlled variants:
 
 Start at 480p to test composition and reference weighting cheaply. Re-run only winning seeds at 720p. Preserve provider request IDs, seeds, exact prompts, source/spec hashes, cost, duration, and outputs.
 
+Freeze one selected analyzer configuration and its evidence-backed Fidelity Map before the generation comparison. The control lane receives the source plus concise change request; the compiler lane additionally receives the compiled Fidelity Map by definition. Do not vary analyzer configuration between generation lanes, because that would confound analyzer quality with the intended raw-request-versus-compiler test.
+
 ### Blind evaluation
 
-Score each pair without revealing which lane produced it:
+Use at least three scorers and score each pair without revealing which lane produced it. A clip-level compiler win requires a majority preference plus a higher median rubric score with no rights/safety regression. Score:
 
 - shot and beat timing;
 - camera geometry and movement;
@@ -85,7 +120,7 @@ Score each pair without revealing which lane produced it:
 
 Proceed to product scaffolding only if:
 
-- the compiler lane wins consistently across the three reference families;
+- the compiler lane wins at clip level across all three reference families;
 - at least one output is commercially usable without hand-written source-specific prompting;
 - failures can be attributed to a repairable Fidelity Map dimension rather than opaque whole-prompt changes;
 - measured generation cost supports a plausible paid workflow.
@@ -168,11 +203,13 @@ An optional MCP Apps UI can show inline job/approval cards and a fullscreen sour
 - Detect and exclude logos, watermarks, private people, minors, licensed music, and verbatim dialogue unless authorized.
 - Preserve source and output provenance, prompt/spec lineage, and generation metadata.
 - Keep publishing external and human-approved in early phases.
+- Before sending user media to Gemini, approve provider data-use terms for the selected paid or enterprise tier, define a bounded retention period, and keep provider file plus interaction handles workspace-scoped.
+- Delete provider-side files and invalidate cached handles on user deletion, rights revocation, retention expiry, or failed ingestion. Never reuse a file or interaction handle across workspaces.
 
 ## Existing Infrastructure To Reuse Deliberately
 
 - Mobile Ad Agent: paid generation adapter patterns, cost estimation, Gemini video QA, and deterministic proof/caption finishing.
-- Mission Control: video understanding and source-analysis orchestration patterns.
+- Mission Control: the shared `mc video-analyze` Gemini 3.7 Flash path, static-first/intent-driven Agentic Video routing, streamed uploads, provider-expiry caching, stateful follow-ups, bounded concurrency and agentic budgets, and persisted provenance.
 - Shared render architecture: durable leases, atomic publishing, deterministic finishing, and output manifests.
 - Existing MCP/OAuth work: WorkOS/AuthKit identity, Streamable HTTP MCP, revocation, audit, and approval contracts.
 
@@ -192,4 +229,4 @@ Reuse should happen through extracted contracts or shared packages. Do not impor
 
 ## Phase 0 Next Action
 
-Obtain one permission-safe reference clip and one requested change from Joe. Freeze the benchmark schema and evaluation rubric, then run the first control-versus-compiler pair with full cost and provenance capture.
+Obtain one permission-safe 8–12 second reference clip and one requested change from Joe. First produce its human-audited annotation and run the static-versus-hybrid analysis bake-off. Freeze the winning evidence-backed Fidelity Map, benchmark schema, and evaluation rubric, then run the first control-versus-compiler generation pair with full cost and provenance capture.
