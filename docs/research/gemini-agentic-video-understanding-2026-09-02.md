@@ -38,6 +38,12 @@ For the planned system, deterministic scene detection will be the timestamp syst
 
 Playback tempo and segment duration are separate fidelity dimensions. A source can be a single shot yet still contain a speed ramp, freeze, reverse, or loop; conversely, naturally fast movement is not proof of accelerated playback. The Phase 0 schema therefore records global and per-segment playback-rate classes, observed cues and confidence, while the edit timeline records every segment's exact length and transition type. Deterministic frame/audio cadence evidence constrains the model's semantic judgment. Benchmark reporting pairs segments by chronological overlap and separates playback answer coverage from accuracy, allowing the model to return `unknown` without either hiding uncertainty or earning free correctness.
 
+### Analysis-v2 playback/edit canary
+
+The committed `analysis-v2` prompt was exercised end to end on a second public, analysis-only 5.116-second vertical reference (content hash `dc32ed98…d7581`) using exact model `gemini-3.8-flash` in Agentic Video mode. The response reported the measured 5,116 ms duration, one continuous 5,116 ms segment, zero cuts/transitions/speed ramps, and `real_time` at approximately 1.0x with explicit motion, gait, gravity/settling, audio-pitch, and frame-continuity cues. Provider provenance was 13.627 seconds latency, 7,917 total tokens, and three processing calls/results.
+
+This proves the prompt and shared adapter can populate the new dimension, not that the classification is benchmark-validated. The public source has no recorded rights attestation or blind annotation, and earlier repeated model passes disagreed on fine repetition timing and audio interpretation. Those details remain disputed; the clip cannot select the production lane or enter paid generation.
+
 ## Decision
 
 Do not make Agentic Video the unconditional analyzer for short references. On this short clip, it took about 3.0 times the latency and 2.7 times the total tokens of static processing. Its measured value was producing sub-second cut hypotheses for comparison with the scene detector; its remaining value in fast/periodic motion analysis, causality, counting, and ambiguity repair is a CloneUGC hypothesis, not a Google-backed or locally proven claim.
