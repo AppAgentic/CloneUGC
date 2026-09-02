@@ -1,4 +1,13 @@
+import type { PlaybackRateClass, TransitionType } from "./contracts.ts";
+
 export type AnalysisLane = "static_default" | "static_5fps" | "static_10fps" | "hybrid_agentic";
+
+export interface AnalysisEditSegment {
+  startMs: number;
+  endMs: number;
+  playbackRateClass: PlaybackRateClass;
+  transitionIn: TransitionType;
+}
 
 export interface AnnotationClaim {
   id: string;
@@ -6,13 +15,16 @@ export interface AnnotationClaim {
 }
 
 export interface BlindAnnotation {
-  schemaVersion: "0.1.0";
+  schemaVersion: "0.2.0";
   blindToModelOutputs: true;
   annotatorId: string;
   sourceContentSha256: string;
   normalizedContentSha256: string;
   normalizedFps: number;
   originalOffsetMs: number;
+  durationMs: number;
+  playbackRateClass: PlaybackRateClass;
+  editSegments: AnalysisEditSegment[];
   shotBoundariesMs: number[];
   actionEvents: Array<{ id: string; timeMs: number }>;
   claims: AnnotationClaim[];
@@ -35,6 +47,8 @@ export interface AnalysisRun {
   providerRunId: string;
   evidenceArtifactId: string;
   structuredPayloadArtifactId: string;
+  playbackRateClass: PlaybackRateClass;
+  editSegments: AnalysisEditSegment[];
   shotBoundariesMs: number[];
   actionEvents: Array<{ annotationId: string; timeMs: number }>;
   predictions: AdjudicatedPrediction[];
@@ -64,6 +78,13 @@ export interface RunScore {
   boundary: BoundaryScore[];
   boundaryMaeMs: number | null;
   actionEventMaeMs: number | null;
+  playbackRateCorrect: boolean | null;
+  playbackRateCoverage: number | null;
+  editSegmentCountError: number;
+  editSegmentDurationMaeMs: number | null;
+  segmentPlaybackRateAccuracy: number | null;
+  segmentPlaybackRateCoverage: number;
+  transitionTypeAccuracy: number;
   claimPrecision: number;
   claimRecall: number;
   rightsRiskRecall: number;
@@ -109,14 +130,18 @@ function validateTimes(times: readonly number[], name: string): void {
 
 function validateAnnotation(annotation: BlindAnnotation): void {
   assert(annotation !== null && typeof annotation === "object", "annotation must be an object");
-  assert(annotation.schemaVersion === "0.1.0" && annotation.blindToModelOutputs === true, "annotation must be versioned and blind to model outputs");
+  assert(annotation.schemaVersion === "0.2.0" && annotation.blindToModelOutputs === true, "annotation must be versioned and blind to model outputs");
   assert(typeof annotation.annotatorId === "string" && annotation.annotatorId.length > 0, "annotation requires an annotator id");
   assertSha256(annotation.sourceContentSha256, "annotation sourceContentSha256");
   assertSha256(annotation.normalizedContentSha256, "annotation normalizedContentSha256");
   assertFiniteNonNegative(annotation.normalizedFps, "annotation normalizedFps");
   assert(annotation.normalizedFps > 0, "annotation normalizedFps must be positive");
   assert(Number.isInteger(annotation.originalOffsetMs) && annotation.originalOffsetMs >= 0, "annotation originalOffsetMs must be a non-negative integer");
+  assert(Number.isInteger(annotation.durationMs) && annotation.durationMs > 0 && annotation.durationMs <= 30_000, "annotation durationMs must be an integer from 1 to 30000");
+  validatePlaybackRateClass(annotation.playbackRateClass, "annotation playback rate");
+  validateEditSegments(annotation.editSegments, annotation.durationMs, "annotation");
   validateTimes(annotation.shotBoundariesMs, "annotation shot boundaries");
+  assert(annotation.shotBoundariesMs.every((time) => time > 0 && time < annotation.durationMs), "annotation shot boundaries must be internal to the clip");
   assert(Array.isArray(annotation.actionEvents), "annotation action events must be an array");
   assert(Array.isArray(annotation.claims), "annotation claims must be an array");
   const actionIds = new Set<string>();
@@ -133,6 +158,27 @@ function validateAnnotation(annotation: BlindAnnotation): void {
     claimIds.add(claim.id);
     assert(["action", "continuity", "text", "audio", "rights_risk"].includes(claim.category), `annotation claim ${claim.id} has an invalid category`);
   }
+}
+
+const playbackRateClasses: PlaybackRateClass[] = ["real_time", "sped_up", "slowed_down", "variable", "unknown"];
+const transitionTypes: TransitionType[] = ["none", "hard_cut", "dissolve", "fade", "wipe", "match_cut", "other"];
+
+function validatePlaybackRateClass(value: PlaybackRateClass, name: string): void {
+  assert(playbackRateClasses.includes(value), `${name} has an invalid classification`);
+}
+
+function validateEditSegments(segments: readonly AnalysisEditSegment[], durationMs: number, owner: string): void {
+  assert(Array.isArray(segments) && segments.length > 0, `${owner} requires edit segments`);
+  let expectedStart = 0;
+  for (const [index, segment] of segments.entries()) {
+    assert(Number.isInteger(segment.startMs) && Number.isInteger(segment.endMs), `${owner} edit segment timestamps must be integers`);
+    assert(segment.startMs === expectedStart && segment.endMs > segment.startMs, `${owner} edit segments must be positive, ordered, and contiguous`);
+    validatePlaybackRateClass(segment.playbackRateClass, `${owner} edit segment playback rate`);
+    assert(transitionTypes.includes(segment.transitionIn), `${owner} edit segment has an invalid transition`);
+    assert(index !== 0 || segment.transitionIn === "none", `${owner} first edit segment must use transitionIn none`);
+    expectedStart = segment.endMs;
+  }
+  assert(expectedStart === durationMs, `${owner} edit segments must cover the full clip`);
 }
 
 function matchTimeErrors(expected: readonly number[], predicted: readonly number[], toleranceMs: number): number[] {
@@ -163,6 +209,38 @@ function matchTimeErrors(expected: readonly number[], predicted: readonly number
   };
 
   return solve(0, 0).errors;
+}
+
+function matchEditSegments(
+  expected: readonly AnalysisEditSegment[],
+  predicted: readonly AnalysisEditSegment[],
+): Array<{ expectedIndex: number; predictedIndex: number }> {
+  type Match = { pairs: Array<{ expectedIndex: number; predictedIndex: number }>; totalOverlapMs: number };
+  const memo = new Map<string, Match>();
+  const better = (left: Match, right: Match): Match => {
+    if (left.totalOverlapMs !== right.totalOverlapMs) return left.totalOverlapMs > right.totalOverlapMs ? left : right;
+    return left.pairs.length >= right.pairs.length ? left : right;
+  };
+  const solve = (expectedIndex: number, predictedIndex: number): Match => {
+    if (expectedIndex >= expected.length || predictedIndex >= predicted.length) return { pairs: [], totalOverlapMs: 0 };
+    const key = `${expectedIndex}:${predictedIndex}`;
+    const cached = memo.get(key);
+    if (cached !== undefined) return cached;
+    let best = better(solve(expectedIndex + 1, predictedIndex), solve(expectedIndex, predictedIndex + 1));
+    const actual = expected[expectedIndex]!;
+    const guess = predicted[predictedIndex]!;
+    const overlapMs = Math.max(0, Math.min(actual.endMs, guess.endMs) - Math.max(actual.startMs, guess.startMs));
+    if (overlapMs > 0) {
+      const rest = solve(expectedIndex + 1, predictedIndex + 1);
+      best = better(best, {
+        pairs: [{ expectedIndex, predictedIndex }, ...rest.pairs],
+        totalOverlapMs: overlapMs + rest.totalOverlapMs,
+      });
+    }
+    memo.set(key, best);
+    return best;
+  };
+  return solve(0, 0).pairs;
 }
 
 function percentile95(values: readonly number[]): number {
@@ -207,11 +285,40 @@ export function scoreRun(annotation: BlindAnnotation, run: AnalysisRun): RunScor
   const matchedRightsRisks = [...validMatches].filter((id) => rightsRiskIds.has(id)).length;
 
   const boundaryErrors = matchTimeErrors(annotation.shotBoundariesMs, run.shotBoundariesMs, 500);
+  const segmentPairs = matchEditSegments(annotation.editSegments, run.editSegments);
+  const segmentDurationErrors = segmentPairs.map(({ expectedIndex, predictedIndex }) => {
+    const segment = annotation.editSegments[expectedIndex]!;
+    const predicted = run.editSegments[predictedIndex]!;
+    return Math.abs((segment.endMs - segment.startMs) - (predicted.endMs - predicted.startMs));
+  });
+  const knownAnnotationSegments = annotation.editSegments.filter((segment) => segment.playbackRateClass !== "unknown").length;
+  const committedSegmentPairs = segmentPairs.filter(({ expectedIndex, predictedIndex }) => (
+    annotation.editSegments[expectedIndex]!.playbackRateClass !== "unknown"
+      && run.editSegments[predictedIndex]!.playbackRateClass !== "unknown"
+  ));
+  const segmentPlaybackMatches = committedSegmentPairs
+    .filter(({ expectedIndex, predictedIndex }) => annotation.editSegments[expectedIndex]!.playbackRateClass === run.editSegments[predictedIndex]!.playbackRateClass).length;
+  const unmatchedCommittedPredictions = run.editSegments.filter((segment, predictedIndex) => (
+    segment.playbackRateClass !== "unknown" && !segmentPairs.some((pair) => pair.predictedIndex === predictedIndex)
+  )).length;
+  const committedSegmentAnswers = committedSegmentPairs.length + unmatchedCommittedPredictions;
+  const transitionMatches = segmentPairs
+    .filter(({ expectedIndex, predictedIndex }) => annotation.editSegments[expectedIndex]!.transitionIn === run.editSegments[predictedIndex]!.transitionIn).length;
+  const segmentDenominator = Math.max(annotation.editSegments.length, run.editSegments.length);
+  const globalPlaybackScorable = annotation.playbackRateClass !== "unknown";
+  const globalPlaybackCommitted = run.playbackRateClass !== "unknown";
   return {
     runId: run.id,
     boundary,
     boundaryMaeMs: boundaryErrors.length === 0 ? null : boundaryErrors.reduce((sum, error) => sum + error, 0) / boundaryErrors.length,
     actionEventMaeMs: actionErrors.length === 0 ? null : actionErrors.reduce((sum, value) => sum + value, 0) / actionErrors.length,
+    playbackRateCorrect: globalPlaybackScorable && globalPlaybackCommitted ? annotation.playbackRateClass === run.playbackRateClass : null,
+    playbackRateCoverage: globalPlaybackScorable ? (globalPlaybackCommitted ? 1 : 0) : null,
+    editSegmentCountError: Math.abs(annotation.editSegments.length - run.editSegments.length),
+    editSegmentDurationMaeMs: segmentDurationErrors.length === 0 ? null : segmentDurationErrors.reduce((sum, value) => sum + value, 0) / segmentDurationErrors.length,
+    segmentPlaybackRateAccuracy: committedSegmentAnswers === 0 ? null : ratio(segmentPlaybackMatches, committedSegmentAnswers),
+    segmentPlaybackRateCoverage: ratio(committedSegmentPairs.length, knownAnnotationSegments),
+    transitionTypeAccuracy: ratio(transitionMatches, segmentDenominator),
     claimPrecision: ratio(validMatches.size, run.predictions.length),
     claimRecall: ratio(validMatches.size, annotation.claims.length),
     rightsRiskRecall: ratio(matchedRightsRisks, rightsRiskIds.size),
@@ -244,6 +351,7 @@ export function scoreLane(annotation: BlindAnnotation, runs: readonly AnalysisRu
     assert(typeof run.exactModel === "string" && run.exactModel.length > 0, "run requires an exact model");
     assert(typeof run.promptVersion === "string" && run.promptVersion.length > 0, "run requires a prompt version");
     if (!Array.isArray(run.shotBoundariesMs)) throw new Error("run shot boundaries must be an array");
+    if (!Array.isArray(run.editSegments)) throw new Error("run edit segments must be an array");
     if (!Array.isArray(run.actionEvents)) throw new Error("run action events must be an array");
     if (!Array.isArray(run.predictions)) throw new Error("run predictions must be an array");
     if (run.lane !== first.lane || run.exactModel !== first.exactModel || run.promptVersion !== first.promptVersion) {
@@ -251,6 +359,8 @@ export function scoreLane(annotation: BlindAnnotation, runs: readonly AnalysisRu
     }
     if (run.sourceContentSha256 !== annotation.sourceContentSha256) throw new Error("lane contains a different source hash");
     if (run.normalizedContentSha256 !== annotation.normalizedContentSha256) throw new Error("lane contains a different normalized hash");
+    validatePlaybackRateClass(run.playbackRateClass, "run playback rate");
+    validateEditSegments(run.editSegments, annotation.durationMs, "run");
     if (run.exactModel.endsWith("-latest")) throw new Error("moving model aliases are forbidden");
     if (run.providerRunId.length === 0 || run.evidenceArtifactId.length === 0 || run.structuredPayloadArtifactId.length === 0) {
       throw new Error("lane run is missing evidence provenance");
@@ -305,7 +415,7 @@ export function scoreLane(annotation: BlindAnnotation, runs: readonly AnalysisRu
 }
 
 export interface BenchmarkCase {
-  schemaVersion: "0.1.0";
+  schemaVersion: "0.2.0";
   annotation: BlindAnnotation;
   budget: AnalysisBudget;
   runs: AnalysisRun[];
@@ -313,7 +423,7 @@ export interface BenchmarkCase {
 
 export function scoreBenchmarkCase(input: BenchmarkCase): LaneScore[] {
   assert(input !== null && typeof input === "object", "benchmark case must be an object");
-  if (input.schemaVersion !== "0.1.0") throw new Error("unsupported benchmark case version");
+  if (input.schemaVersion !== "0.2.0") throw new Error("unsupported benchmark case version");
   validateAnnotation(input.annotation);
   assert(Array.isArray(input.runs), "benchmark case runs must be an array");
   const groups = new Map<string, AnalysisRun[]>();

@@ -13,4 +13,4 @@ pnpm install
 pnpm check
 ```
 
-`pnpm check` type-checks the contracts, runs the deterministic scoring tests, and scores the permission-safe synthetic sample manifest. Live provider calls and paid generation are intentionally outside this harness.
+`pnpm check` type-checks the contracts, runs the deterministic scoring tests, and scores the permission-safe synthetic sample manifest. The harness treats cut timing, exact segment lengths, transition type, and global/per-segment playback speed as first-class fidelity evidence. Live provider calls and paid generation are intentionally outside this harness.

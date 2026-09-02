@@ -1,13 +1,21 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.2.0",
   "annotation": {
-    "schemaVersion": "0.1.0",
+    "schemaVersion": "0.2.0",
     "blindToModelOutputs": true,
     "annotatorId": "synthetic-fixture",
     "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
     "normalizedFps": 30,
     "originalOffsetMs": 0,
+    "durationMs": 10000,
+    "playbackRateClass": "variable",
+    "editSegments": [
+      { "startMs": 0, "endMs": 2000, "playbackRateClass": "real_time", "transitionIn": "none" },
+      { "startMs": 2000, "endMs": 5000, "playbackRateClass": "real_time", "transitionIn": "hard_cut" },
+      { "startMs": 5000, "endMs": 8000, "playbackRateClass": "sped_up", "transitionIn": "hard_cut" },
+      { "startMs": 8000, "endMs": 10000, "playbackRateClass": "real_time", "transitionIn": "hard_cut" }
+    ],
     "shotBoundariesMs": [2000, 5000, 8000],
     "actionEvents": [{ "id": "action-1", "timeMs": 3000 }],
     "claims": [
@@ -28,10 +36,17 @@
       "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "exactModel": "gemini-3.8-flash",
-      "promptVersion": "analysis-v1",
+      "promptVersion": "analysis-v2",
       "providerRunId": "synthetic-provider-1",
       "evidenceArtifactId": "synthetic-evidence-1",
       "structuredPayloadArtifactId": "synthetic-payload-1",
+      "playbackRateClass": "variable",
+      "editSegments": [
+        { "startMs": 0, "endMs": 2000, "playbackRateClass": "real_time", "transitionIn": "none" },
+        { "startMs": 2000, "endMs": 5000, "playbackRateClass": "real_time", "transitionIn": "hard_cut" },
+        { "startMs": 5000, "endMs": 8000, "playbackRateClass": "sped_up", "transitionIn": "hard_cut" },
+        { "startMs": 8000, "endMs": 10000, "playbackRateClass": "real_time", "transitionIn": "hard_cut" }
+      ],
       "shotBoundariesMs": [2000, 5000, 8000],
       "actionEvents": [{ "annotationId": "action-1", "timeMs": 3100 }],
       "predictions": [
@@ -50,10 +65,17 @@
       "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "exactModel": "gemini-3.8-flash",
-      "promptVersion": "analysis-v1",
+      "promptVersion": "analysis-v2",
       "providerRunId": "synthetic-provider-2",
       "evidenceArtifactId": "synthetic-evidence-2",
       "structuredPayloadArtifactId": "synthetic-payload-2",
+      "playbackRateClass": "variable",
+      "editSegments": [
+        { "startMs": 0, "endMs": 2000, "playbackRateClass": "real_time", "transitionIn": "none" },
+        { "startMs": 2000, "endMs": 5000, "playbackRateClass": "real_time", "transitionIn": "hard_cut" },
+        { "startMs": 5000, "endMs": 8000, "playbackRateClass": "sped_up", "transitionIn": "hard_cut" },
+        { "startMs": 8000, "endMs": 10000, "playbackRateClass": "real_time", "transitionIn": "hard_cut" }
+      ],
       "shotBoundariesMs": [2000, 5000, 8000],
       "actionEvents": [{ "annotationId": "action-1", "timeMs": 3150 }],
       "predictions": [
@@ -72,10 +94,17 @@
       "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "exactModel": "gemini-3.8-flash",
-      "promptVersion": "analysis-v1",
+      "promptVersion": "analysis-v2",
       "providerRunId": "synthetic-provider-3",
       "evidenceArtifactId": "synthetic-evidence-3",
       "structuredPayloadArtifactId": "synthetic-payload-3",
+      "playbackRateClass": "variable",
+      "editSegments": [
+        { "startMs": 0, "endMs": 2000, "playbackRateClass": "real_time", "transitionIn": "none" },
+        { "startMs": 2000, "endMs": 5000, "playbackRateClass": "real_time", "transitionIn": "hard_cut" },
+        { "startMs": 5000, "endMs": 8000, "playbackRateClass": "sped_up", "transitionIn": "hard_cut" },
+        { "startMs": 8000, "endMs": 10000, "playbackRateClass": "real_time", "transitionIn": "hard_cut" }
+      ],
       "shotBoundariesMs": [2000, 5000, 8000],
       "actionEvents": [{ "annotationId": "action-1", "timeMs": 3050 }],
       "predictions": [

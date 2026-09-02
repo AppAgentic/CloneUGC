@@ -12,6 +12,14 @@ const range = {
   normalizedStartFrame: 0,
   normalizedEndFrame: 30,
 };
+const fullRange = {
+  startMs: 0,
+  endMs: 10_000,
+  originalStartMs: 2_000,
+  originalEndMs: 12_000,
+  normalizedStartFrame: 0,
+  normalizedEndFrame: 300,
+};
 const evidence: EvidenceClaim[] = [{
   id: "e1",
   artifactId: "artifact-1",
@@ -24,7 +32,7 @@ const evidence: EvidenceClaim[] = [{
   range,
 }];
 const map: FidelityMap = {
-  schemaVersion: "0.1.0",
+  schemaVersion: "0.2.0",
   id: "map-1",
   revision: 1,
   sourceAssetId: "source-1",
@@ -32,6 +40,29 @@ const map: FidelityMap = {
   durationMs: 10_000,
   rightsStatus: "owned",
   requestedChange: "Change the shirt to blue.",
+  playback: {
+    classification: "real_time",
+    estimatedMultiplier: 1,
+    confidence: 0.9,
+    cues: ["Natural gravity and repetition cadence"],
+    evidenceIds: ["e1"],
+  },
+  editSegments: [{
+    id: "s1",
+    sourceShotId: "shot-1",
+    range: fullRange,
+    durationMs: 10_000,
+    transitionIn: "none",
+    transitionDurationMs: 0,
+    playback: {
+      classification: "real_time",
+      estimatedMultiplier: 1,
+      confidence: 0.9,
+      cues: ["Natural motion cadence"],
+      evidenceIds: ["e1"],
+    },
+    evidenceIds: ["e1"],
+  }],
   beats: [{ id: "b1", role: "hook", range, description: "Opening action", evidenceIds: ["e1"] }],
   directives: [{ id: "d1", kind: "preserve", description: "Preserve framing", evidenceIds: ["e1"] }],
   risks: [],
@@ -64,7 +95,7 @@ test("evidence from another source cannot enter a Fidelity Map", () => {
 
 test("evidence artifacts require bounded media, exact models, and lossless payloads", () => {
   const artifact: EvidenceArtifact = {
-    schemaVersion: "0.1.0",
+    schemaVersion: "0.2.0",
     id: "artifact-1",
     workspaceId: "workspace-1",
     sourceAssetId: "source-1",
@@ -78,7 +109,7 @@ test("evidence artifacts require bounded media, exact models, and lossless paylo
       exactModel: "gemini-3.8-flash",
       mode: "agentic",
       runId: "run-1",
-      promptVersion: "analysis-v1",
+      promptVersion: "analysis-v2",
       latencyMs: 1_000,
       inputTokens: 100,
       outputTokens: 100,
@@ -95,4 +126,23 @@ test("evidence artifacts require bounded media, exact models, and lossless paylo
     providerRun: { ...artifact.providerRun, exactModel: "gemini-flash-latest" },
   }), /moving model aliases/);
   assert.throws(() => assertEvidenceArtifact({ ...artifact, durationMs: 30_001 }), /1-30 seconds/);
+});
+
+test("edit segments must cover the full timeline with explicit playback evidence", () => {
+  assert.throws(() => assertFidelityMap({
+    ...map,
+    editSegments: [{ ...map.editSegments[0]!, durationMs: 9_999 }],
+  }, evidence), /duration does not match/);
+  assert.throws(() => assertFidelityMap({
+    ...map,
+    playback: { ...map.playback, cues: [] },
+  }, evidence), /at least one observed cue/);
+  assert.throws(() => assertFidelityMap({
+    ...map,
+    playback: { ...map.playback, classification: "sped_up", estimatedMultiplier: 0.5 },
+  }, evidence), /sped-up multiplier must exceed 1x/);
+  assert.throws(() => assertFidelityMap({
+    ...map,
+    playback: { ...map.playback, classification: "variable", estimatedMultiplier: 1.5 },
+  }, evidence), /variable playback cannot use one scalar multiplier/);
 });

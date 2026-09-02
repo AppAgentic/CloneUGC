@@ -4,6 +4,8 @@ export type Milliseconds = number;
 export type EvidenceStatus = "accepted" | "disputed" | "rejected";
 export type AnalysisMode = "deterministic" | "human" | "static" | "agentic";
 export type RightsStatus = "unverified" | "owned" | "licensed" | "other_valid_right";
+export type PlaybackRateClass = "real_time" | "sped_up" | "slowed_down" | "variable" | "unknown";
+export type TransitionType = "none" | "hard_cut" | "dissolve" | "fade" | "wipe" | "match_cut" | "other";
 
 export interface EvidenceRange {
   startMs: Milliseconds;
@@ -30,7 +32,7 @@ export interface ProviderRun {
 }
 
 export interface EvidenceArtifact {
-  schemaVersion: "0.1.0";
+  schemaVersion: "0.2.0";
   id: string;
   workspaceId: string;
   sourceAssetId: string;
@@ -48,7 +50,7 @@ export interface EvidenceClaim {
   id: string;
   artifactId: string;
   sourceContentSha256: string;
-  kind: "shot" | "action" | "continuity" | "text" | "audio" | "risk" | "other";
+  kind: "shot" | "edit" | "playback_rate" | "action" | "continuity" | "text" | "audio" | "risk" | "other";
   statement: string;
   status: EvidenceStatus;
   confidence: number;
@@ -78,8 +80,27 @@ export interface RiskConstraint {
   evidenceIds: string[];
 }
 
+export interface PlaybackRateAssessment {
+  classification: PlaybackRateClass;
+  estimatedMultiplier?: number;
+  confidence: number;
+  cues: string[];
+  evidenceIds: string[];
+}
+
+export interface EditSegment {
+  id: string;
+  sourceShotId: string;
+  range: EvidenceRange;
+  durationMs: Milliseconds;
+  transitionIn: TransitionType;
+  transitionDurationMs: Milliseconds;
+  playback: PlaybackRateAssessment;
+  evidenceIds: string[];
+}
+
 export interface FidelityMap {
-  schemaVersion: "0.1.0";
+  schemaVersion: "0.2.0";
   id: string;
   revision: number;
   parentRevisionHash?: string;
@@ -88,6 +109,8 @@ export interface FidelityMap {
   durationMs: Milliseconds;
   rightsStatus: RightsStatus;
   requestedChange: string;
+  playback: PlaybackRateAssessment;
+  editSegments: EditSegment[];
   beats: FidelityBeat[];
   directives: FidelityDirective[];
   risks: RiskConstraint[];
@@ -112,7 +135,7 @@ function assertRange(range: EvidenceRange, durationMs: number, field: string): v
 }
 
 export function assertEvidenceArtifact(artifact: EvidenceArtifact): void {
-  assert(artifact.schemaVersion === "0.1.0", "unsupported evidence schema version");
+  assert(artifact.schemaVersion === "0.2.0", "unsupported evidence schema version");
   assert(artifact.workspaceId.length > 0, "workspaceId is required");
   assert(artifact.durationMs > 0 && artifact.durationMs <= 30_000, "analysis artifact must be 1-30 seconds");
   assert(artifact.normalizedFps > 0, "normalizedFps must be positive");
@@ -128,7 +151,7 @@ export function assertEvidenceArtifact(artifact: EvidenceArtifact): void {
 }
 
 export function assertFidelityMap(map: FidelityMap, evidence: readonly EvidenceClaim[]): void {
-  assert(map.schemaVersion === "0.1.0", "unsupported Fidelity Map schema version");
+  assert(map.schemaVersion === "0.2.0", "unsupported Fidelity Map schema version");
   assert(map.revision >= 1 && Number.isInteger(map.revision), "revision must be a positive integer");
   assert(map.durationMs > 0 && map.durationMs <= 30_000, "Fidelity Map must cover 1-30 seconds");
   assertHash(map.sourceContentSha256, "sourceContentSha256");
@@ -160,6 +183,50 @@ export function assertFidelityMap(map: FidelityMap, evidence: readonly EvidenceC
   assertUniqueIds(map.beats, "beat");
   assertUniqueIds(map.directives, "directive");
   assertUniqueIds(map.risks, "risk");
+  assertUniqueIds(map.editSegments, "edit segment");
+
+  const playbackClasses: PlaybackRateClass[] = ["real_time", "sped_up", "slowed_down", "variable", "unknown"];
+  const transitionTypes: TransitionType[] = ["none", "hard_cut", "dissolve", "fade", "wipe", "match_cut", "other"];
+  const assertPlayback = (playback: PlaybackRateAssessment, owner: string): void => {
+    assert(playbackClasses.includes(playback.classification), `${owner} has an invalid playback-rate class`);
+    assert(Number.isFinite(playback.confidence) && playback.confidence >= 0 && playback.confidence <= 1, `${owner} confidence must be between 0 and 1`);
+    if (playback.estimatedMultiplier !== undefined) {
+      assert(Number.isFinite(playback.estimatedMultiplier) && playback.estimatedMultiplier > 0, `${owner} estimated multiplier must be positive`);
+      if (playback.classification === "real_time") {
+        assert(playback.estimatedMultiplier >= 0.95 && playback.estimatedMultiplier <= 1.05, `${owner} real-time multiplier must be approximately 1x`);
+      }
+      if (playback.classification === "sped_up") {
+        assert(playback.estimatedMultiplier > 1, `${owner} sped-up multiplier must exceed 1x`);
+      }
+      if (playback.classification === "slowed_down") {
+        assert(playback.estimatedMultiplier < 1, `${owner} slowed-down multiplier must be below 1x`);
+      }
+      assert(playback.classification !== "variable" && playback.classification !== "unknown", `${owner} ${playback.classification} playback cannot use one scalar multiplier`);
+    }
+    assert(playback.cues.length > 0, `${owner} requires at least one observed cue`);
+    assert(playback.evidenceIds.length > 0, `${owner} requires evidence`);
+    playback.evidenceIds.forEach((id) => requireAccepted(id, owner));
+  };
+
+  assertPlayback(map.playback, "global playback assessment");
+  assert(map.editSegments.length > 0, "Fidelity Map requires at least one edit segment");
+  let expectedSegmentStart = 0;
+  for (const [index, segment] of map.editSegments.entries()) {
+    assertRange(segment.range, map.durationMs, `edit segment.${segment.id}.range`);
+    assert(segment.range.startMs === expectedSegmentStart, `edit segment ${segment.id} leaves a gap or overlap`);
+    assert(segment.range.endMs > segment.range.startMs, `edit segment ${segment.id} must have positive duration`);
+    assert(segment.durationMs === segment.range.endMs - segment.range.startMs, `edit segment ${segment.id} duration does not match its range`);
+    assert(segment.sourceShotId.length > 0, `edit segment ${segment.id} requires a source shot id`);
+    assert(transitionTypes.includes(segment.transitionIn), `edit segment ${segment.id} has an invalid transition type`);
+    assert(Number.isInteger(segment.transitionDurationMs) && segment.transitionDurationMs >= 0, `edit segment ${segment.id} transition duration must be a non-negative integer`);
+    assert(segment.transitionDurationMs <= segment.durationMs, `edit segment ${segment.id} transition exceeds segment duration`);
+    assert(index !== 0 || segment.transitionIn === "none", "first edit segment must use transitionIn none");
+    assertPlayback(segment.playback, `edit segment ${segment.id} playback`);
+    assert(segment.evidenceIds.length > 0, `edit segment ${segment.id} requires evidence`);
+    segment.evidenceIds.forEach((id) => requireAccepted(id, `edit segment ${segment.id}`));
+    expectedSegmentStart = segment.range.endMs;
+  }
+  assert(expectedSegmentStart === map.durationMs, "edit segments must cover the full source timeline");
 
   let previousBeatStart = -1;
   for (const beat of map.beats) {
