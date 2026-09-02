@@ -61,6 +61,21 @@ def vault_secret(service: str) -> str:
     return secret
 
 
+def is_content_policy_rejection(error: Exception) -> bool:
+    response = getattr(error, "response", None)
+    if response is None or getattr(response, "status_code", None) != 422:
+        return False
+    try:
+        body = response.json()
+    except (TypeError, ValueError):
+        return False
+    details = body.get("detail", []) if isinstance(body, dict) else []
+    return any(
+        isinstance(detail, dict) and detail.get("type") == "content_policy_violation"
+        for detail in details
+    )
+
+
 def build_spec(args: argparse.Namespace, source_hash: str) -> dict[str, Any]:
     return {
         "schemaVersion": "0.2.0",
@@ -146,7 +161,9 @@ def main() -> int:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         if state_path.exists():
             existing = json.loads(state_path.read_text())
-            if existing.get("status") in {"submitting", "submitted", "unknown_outcome", "complete"}:
+            if existing.get("status") in {
+                "submitting", "submitted", "unknown_outcome", "rejected", "complete"
+            }:
                 raise RuntimeError(f"refusing duplicate paid submission in state {existing.get('status')}")
         atomic_json(state_path, prepared)
 
@@ -189,9 +206,20 @@ def main() -> int:
         try:
             result = handle.get()
         except Exception as error:
-            prepared.update({"status": "unknown_outcome", "errorType": type(error).__name__})
+            rejected = is_content_policy_rejection(error)
+            prepared.update({
+                "status": "rejected" if rejected else "unknown_outcome",
+                "errorType": type(error).__name__,
+            })
+            if rejected:
+                prepared["providerResolution"] = "content_policy_violation"
             atomic_json(state_path, prepared)
-            raise RuntimeError("provider result is uncertain; do not resubmit automatically") from None
+            message = (
+                "provider rejected the reference under content policy; do not resubmit automatically"
+                if rejected
+                else "provider result is uncertain; do not resubmit automatically"
+            )
+            raise RuntimeError(message) from None
 
         video = result.get("video") if isinstance(result, dict) else None
         output_url = video.get("url") if isinstance(video, dict) else None
