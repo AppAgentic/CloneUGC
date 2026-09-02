@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "0.1.0",
+  "annotation": {
+    "schemaVersion": "0.1.0",
+    "blindToModelOutputs": true,
+    "annotatorId": "synthetic-fixture",
+    "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "normalizedFps": 30,
+    "originalOffsetMs": 0,
+    "shotBoundariesMs": [2000, 5000, 8000],
+    "actionEvents": [{ "id": "action-1", "timeMs": 3000 }],
+    "claims": [
+      { "id": "action-claim", "category": "action" },
+      { "id": "music-risk", "category": "rights_risk" }
+    ]
+  },
+  "budget": {
+    "maxAgenticFollowups": 2,
+    "maxCostUsdPerRun": 0.05,
+    "maxP95LatencyMs": 45000
+  },
+  "runs": [
+    {
+      "id": "static-1",
+      "lane": "static_default",
+      "repeat": 1,
+      "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "exactModel": "gemini-3.8-flash",
+      "promptVersion": "analysis-v1",
+      "providerRunId": "synthetic-provider-1",
+      "evidenceArtifactId": "synthetic-evidence-1",
+      "structuredPayloadArtifactId": "synthetic-payload-1",
+      "shotBoundariesMs": [2000, 5000, 8000],
+      "actionEvents": [{ "annotationId": "action-1", "timeMs": 3100 }],
+      "predictions": [
+        { "claimKey": "action:raise", "annotationId": "action-claim", "adjudication": "supported" },
+        { "claimKey": "risk:music", "annotationId": "music-risk", "adjudication": "supported" }
+      ],
+      "latencyMs": 12000,
+      "totalTokens": 5000,
+      "costUsd": 0.004,
+      "agenticFollowups": 0
+    },
+    {
+      "id": "static-2",
+      "lane": "static_default",
+      "repeat": 2,
+      "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "exactModel": "gemini-3.8-flash",
+      "promptVersion": "analysis-v1",
+      "providerRunId": "synthetic-provider-2",
+      "evidenceArtifactId": "synthetic-evidence-2",
+      "structuredPayloadArtifactId": "synthetic-payload-2",
+      "shotBoundariesMs": [2000, 5000, 8000],
+      "actionEvents": [{ "annotationId": "action-1", "timeMs": 3150 }],
+      "predictions": [
+        { "claimKey": "action:raise", "annotationId": "action-claim", "adjudication": "supported" },
+        { "claimKey": "risk:music", "annotationId": "music-risk", "adjudication": "supported" }
+      ],
+      "latencyMs": 13000,
+      "totalTokens": 5100,
+      "costUsd": 0.0041,
+      "agenticFollowups": 0
+    },
+    {
+      "id": "static-3",
+      "lane": "static_default",
+      "repeat": 3,
+      "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "exactModel": "gemini-3.8-flash",
+      "promptVersion": "analysis-v1",
+      "providerRunId": "synthetic-provider-3",
+      "evidenceArtifactId": "synthetic-evidence-3",
+      "structuredPayloadArtifactId": "synthetic-payload-3",
+      "shotBoundariesMs": [2000, 5000, 8000],
+      "actionEvents": [{ "annotationId": "action-1", "timeMs": 3050 }],
+      "predictions": [
+        { "claimKey": "action:raise", "annotationId": "action-claim", "adjudication": "supported" },
+        { "claimKey": "risk:music", "annotationId": "music-risk", "adjudication": "supported" }
+      ],
+      "latencyMs": 12500,
+      "totalTokens": 4950,
+      "costUsd": 0.0039,
+      "agenticFollowups": 0
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "cloneugc-phase-0",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.1",
+  "scripts": {
+    "benchmark:sample": "node --experimental-strip-types scripts/score-analysis.ts fixtures/benchmark/sample-analysis-case.json",
+    "check": "pnpm typecheck && pnpm test && pnpm benchmark:sample",
+    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "typescript": "5.9.3"
+  }
+}
