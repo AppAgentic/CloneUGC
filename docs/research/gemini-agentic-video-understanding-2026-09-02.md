@@ -44,6 +44,12 @@ The committed `analysis-v2` prompt was exercised end to end on a second public, 
 
 This proves the prompt and shared adapter can populate the new dimension, not that the classification is benchmark-validated. The public source has no recorded rights attestation or blind annotation, and earlier repeated model passes disagreed on fine repetition timing and audio interpretation. Those details remain disputed; the clip cannot select the production lane or enter paid generation.
 
+### Operator correction and direct-comparison result
+
+The single-video `real_time` classification above was a false negative. After the operator noticed accelerated background movement, Gemini 3.8 Agentic Video inspected a synchronized original-versus-reconstruction composite (content hash `dfd7abde…cee0`) and navigated both halves together. It counted approximately 5.5–6 heavy presses in the 5.116-second original, versus approximately 1.5 in the Seedance reconstruction. It also tracked an original-background bystander bending for a bottle, standing, turning, and taking about four strides in roughly 1.4 seconds. The corrected inference is high-confidence global acceleration of approximately 2.0–2.5× in the original and natural-speed motion in the reconstruction. Provider provenance was 49.380 seconds, 63,542 total tokens, and six processing calls/results.
+
+The material event deltas were: first lockout +50 ms in the reconstruction, lowering start +1,400 ms, bottom turnaround +2,850 ms, and second upward start +2,950 ms. Native 60 fps in the original versus 24 fps in the reconstruction cannot explain wall-clock phase compression. The earlier analysis accepted generic gait/gravity/audio cues without counting full-clip cycles or tracing an independent background action. `analysis-v3` therefore requires both checks before `real_time` can pass. This correction supersedes the canary's playback conclusion while preserving its evidence that the adapter and schema functioned.
+
 ## Decision
 
 Do not make Agentic Video the unconditional analyzer for short references. On this short clip, it took about 3.0 times the latency and 2.7 times the total tokens of static processing. Its measured value was producing sub-second cut hypotheses for comparison with the scene detector; its remaining value in fast/periodic motion analysis, causality, counting, and ambiguity repair is a CloneUGC hypothesis, not a Google-backed or locally proven claim.
