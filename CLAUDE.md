@@ -35,13 +35,28 @@ The durable product is the reconstruction intelligence layer: source forensics, 
 
 ## Project Structure
 
-The application has not been scaffolded yet. Phase 0 should establish only the benchmark harness and domain contracts needed to test the fidelity-compiler thesis. Do not run `create-next-app` until Phase 0 is approved.
+The application has not been scaffolded yet. Phase 0 established the benchmark harness, the provider-neutral domain contracts, and the headless job kernel authorized by `docs/plans/cloneugc-agent-native-product-plan.md`. Do not run `create-next-app` until the Phase 0A evidence gate passes.
+
+- `src/contracts.ts`, `src/format-recipe.ts`, `src/benchmark.ts`: Fidelity Map, evidence, Format Recipe, and scoring contracts
+- `src/directives.ts`, `src/compiler.ts`, `src/estimate.ts`, `src/authority.ts`, `src/qa.ts`: typed directives, compiled plans, bounded estimates, rights/spend authority, machine-readable QA
+- `src/kernel/`: transactional store, durable job kernel, and stateless worker
+- `src/adapters/`: fake provider, asset store, render, QA, and analyzer adapters (offline only)
+- `fixtures/fidelity-maps/`: validator-accepted Fidelity Maps materialized from persisted evidence
+- `fixtures/replays/`: accepted historical runs replayed for hash parity
+- `PARKED_ACTIONS.md`: external-only gates and what unblocks them
 
 ## Commands
 
 ```bash
-# Project shell only; commands will be added with the first scaffold.
+pnpm install
+pnpm check                 # typecheck, tests, benchmark sample, map validation, replay parity
+pnpm test
+pnpm kernel validate-maps
+pnpm kernel simulate fixtures/fidelity-maps/fm-phone-laugh-to-lock-in-gym-v1.json
+pnpm kernel:replay
 ```
+
+All kernel commands run against fake adapters; none can reach a provider or spend.
 
 ## Environment Variables
 

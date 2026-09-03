@@ -13,7 +13,7 @@ pnpm install
 pnpm check
 ```
 
-`pnpm check` type-checks the contracts, runs the deterministic scoring tests, and scores the permission-safe synthetic sample manifest. The harness treats cut timing, exact segment lengths, transition type, and global/per-segment playback speed as first-class fidelity evidence. Live provider calls and paid generation are intentionally outside this harness.
+`pnpm check` type-checks the contracts, runs the deterministic scoring, compiler, authority, kernel, and chaos tests, scores the permission-safe synthetic sample manifest, validates the materialized Fidelity Maps, and replays one accepted historical run for plan-hash parity. The harness treats cut timing, exact segment lengths, transition type, and global/per-segment playback speed as first-class fidelity evidence. Live provider calls and paid generation are intentionally outside this harness.
 
 Phase 0 also includes a provider-neutral Format Recipe compiler. Validated creative structures can be saved once and instantiated from a short prompt with different characters, gender presentation, body-state arcs, wardrobe, setting, captions, and audio policy while locked timing/camera/edit grammar stays unchanged. The first recipe fixture is [`fixtures/formats/hand-wipe-fitness-transformation-v1.json`](fixtures/formats/hand-wipe-fitness-transformation-v1.json).
 
@@ -24,3 +24,16 @@ pnpm format:compile fixtures/formats/hand-wipe-fitness-transformation-v1.json \
   --prompt "Use this format with a blonde woman and a new caption" \
   --values '{"subject_identity":"a fictional blonde woman","gender_presentation":"female","caption_text":"90 days with GymLevels"}'
 ```
+
+## Headless kernel
+
+The Phase 0B / Phase 1 kernel lives in `src/kernel/` and runs entirely offline against the fake adapters in `src/adapters/`. It provides typed directives and immutable revisions, provider-neutral compiled plans with an invalidation graph, bounded estimates in integer USD micros, server-minted rights and spend approvals, and a durable job state machine with an outbox, leases, provider-call compare-and-set, unknown-outcome reconciliation, exact-once ledger settlement, cancellation, atomic publication, and byte-for-byte reuse of accepted unit artifacts on repair.
+
+```bash
+pnpm kernel validate-maps
+pnpm kernel compile fixtures/fidelity-maps/fm-childhood-to-family-gym-montage-v1.json --intent "Recreate with a fictional family"
+pnpm kernel simulate fixtures/fidelity-maps/fm-childhood-to-family-gym-montage-v1.json
+pnpm kernel:replay
+```
+
+Three validator-accepted Fidelity Maps in `fixtures/fidelity-maps/` are linked from the `phone-laugh-to-lock-in-gym`, `winter-arc-shirt-reveal-checklist`, and `childhood-to-family-gym-montage` recipes. The evidence report is in `docs/reports/phase-0-benchmark-evidence-2026-09-03.md`; paid and human gates are listed in `PARKED_ACTIONS.md`.
