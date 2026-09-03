@@ -11,7 +11,7 @@ import { assertCompiledPlan, type CompiledPlan, type PlanUnit } from "./compiler
  */
 
 export type ProviderClass = "image_anchor" | "video_motion" | "deterministic_finishing";
-export type Resolution = "480p" | "720p" | "1080p";
+export type Resolution = "480p" | "720p" | "768p" | "1080p";
 
 export interface ProviderCapability {
   providerClass: ProviderClass;
@@ -159,7 +159,7 @@ export function assertGenerationEstimate(estimate: GenerationEstimate): void {
   const { id, estimateHash, ...core } = estimate;
   assert(estimate.schemaVersion === "0.1.0", "unsupported estimate schema version");
   assert(estimate.currency === "USD", "estimate currency must be USD");
-  assert(["480p", "720p", "1080p"].includes(estimate.resolution), "estimate resolution is invalid");
+  assert(["480p", "720p", "768p", "1080p"].includes(estimate.resolution), "estimate resolution is invalid");
   assert(/^[a-f0-9]{64}$/.test(estimateHash), "estimate hash must be a lowercase SHA-256 hash");
   assert(contentHash(core) === estimateHash, "estimate hash does not match its content");
   assert(id === `est_${estimateHash.slice(0, 16)}`, "estimate id does not match its hash");

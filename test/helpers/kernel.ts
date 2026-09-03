@@ -25,7 +25,7 @@ export interface Harness {
   createJob(options?: { revision?: ReconstructionRevision; plan?: CompiledPlan; estimate?: GenerationEstimate; reusedUnitArtifacts?: Record<string, string>; idempotencyKey?: string; tokenSuffix?: string }): { jobId: string; plan: CompiledPlan; estimate: GenerationEstimate; input: CreateJobInput };
 }
 
-export function createHarness(options: { leaseMs?: number; maxAttempts?: number } = {}): Harness {
+export function createHarness(options: { leaseMs?: number; maxAttempts?: number; requiredProductionWorkflow?: boolean } = {}): Harness {
   const store = new MemoryStore();
   const clock = new ManualClock(10_000);
   const image = new FakeProvider(sampleCapabilities[0]!, clock);
@@ -41,7 +41,12 @@ export function createHarness(options: { leaseMs?: number; maxAttempts?: number 
     assets,
     render,
     qa,
-    policy: { leaseMs: options.leaseMs ?? 5_000, maxAttempts: options.maxAttempts ?? 2, resolution: "480p" },
+    policy: {
+      leaseMs: options.leaseMs ?? 5_000,
+      maxAttempts: options.maxAttempts ?? 2,
+      resolution: "480p",
+      ...(options.requiredProductionWorkflow ? { requiredWorkflowId: "setup-frame-image-to-video-per-take-v1" as const } : {}),
+    },
   });
   kernel.registerRightsRecord(sampleRights());
   let tokenCounter = 0;

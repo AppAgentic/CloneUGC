@@ -4,6 +4,7 @@ import { assertCompiledPlan, type CompiledPlan } from "../compiler.ts";
 import type { EvidenceClaim, FidelityMap } from "../contracts.ts";
 import { assertReconstructionRevision, type ReconstructionRevision } from "../directives.ts";
 import { assertGenerationEstimate, providerClassForUnit, type GenerationEstimate, type ProviderClass, type Resolution } from "../estimate.ts";
+import { assertProductionWorkflowPlan, PRODUCTION_WORKFLOW_ID } from "../production-workflow.ts";
 import { assertQAReport, finalizeQAReport, type QAReport } from "../qa.ts";
 import type { AssetStore, ProviderAdapter, QAScorer, RenderAdapter } from "./adapters.ts";
 import { MemoryStore, SequentialIds, type Clock, type Transaction } from "./store.ts";
@@ -46,6 +47,8 @@ export interface KernelPolicy {
   leaseMs: number;
   maxAttempts: number;
   resolution: Resolution;
+  /** When enabled, registration rejects every plan outside the approved production media graph. */
+  requiredWorkflowId?: typeof PRODUCTION_WORKFLOW_ID;
 }
 
 export interface KernelDeps {
@@ -126,6 +129,7 @@ export class JobKernel {
 
   registerPlan(plan: CompiledPlan, estimate: GenerationEstimate, revision: ReconstructionRevision): void {
     assertCompiledPlan(plan);
+    if (this.policy.requiredWorkflowId === PRODUCTION_WORKFLOW_ID) assertProductionWorkflowPlan(plan);
     assertGenerationEstimate(estimate);
     assertReconstructionRevision(revision);
     this.store.transaction((tx) => {

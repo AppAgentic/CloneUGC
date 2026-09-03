@@ -7,6 +7,7 @@ export * from "./format-recipe.ts";
 export * from "./directives.ts";
 export * from "./compiler.ts";
 export * from "./estimate.ts";
+export * from "./production-workflow.ts";
 export * from "./authority.ts";
 export * from "./qa.ts";
 export * from "./kernel/types.ts";
