@@ -25,13 +25,13 @@
     "A": "778b1514f822a0578c17109ba22e40e079e9199965886749e73bff76a99ae1d5",
     "B": "aa84f5970352606fa7128465477b90d5f70f0be323adf11e2af3c5a298a866cf"
   },
-  "outcome": "compiler_preferred_with_minor_repair",
+  "outcome": "compiler_preferred_transition_failed_pending_deterministic_repair_review",
   "typedFindings": [
     {
       "dimension": "transition",
       "targetUnitId": "unit-after",
-      "severity": "minor",
-      "finding": "The compiler candidate preserved the requested woman and green after-state but showed a slight palm artifact at the wipe boundary; repair should remain scoped to the transition region."
+      "severity": "material",
+      "finding": "The compiler candidate preserved the requested woman and green after-state, but the assembled palm transition was wrong. The before generation contained a valid full-occlusion interval followed by an invalid withdrawal; the finisher compressed the full take and cut after the withdrawal instead of trimming on the valid palm interval."
     }
   ]
 }

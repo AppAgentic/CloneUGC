@@ -60,9 +60,11 @@ def finish_hand_wipe(root: Path, source: Path, overlay: Path, slot: str, run_nam
     before = root / run_name / "unit-before" / f"slot-{slot}" / f"candidate-{slot}.mp4"
     after = root / run_name / "unit-after" / f"slot-{slot}" / f"candidate-{slot}.mp4"
     output = root / f"candidate-{slot}{suffix}.mp4"
-    # Scale each complete provider take onto the source's exact 144/161-frame split.
+    # The before take contains a valid full-palm interval at 4.0-4.8s, then the model
+    # incorrectly withdraws again. Preserve the first 144 frames so the cut lands on
+    # full occlusion instead of time-compressing the invalid post-wipe tail into view.
     filters = (
-        "[0:v]crop=756:1344:6:0,scale=720:1280,setpts=PTS*0.9270968,fps=30,"
+        "[0:v]crop=756:1344:6:0,scale=720:1280,fps=30,"
         "trim=end_frame=144,setpts=PTS-STARTPTS[v0];"
         "[1:v]crop=756:1344:6:0,scale=720:1280,setpts=PTS*0.5176296,fps=30,"
         "trim=end_frame=161,setpts=PTS-STARTPTS[v1];"
