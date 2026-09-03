@@ -429,6 +429,22 @@ export interface BenchmarkCase {
   runs: AnalysisRun[];
 }
 
+export interface BenchmarkCorpusCase {
+  id: string;
+  family: string;
+  benchmark: BenchmarkCase;
+}
+
+export interface BenchmarkCorpus {
+  schemaVersion: "0.1.0";
+  cases: BenchmarkCorpusCase[];
+}
+
+export interface BenchmarkCorpusScore {
+  exactModel: string;
+  cases: Array<{ id: string; family: string; lanes: LaneScore[] }>;
+}
+
 export function scoreBenchmarkCase(input: BenchmarkCase): LaneScore[] {
   assert(input !== null && typeof input === "object", "benchmark case must be an object");
   if (input.schemaVersion !== "0.2.0") throw new Error("unsupported benchmark case version");
@@ -442,4 +458,34 @@ export function scoreBenchmarkCase(input: BenchmarkCase): LaneScore[] {
     groups.set(key, group);
   }
   return [...groups.values()].map((runs) => scoreLane(input.annotation, runs, input.budget));
+}
+
+/**
+ * Scores the complete three-family analyzer bake-off. A single-case or partial-lane fixture may
+ * exercise the metric code, but it cannot be mistaken for Phase 0A corpus evidence.
+ */
+export function scoreBenchmarkCorpus(input: BenchmarkCorpus): BenchmarkCorpusScore {
+  assert(input !== null && typeof input === "object", "benchmark corpus must be an object");
+  assert(input.schemaVersion === "0.1.0", "unsupported benchmark corpus version");
+  assert(Array.isArray(input.cases) && input.cases.length === 3, "Phase 0A requires exactly three benchmark families");
+  const ids = new Set<string>();
+  const families = new Set<string>();
+  const requiredLanes: AnalysisLane[] = ["static_default", "static_5fps", "static_10fps", "hybrid_agentic"];
+  let exactModel: string | undefined;
+  const cases = input.cases.map((entry) => {
+    assert(entry.id.trim().length > 0 && entry.family.trim().length > 0, "corpus cases require id and family");
+    assert(!ids.has(entry.id), `duplicate corpus case id ${entry.id}`);
+    assert(!families.has(entry.family), `duplicate corpus family ${entry.family}`);
+    ids.add(entry.id);
+    families.add(entry.family);
+    const lanes = scoreBenchmarkCase(entry.benchmark);
+    for (const lane of requiredLanes) assert(lanes.filter((score) => score.lane === lane).length === 1, `case ${entry.id} requires exactly one ${lane} lane`);
+    assert(lanes.length === requiredLanes.length, `case ${entry.id} contains an unexpected analyzer lane`);
+    for (const lane of lanes) {
+      if (exactModel === undefined) exactModel = lane.exactModel;
+      assert(lane.exactModel === exactModel, `case ${entry.id} does not use the corpus-pinned exact model`);
+    }
+    return { id: entry.id, family: entry.family, lanes: [...lanes].sort((a, b) => requiredLanes.indexOf(a.lane) - requiredLanes.indexOf(b.lane)) };
+  });
+  return { exactModel: exactModel!, cases };
 }

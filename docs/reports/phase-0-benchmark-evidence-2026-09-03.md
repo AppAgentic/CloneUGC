@@ -57,11 +57,11 @@ The replayed plan then compiles to a kernel plan and runs through the fake kerne
 
 | Suite | Base commit e20ed3b | This branch |
 |---|---:|---:|
-| Tests passing | 26 | 74 |
+| Tests passing | 26 | 80 |
 | Format recipes valid | 9 | 9 |
 | Recipes marked validated | 7 | 7 |
 
-No existing test was modified. `pnpm check` also runs the benchmark sample, the Fidelity Map validator, and the historical replay.
+The original coverage remains green and the new evidence-gate tests run alongside it. `pnpm check` also runs the benchmark sample, the Fidelity Map validator, and the historical replay.
 
 An owner review added a final fail-closed hardening pass: idempotency keys are now bound to the immutable create-job request; reused artifacts must come from a published, same-workspace, same-source output whose unit hash is unchanged; provider routing is checked against the compiled plan and estimate; estimate arithmetic and provider receipts are validated; an actual-cost overrun records the real capture but terminates the job before any further paid submission; and QA lineage or rights-regression failures cannot be reconciled away or published.
 
@@ -116,7 +116,17 @@ The plan requires unit cost and latency for every paid generation unit. The pers
 
 Per-unit latency was never captured. The kernel now records `createdAtMs`, `updatedAtMs`, receipt time, and `actualCostUsdMicros` per provider call, so future live runs satisfy this automatically.
 
-### 2.4 Not run in this session
+### 2.4 Offline evidence evaluators
+
+The repository now rejects incomplete Phase 0A evidence before it can be mistaken for a passing gate:
+
+- `scoreBenchmarkCorpus` requires exactly three distinct reference families, all four analyzer lanes, at least three repeated runs per lane, one pinned exact model across the corpus, immutable source hashes, and run-level provider/artifact/cost/latency provenance;
+- `scorePhase0Comparisons` requires three sealed A/B families, paid-unit request/seed/hash/cost/latency provenance, three unique lane-blind ballots per pair, complete ten-dimension scoring, majority preference plus higher median score, no rights regression, typed repair attribution for material failures, a cost ceiling, and at least one commercially usable compiler output;
+- `pnpm phase0:evaluate analysis <file>` and `pnpm phase0:evaluate comparisons <file>` produce machine-readable reports. The comparison report also hashes its complete input bundle.
+
+The exact evidence assembly sequence is documented in `docs/phase-0-evidence-workflow.md`.
+
+### 2.5 Not run in this session
 
 - blind human annotations for the three clips;
 - one raw-request versus compiler generation pair per family;

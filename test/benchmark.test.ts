@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { scoreLane, scoreRun, type AnalysisRun, type BlindAnnotation } from "../src/benchmark.ts";
+import {
+  scoreBenchmarkCorpus,
+  scoreLane,
+  scoreRun,
+  type AnalysisLane,
+  type AnalysisRun,
+  type BenchmarkCorpus,
+  type BlindAnnotation,
+} from "../src/benchmark.ts";
 
 const sourceHash = "b".repeat(64);
 const normalizedHash = "c".repeat(64);
@@ -63,6 +71,27 @@ function makeRun(repeat: number, overrides: Partial<AnalysisRun> = {}): Analysis
     costUsd: 0.02,
     agenticFollowups: 2,
     ...overrides,
+  };
+}
+
+function makeCorpus(): BenchmarkCorpus {
+  const lanes: AnalysisLane[] = ["static_default", "static_5fps", "static_10fps", "hybrid_agentic"];
+  return {
+    schemaVersion: "0.1.0",
+    cases: ["dialogue", "movement", "product"].map((family, caseIndex) => ({
+      id: `case-${caseIndex + 1}`,
+      family,
+      benchmark: {
+        schemaVersion: "0.2.0",
+        annotation,
+        budget: { maxAgenticFollowups: 2, maxCostUsdPerRun: 0.05, maxP95LatencyMs: 45_000 },
+        runs: lanes.flatMap((lane) => [1, 2, 3].map((repeat) => makeRun(repeat, {
+          id: `${family}-${lane}-${repeat}`,
+          lane,
+          agenticFollowups: lane === "hybrid_agentic" ? 2 : 0,
+        }))),
+      },
+    })),
   };
 }
 
@@ -166,4 +195,31 @@ test("rejects malformed runtime fixture values instead of coercing them", () => 
   const gappedTimeline = structuredClone(runs);
   gappedTimeline[0]!.editSegments[1]!.startMs = 2_100;
   assert.throws(() => scoreLane(annotation, gappedTimeline, budget), /positive, ordered, and contiguous/);
+});
+
+test("scores only a complete three-family, four-lane, repeated analysis corpus", () => {
+  const result = scoreBenchmarkCorpus(makeCorpus());
+  assert.equal(result.exactModel, "gemini-3.8-flash");
+  assert.equal(result.cases.length, 3);
+  assert.deepEqual(result.cases[0]!.lanes.map((lane) => lane.lane), [
+    "static_default",
+    "static_5fps",
+    "static_10fps",
+    "hybrid_agentic",
+  ]);
+  assert(result.cases.every((entry) => entry.lanes.every((lane) => lane.repeats === 3)));
+});
+
+test("rejects partial, duplicate-family, or model-drifted Phase 0 analysis evidence", () => {
+  const partial = makeCorpus();
+  partial.cases[0]!.benchmark.runs = partial.cases[0]!.benchmark.runs.filter((run) => run.lane !== "static_10fps");
+  assert.throws(() => scoreBenchmarkCorpus(partial), /requires exactly one static_10fps lane/);
+
+  const duplicateFamily = makeCorpus();
+  duplicateFamily.cases[1]!.family = duplicateFamily.cases[0]!.family;
+  assert.throws(() => scoreBenchmarkCorpus(duplicateFamily), /duplicate corpus family/);
+
+  const drifted = makeCorpus();
+  for (const run of drifted.cases[2]!.benchmark.runs) run.exactModel = "gemini-3.8-flash-002";
+  assert.throws(() => scoreBenchmarkCorpus(drifted), /corpus-pinned exact model/);
 });

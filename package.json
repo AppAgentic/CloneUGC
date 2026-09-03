@@ -10,6 +10,7 @@
     "kernel": "node --experimental-strip-types scripts/kernel-cli.ts",
     "kernel:validate-maps": "node --experimental-strip-types scripts/kernel-cli.ts validate-maps fixtures/fidelity-maps",
     "kernel:replay": "node --experimental-strip-types scripts/kernel-cli.ts replay fixtures/replays/hand-wipe-blonde-r3ta-pepmod-v1.json fixtures/formats/hand-wipe-fitness-transformation-v1.json",
+    "phase0:evaluate": "node --experimental-strip-types scripts/phase-0-evaluate.ts",
     "check": "pnpm typecheck && pnpm test && pnpm benchmark:sample && pnpm kernel:validate-maps && pnpm kernel:replay",
     "test": "node --experimental-strip-types --test test/*.test.ts",
     "typecheck": "tsc --noEmit"
