@@ -41,7 +41,7 @@ The first durable schema should include:
 - camera position, lens feel, framing, path, triggers, and screen-space subject position;
 - subject count, identity policy, pose, blocking, gaze, gesture, and motion rhythm;
 - continuity invariants for face, hair, wardrobe, product geometry, hands, props, and occlusion;
-- setting, clutter, lighting direction, temperature, contrast, and texture;
+- setting and clutter plus an evidence-backed lighting state: source positions/direction/hardness, temperature and mixed casts, exposure/contrast, shadow/highlight geometry, reflective response, timestamped dynamic light events, and phone-camera processing/texture;
 - dialogue, room tone, contact sounds, music policy, and caption intent;
 - starting and ending state for each beat;
 - explicit Preserve, Change, Exclude, and must-not-transfer fields;
@@ -57,7 +57,7 @@ Use Gemini Agentic Video through the Files and Interactions APIs as the first fo
 For CloneUGC's short references, agentic processing is a targeted semantic precision pass rather than a blanket replacement for static inspection:
 
 1. Normalize the analysis copy to a constant frame rate while preserving the original timebase mapping. Run deterministic media probes, scene detection, OCR, frame-cadence/duplication checks, and audio inspection first. Hard-cut timestamps and measured media properties come from these probes, with both normalized frame index and original-source timestamp retained. Playback-rate inference remains separate from the delivered file's nominal FPS: classify real-time, sped-up, slowed-down, variable-speed, or unknown from motion/gravity/settling, gait/blink cadence, motion blur, audio pitch/cadence, and duplicated/dropped-frame evidence.
-2. Run a static broad pass to inventory the complete clip: shots, subjects, objects, text, audio, environment, and coarse beats. Benchmark default and higher static sampling rates because a short clip may get cheaper frame coverage without an agentic loop.
+2. Run a static broad pass to inventory the complete clip: shots, subjects, objects, text, audio, environment, coarse beats, and global lighting state. Lighting evidence separates physical illumination from grading/camera processing and timestamps passing lights, flicker, moving shadows, reflections, and auto-exposure/white-balance/HDR changes. Benchmark default and higher static sampling rates because a short clip may get cheaper frame coverage without an agentic loop.
 3. Escalate focused questions to Agentic Video for split-second gestures, periodic or fast motion, counting, speed ramps, freeze/reverse/loop hypotheses, ambiguous transitions, and the CloneUGC hypotheses that it may improve action causality, occlusion, and continuity-conflict analysis. Gemini labels and interprets detected cuts; it is not the timestamp system of record for unambiguous hard cuts. Fast subject movement must not be treated as sped-up playback without independent cues.
 4. Generate follow-up questions from a versioned policy over unresolved evidence categories. A human who has watched the clip may not author lane-specific prompts.
 5. Reuse the uploaded file and stateful interaction for follow-up questions instead of uploading or re-tokenizing the source independently for every dimension.
@@ -81,13 +81,13 @@ The first benchmark clip must still satisfy the rights and duration rules. A pub
 
 ### Analysis bake-off
 
-Before seeing any model output or spending on generation, create a blind human annotation for each reference. The annotation must include cut/transition intervals, ordered segment lengths, global and per-segment playback-rate classes, speed-ramp/freeze/reverse/loop events, action events, repeated-action counts, continuity facts, on-screen text, audio/dialogue events, and rights-risk items. Then compare:
+Before seeing any model output or spending on generation, create a blind human annotation for each reference. The annotation must include cut/transition intervals, ordered segment lengths, global and per-segment playback-rate classes, speed-ramp/freeze/reverse/loop events, action events, repeated-action counts, continuity facts, lighting facts and dynamic-light events, on-screen text, audio/dialogue events, and rights-risk items. Then compare:
 
 - **Static default:** deterministic probes plus one broad pass with the pinned Gemini Flash model at the default sampling rate;
 - **Static high-FPS:** the same probes and prompt with static sampling at 5 FPS and 10 FPS, subject to the same resolution and cost accounting;
 - **Hybrid:** the winning static configuration plus at most two policy-generated Agentic Video follow-ups, merged through the evidence graph.
 
-Run each model lane at least three times per clip and report claim stability. Measure shot-boundary precision/recall at ±100, ±250, and ±500 ms; boundary and segment-duration mean absolute error; segment-count error; global and per-segment playback-rate accuracy plus answer coverage; transition-type accuracy; action-event timing error; Preserve/Change/Exclude schema completeness; continuity-fact precision/recall; rights-risk recall; unsupported-claim rate; latency; input/output/thought/tool-use tokens; and estimated analysis cost. Pair segments by maximum chronological time overlap so one missed early cut does not shift every later score. `unknown` is an abstention: exclude it from accuracy and report the resulting coverage separately, so uncertainty is visible without rewarding guesses. Treat `variable` as a committed class that must match the annotation. Treat gradual transitions as annotated intervals rather than point events. An unsupported claim is one lacking a valid evidence interval/frame or contradicted by the blind annotation after adjudication.
+Run each model lane at least three times per clip and report claim stability. Measure shot-boundary precision/recall at ±100, ±250, and ±500 ms; boundary and segment-duration mean absolute error; segment-count error; global and per-segment playback-rate accuracy plus answer coverage; transition-type accuracy; action-event timing error; Preserve/Change/Exclude schema completeness; continuity-fact precision/recall; lighting-fact recall; rights-risk recall; unsupported-claim rate; latency; input/output/thought/tool-use tokens; and estimated analysis cost. Pair segments by maximum chronological time overlap so one missed early cut does not shift every later score. `unknown` is an abstention: exclude it from accuracy and report the resulting coverage separately, so uncertainty is visible without rewarding guesses. Treat `variable` as a committed class that must match the annotation. Treat gradual transitions as annotated intervals rather than point events. An unsupported claim is one lacking a valid evidence interval/frame or contradicted by the blind annotation after adjudication.
 
 Retain the exact model identifier, prompts, raw provider interactions, deterministic-probe outputs, hashes, and run IDs so disagreements can be audited. Provisional interactive budgets are no more than two agentic follow-ups, $0.05 total analysis cost per reference, and 45 seconds p95 end-to-end analysis latency; Phase 0 replaces these with measured ceilings before product scaffolding.
 
@@ -98,7 +98,7 @@ Select the hybrid lane only if its sub-second motion, causality, counting, occlu
 For each reference, produce two otherwise controlled variants:
 
 - **Control:** the reference plus a concise direct change request;
-- **Compiler:** the same reference and requested change, compiled from the Fidelity Map into explicit reference roles, starting state, timestamped actions, camera geometry, continuity, audio, ending state, and constraints.
+- **Compiler:** the same reference and requested change, compiled from the Fidelity Map into explicit reference roles, starting state, timestamped actions, camera geometry, evidence-backed lighting geometry and dynamic events, continuity, audio, ending state, and constraints.
 
 Start at 480p to test composition and reference weighting cheaply. Re-run only winning seeds at 720p. Preserve provider request IDs, seeds, exact prompts, source/spec hashes, cost, duration, and outputs.
 

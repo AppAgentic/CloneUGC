@@ -136,7 +136,7 @@ def build_spec(args: argparse.Namespace, source_hash: str) -> dict[str, Any]:
         "spendApprovalMessageTs": args.spend_approval_ts,
         "maxApprovedCostUsd": args.max_cost_usd,
         "requestedChange": "none_exact_reconstruction",
-        "analysisPromptVersion": "analysis-v2",
+        "analysisPromptVersion": "analysis-v5",
         "internalRoute": model,
         "referenceRole": (
             "prompt_from_source_forensics_no_media_reference"

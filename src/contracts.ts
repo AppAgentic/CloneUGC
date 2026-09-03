@@ -50,7 +50,7 @@ export interface EvidenceClaim {
   id: string;
   artifactId: string;
   sourceContentSha256: string;
-  kind: "shot" | "edit" | "playback_rate" | "action" | "continuity" | "text" | "audio" | "risk" | "other";
+  kind: "shot" | "edit" | "playback_rate" | "action" | "continuity" | "lighting" | "text" | "audio" | "risk" | "other";
   statement: string;
   status: EvidenceStatus;
   confidence: number;
@@ -88,6 +88,24 @@ export interface PlaybackRateAssessment {
   evidenceIds: string[];
 }
 
+export interface LightingEvent {
+  range: EvidenceRange;
+  description: string;
+  evidenceIds: string[];
+}
+
+export interface LightingAssessment {
+  summary: string;
+  sources: string[];
+  direction: string;
+  colorTemperature: string;
+  exposure: string;
+  contrast: string;
+  captureArtifacts: string[];
+  events: LightingEvent[];
+  evidenceIds: string[];
+}
+
 export interface EditSegment {
   id: string;
   sourceShotId: string;
@@ -110,6 +128,7 @@ export interface FidelityMap {
   rightsStatus: RightsStatus;
   requestedChange: string;
   playback: PlaybackRateAssessment;
+  lighting: LightingAssessment;
   editSegments: EditSegment[];
   beats: FidelityBeat[];
   directives: FidelityDirective[];
@@ -209,6 +228,20 @@ export function assertFidelityMap(map: FidelityMap, evidence: readonly EvidenceC
   };
 
   assertPlayback(map.playback, "global playback assessment");
+  assert(map.lighting.summary.length > 0, "lighting assessment requires a summary");
+  assert(map.lighting.sources.length > 0, "lighting assessment requires at least one source or an explicit unknown source");
+  assert(map.lighting.direction.length > 0, "lighting assessment requires direction or unknown");
+  assert(map.lighting.colorTemperature.length > 0, "lighting assessment requires color temperature or unknown");
+  assert(map.lighting.exposure.length > 0, "lighting assessment requires exposure or unknown");
+  assert(map.lighting.contrast.length > 0, "lighting assessment requires contrast or unknown");
+  assert(map.lighting.evidenceIds.length > 0, "lighting assessment requires evidence");
+  map.lighting.evidenceIds.forEach((id) => requireAccepted(id, "lighting assessment"));
+  for (const [index, event] of map.lighting.events.entries()) {
+    assertRange(event.range, map.durationMs, `lighting event.${index}.range`);
+    assert(event.description.length > 0, `lighting event ${index} requires a description`);
+    assert(event.evidenceIds.length > 0, `lighting event ${index} requires evidence`);
+    event.evidenceIds.forEach((id) => requireAccepted(id, `lighting event ${index}`));
+  }
   assert(map.editSegments.length > 0, "Fidelity Map requires at least one edit segment");
   let expectedSegmentStart = 0;
   for (const [index, segment] of map.editSegments.entries()) {

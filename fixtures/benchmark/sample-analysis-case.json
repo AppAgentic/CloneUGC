@@ -20,6 +20,7 @@
     "actionEvents": [{ "id": "action-1", "timeMs": 3000 }],
     "claims": [
       { "id": "action-claim", "category": "action" },
+      { "id": "lighting-claim", "category": "lighting" },
       { "id": "music-risk", "category": "rights_risk" }
     ]
   },
@@ -36,7 +37,7 @@
       "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "exactModel": "gemini-3.8-flash",
-      "promptVersion": "analysis-v2",
+      "promptVersion": "analysis-v5",
       "providerRunId": "synthetic-provider-1",
       "evidenceArtifactId": "synthetic-evidence-1",
       "structuredPayloadArtifactId": "synthetic-payload-1",
@@ -51,6 +52,7 @@
       "actionEvents": [{ "annotationId": "action-1", "timeMs": 3100 }],
       "predictions": [
         { "claimKey": "action:raise", "annotationId": "action-claim", "adjudication": "supported" },
+        { "claimKey": "lighting:warm-key", "annotationId": "lighting-claim", "adjudication": "supported" },
         { "claimKey": "risk:music", "annotationId": "music-risk", "adjudication": "supported" }
       ],
       "latencyMs": 12000,
@@ -65,7 +67,7 @@
       "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "exactModel": "gemini-3.8-flash",
-      "promptVersion": "analysis-v2",
+      "promptVersion": "analysis-v5",
       "providerRunId": "synthetic-provider-2",
       "evidenceArtifactId": "synthetic-evidence-2",
       "structuredPayloadArtifactId": "synthetic-payload-2",
@@ -80,6 +82,7 @@
       "actionEvents": [{ "annotationId": "action-1", "timeMs": 3150 }],
       "predictions": [
         { "claimKey": "action:raise", "annotationId": "action-claim", "adjudication": "supported" },
+        { "claimKey": "lighting:warm-key", "annotationId": "lighting-claim", "adjudication": "supported" },
         { "claimKey": "risk:music", "annotationId": "music-risk", "adjudication": "supported" }
       ],
       "latencyMs": 13000,
@@ -94,7 +97,7 @@
       "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "exactModel": "gemini-3.8-flash",
-      "promptVersion": "analysis-v2",
+      "promptVersion": "analysis-v5",
       "providerRunId": "synthetic-provider-3",
       "evidenceArtifactId": "synthetic-evidence-3",
       "structuredPayloadArtifactId": "synthetic-payload-3",
@@ -109,6 +112,7 @@
       "actionEvents": [{ "annotationId": "action-1", "timeMs": 3050 }],
       "predictions": [
         { "claimKey": "action:raise", "annotationId": "action-claim", "adjudication": "supported" },
+        { "claimKey": "lighting:warm-key", "annotationId": "lighting-claim", "adjudication": "supported" },
         { "claimKey": "risk:music", "annotationId": "music-risk", "adjudication": "supported" }
       ],
       "latencyMs": 12500,

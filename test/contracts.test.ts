@@ -20,17 +20,30 @@ const fullRange = {
   normalizedStartFrame: 0,
   normalizedEndFrame: 300,
 };
-const evidence: EvidenceClaim[] = [{
-  id: "e1",
-  artifactId: "artifact-1",
-  sourceContentSha256: hash,
-  kind: "shot",
-  statement: "A static medium shot begins the clip.",
-  status: "accepted",
-  confidence: 0.95,
-  directObservation: true,
-  range,
-}];
+const evidence: EvidenceClaim[] = [
+  {
+    id: "e1",
+    artifactId: "artifact-1",
+    sourceContentSha256: hash,
+    kind: "shot",
+    statement: "A static medium shot begins the clip.",
+    status: "accepted",
+    confidence: 0.95,
+    directObservation: true,
+    range,
+  },
+  {
+    id: "e-light",
+    artifactId: "artifact-1",
+    sourceContentSha256: hash,
+    kind: "lighting",
+    statement: "A warm overhead practical creates a soft top-front key.",
+    status: "accepted",
+    confidence: 0.9,
+    directObservation: true,
+    range: fullRange,
+  },
+];
 const map: FidelityMap = {
   schemaVersion: "0.2.0",
   id: "map-1",
@@ -46,6 +59,17 @@ const map: FidelityMap = {
     confidence: 0.9,
     cues: ["Natural gravity and repetition cadence"],
     evidenceIds: ["e1"],
+  },
+  lighting: {
+    summary: "Warm, softly diffused practical lighting remains stable.",
+    sources: ["Overhead practical"],
+    direction: "Top-front",
+    colorTemperature: "Warm",
+    exposure: "Slightly underexposed",
+    contrast: "Medium-low",
+    captureArtifacts: ["Shadow noise"],
+    events: [],
+    evidenceIds: ["e-light"],
   },
   editSegments: [{
     id: "s1",
@@ -109,7 +133,7 @@ test("evidence artifacts require bounded media, exact models, and lossless paylo
       exactModel: "gemini-3.8-flash",
       mode: "agentic",
       runId: "run-1",
-      promptVersion: "analysis-v2",
+      promptVersion: "analysis-v5",
       latencyMs: 1_000,
       inputTokens: 100,
       outputTokens: 100,
@@ -145,4 +169,15 @@ test("edit segments must cover the full timeline with explicit playback evidence
     ...map,
     playback: { ...map.playback, classification: "variable", estimatedMultiplier: 1.5 },
   }, evidence), /variable playback cannot use one scalar multiplier/);
+});
+
+test("lighting is required as evidence-backed reconstruction state", () => {
+  assert.throws(() => assertFidelityMap({
+    ...map,
+    lighting: { ...map.lighting, sources: [] },
+  }, evidence), /at least one source/);
+  assert.throws(() => assertFidelityMap({
+    ...map,
+    lighting: { ...map.lighting, evidenceIds: [] },
+  }, evidence), /lighting assessment requires evidence/);
 });

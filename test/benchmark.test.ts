@@ -24,6 +24,7 @@ const annotation: BlindAnnotation = {
   actionEvents: [{ id: "action-1", timeMs: 3_000 }],
   claims: [
     { id: "action-claim", category: "action" },
+    { id: "lighting-claim", category: "lighting" },
     { id: "music-risk", category: "rights_risk" },
   ],
 };
@@ -36,7 +37,7 @@ function makeRun(repeat: number, overrides: Partial<AnalysisRun> = {}): Analysis
     sourceContentSha256: sourceHash,
     normalizedContentSha256: normalizedHash,
     exactModel: "gemini-3.8-flash",
-    promptVersion: "analysis-v2",
+    promptVersion: "analysis-v5",
     providerRunId: `provider-${repeat}`,
     evidenceArtifactId: `evidence-${repeat}`,
     structuredPayloadArtifactId: `payload-${repeat}`,
@@ -51,6 +52,7 @@ function makeRun(repeat: number, overrides: Partial<AnalysisRun> = {}): Analysis
     actionEvents: [{ annotationId: "action-1", timeMs: 3_120 }],
     predictions: [
       { claimKey: "action:raise", annotationId: "action-claim", adjudication: "supported" },
+      { claimKey: "lighting:warm-key", annotationId: "lighting-claim", adjudication: "supported" },
       { claimKey: "risk:music", annotationId: "music-risk", adjudication: "supported" },
       { claimKey: "camera:dolly", adjudication: "unsupported" },
     ],
@@ -74,10 +76,11 @@ test("scores timing windows, claims, rights risks, and unsupported claims", () =
   assert.equal(result.segmentPlaybackRateAccuracy, 3 / 4);
   assert.equal(result.segmentPlaybackRateCoverage, 1);
   assert.equal(result.transitionTypeAccuracy, 1);
-  assert.equal(result.claimPrecision, 2 / 3);
+  assert.equal(result.claimPrecision, 3 / 4);
   assert.equal(result.claimRecall, 1);
+  assert.equal(result.lightingClaimRecall, 1);
   assert.equal(result.rightsRiskRecall, 1);
-  assert.equal(result.unsupportedClaimRate, 1 / 3);
+  assert.equal(result.unsupportedClaimRate, 1 / 4);
 });
 
 test("boundary matching maximizes one-to-one matches before minimizing error", () => {

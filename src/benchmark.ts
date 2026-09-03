@@ -11,7 +11,7 @@ export interface AnalysisEditSegment {
 
 export interface AnnotationClaim {
   id: string;
-  category: "action" | "continuity" | "text" | "audio" | "rights_risk";
+  category: "action" | "continuity" | "lighting" | "text" | "audio" | "rights_risk";
 }
 
 export interface BlindAnnotation {
@@ -87,6 +87,7 @@ export interface RunScore {
   transitionTypeAccuracy: number;
   claimPrecision: number;
   claimRecall: number;
+  lightingClaimRecall: number;
   rightsRiskRecall: number;
   unsupportedClaimRate: number;
 }
@@ -156,7 +157,7 @@ function validateAnnotation(annotation: BlindAnnotation): void {
     assert(typeof claim.id === "string" && claim.id.length > 0, "annotation claim requires an id");
     assert(!claimIds.has(claim.id), `duplicate annotation claim ${claim.id}`);
     claimIds.add(claim.id);
-    assert(["action", "continuity", "text", "audio", "rights_risk"].includes(claim.category), `annotation claim ${claim.id} has an invalid category`);
+    assert(["action", "continuity", "lighting", "text", "audio", "rights_risk"].includes(claim.category), `annotation claim ${claim.id} has an invalid category`);
   }
 }
 
@@ -281,6 +282,8 @@ export function scoreRun(annotation: BlindAnnotation, run: AnalysisRun): RunScor
     }
   }
   const validMatches = new Set([...matchedIds].filter((id) => annotationIds.has(id)));
+  const lightingIds = new Set(annotation.claims.filter((claim) => claim.category === "lighting").map((claim) => claim.id));
+  const matchedLighting = [...validMatches].filter((id) => lightingIds.has(id)).length;
   const rightsRiskIds = new Set(annotation.claims.filter((claim) => claim.category === "rights_risk").map((claim) => claim.id));
   const matchedRightsRisks = [...validMatches].filter((id) => rightsRiskIds.has(id)).length;
 
@@ -321,6 +324,7 @@ export function scoreRun(annotation: BlindAnnotation, run: AnalysisRun): RunScor
     transitionTypeAccuracy: ratio(transitionMatches, segmentDenominator),
     claimPrecision: ratio(validMatches.size, run.predictions.length),
     claimRecall: ratio(validMatches.size, annotation.claims.length),
+    lightingClaimRecall: ratio(matchedLighting, lightingIds.size),
     rightsRiskRecall: ratio(matchedRightsRisks, rightsRiskIds.size),
     unsupportedClaimRate: ratio(run.predictions.length - supported.length, run.predictions.length),
   };
