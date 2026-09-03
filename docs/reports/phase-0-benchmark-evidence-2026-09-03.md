@@ -9,7 +9,7 @@ Scope: the Phase 0A evidence close-out and the Phase 0B / Phase 1 headless kerne
 | Gate | Status | Basis |
 |---|---|---|
 | Phase 0B / Phase 1 headless kernel | **PASS (local)** | All four gate items below are covered by committed tests that run in `pnpm check`. |
-| Phase 0A evidence close-out | **PARTIAL** | Three validator-accepted Fidelity Maps are linked to three validated recipes. Blind annotations, blind scoring, raw-versus-compiler pairs, and per-unit cost/latency capture require paid or human work that this session could not run. See `PARKED_ACTIONS.md`. |
+| Phase 0A evidence close-out | **PARTIAL** | Three validator-accepted Fidelity Maps are linked to recipes; two recipes are validated and the corrected Winter Arc walk-in/stretch recipe is draft. Blind annotations, blind scoring, raw-versus-compiler pairs, and per-unit cost/latency capture require paid or human work that this session could not run. See `PARKED_ACTIONS.md`. |
 | Private live route (Phase 2) | **NO-GO for now** | The kernel is ready to host one analyzer, one image, and one video adapter, but the Phase 0A fidelity gate has not passed and no rights records exist for the benchmark sources. |
 
 ## 1. Headless kernel gate
@@ -59,7 +59,7 @@ The replayed plan then compiles to a kernel plan and runs through the fake kerne
 |---|---:|---:|
 | Tests passing | 26 | 86 |
 | Format recipes valid | 9 | 10 |
-| Recipes marked validated | 7 | 7 |
+| Recipes marked validated | 7 | 6 |
 
 The original coverage remains green and the new evidence-gate tests run alongside it. `pnpm check` also runs the benchmark sample, the Fidelity Map validator, and the historical replay.
 
@@ -69,12 +69,12 @@ An owner review added a final fail-closed hardening pass: idempotency keys are n
 
 ### 2.1 Materialized Fidelity Maps
 
-Three maps were materialized from evidence already persisted under `output/` (read-only): the Gemini `gemini-3.7-flash` static analysis JSON and the FFmpeg `select=scene` `showinfo` log for each source. Deterministic cut timestamps are the system of record; the analyzer supplies labels and interpretation.
+Three maps were materialized from evidence already persisted under `output/` (read-only): the Gemini `gemini-3.7-flash` static analysis JSON and the FFmpeg `select=scene` `showinfo` log for each source. Deterministic cut timestamps are the system of record. The Dcq Reel additionally carries a persisted full-timeline human correction because the model's action label was visually wrong.
 
 | Map | Family | Source duration | Segments / units | Static analyzer latency | Static tokens (in / out / thought) |
 |---|---|---:|---:|---:|---|
 | `fm-phone-laugh-to-lock-in-gym-v1` | single-take performance | 6139 ms | 1 / 1 | 14.6 s | 873 / 867 / 548 |
-| `fm-winter-arc-shirt-reveal-checklist-v1` | single-take product/checklist | 9517 ms | 1 / 1 | 11.7 s | 1118 / 709 / 116 |
+| `fm-winter-arc-walk-in-stretch-checklist-v2` | single-take product/checklist | 9517 ms | 1 / 1 | 11.7 s | 1118 / 709 / 116 |
 | `fm-childhood-to-family-gym-montage-v1` | multi-take posing montage | 12933 ms | 17 / 17 | 14.5 s | 1493 / 981 / 582 |
 
 Hashes:
@@ -82,13 +82,13 @@ Hashes:
 | Map | Fidelity Map hash |
 |---|---|
 | phone-laugh | `d792607c67c22199c61c0275a014ca5e94db1a7746957051136a0123f98873ab` |
-| winter-arc | `0e312cab94bcde687aa7b00dfaf853b35a5cb22b7665287f072f52857bb52c5a` |
+| winter-arc walk-in/stretch | `484f5fe4d7a681a99b226d12d07ec5276fe3dc825bec449694b6fc7ecd1fc586` |
 | family montage | `e003a259a09975d209f22d633a0933375e202ce196f06b2864310b4a8cf505d3` |
 
 Notable honesty choices baked into the fixtures:
 
 - rights status is `unverified` on all three, so `generationEligibility` reports "rights attestation is required"; the historical runs used Slack approvals, which are not durable rights records;
-- the Winter Arc map records playback as `unknown` because the analyzer could not rule out a slight ramp and no independent anchor was verifiable;
+- the corrected Winter Arc map records real-time playback from observable gait, clothing and carried-item swing; the original model's shirt-removal label is superseded by the persisted human full-timeline review;
 - the family montage map records a `minor` risk with `exclude` disposition for the childhood photograph; the rights contract refuses to ever authorize it;
 - the family montage covers the 388-frame video timeline (12933 ms) rather than the longer container duration.
 
@@ -97,10 +97,10 @@ Notable honesty choices baked into the fixtures:
 | Recipe | Lineage before | Lineage now | Derivation check |
 |---|---|---|---|
 | `phone-laugh-to-lock-in-gym` | run manifest | Fidelity Map | 1 shot equals 1 segment, same strategy |
-| `winter-arc-shirt-reveal-checklist` | run manifest | Fidelity Map | 1 shot equals 1 segment; recipe ends 117 ms inside the final segment (deterministic tail trim of the validated run) |
+| `winter-arc-walk-in-stretch-checklist` | run manifest | Fidelity Map + human correction | 1 shot equals 1 segment; recipe ends 117 ms inside the final segment; status is draft because the old generated run followed the rejected shirt-removal interpretation |
 | `childhood-to-family-gym-montage` | run manifest | Fidelity Map | 17 shots equal 17 deterministic segments; 5 deterministic-source photo units plus 12 image-to-video units |
 
-The remaining four validated recipes and two drafts still cite run manifests or evidence hashes. Their analyzer outputs are not persisted in the repository's evidence set, so re-deriving them requires a paid analyzer run and is parked.
+The remaining four validated recipes and three manifest/evidence-only drafts still cite run manifests or evidence hashes. Their analyzer outputs are not persisted in the repository's evidence set, so re-deriving them requires a paid analyzer run and is parked.
 
 ### 2.3 Historical paid-unit cost and latency
 
@@ -112,7 +112,7 @@ The plan requires unit cost and latency for every paid generation unit. The pers
 | hand-wipe final (GymLevels) | $0.28 | $0.18 | $0.10 | 2 image + 2 video | not recorded |
 | hand-wipe r3ta/pepmod instantiation | $0.28 | not split | not split | 2 image + 2 video | not recorded |
 | family montage run-v1 | not recorded | not recorded | not recorded | 12 video | not recorded |
-| winter-arc run-v1 | not recorded | not recorded | not recorded | 1 image + 1 video | not recorded |
+| winter-arc run-v1 (action misclassified; excluded) | not recorded | not recorded | not recorded | 1 image + 1 video | not recorded |
 
 Per-unit latency was never captured. The kernel now records `createdAtMs`, `updatedAtMs`, receipt time, and `actualCostUsdMicros` per provider call, so future live runs satisfy this automatically.
 
@@ -128,7 +128,7 @@ The exact evidence assembly sequence is documented in `docs/phase-0-evidence-wor
 
 ### 2.5 Not run in this session
 
-Correction recorded 2026-09-03: the first live H3 control/compiler pair used the later Instagram `DcqCAe_Jl9o` shirt-reveal recipe, but the intended original product/checklist source was TikTok `7665182154300624142`. Candidate A was the compiler lane, but that pair is excluded from the Phase 0 gate because it tested the wrong action grammar. The TikTok is one fixed 5.117-second take: the foreground subject performs accelerated incline dumbbell presses while a background person bends, picks up a bottle, turns and walks several strides; a persistent `Getting lean is EASY.` checklist overlays the action. It contains no undressing. The corrected recipe is `incline-press-checklist-loop` and remains draft until an H3 reconstruction validates the approximately 2.0x-2.5x foreground and background cadence. The separate Instagram shirt-reveal recipe remains valid only for its own source.
+Correction recorded 2026-09-03: the operator confirmed the intended source was Instagram `DcqCAe_Jl9o`. Direct full-timeline review shows a fully clothed subject walking away into the gym, raising both arms into an overhead shoulder/triceps stretch, lowering the arms, and continuing forward. No shirt is removed and no bodybuilding flex occurs. The static analyzer, saved recipe, Fidelity Map, historical generated output, and control/compiler pair had all inherited the same visual misinterpretation. The corrected recipe is `winter-arc-walk-in-stretch-checklist`; its v2 Fidelity Map is chained to the rejected v1 hash and backed by a persisted human review. The recipe is draft, and Candidate A plus the historical H3 output are excluded from gate evidence until a corrected generation validates the walking/stretching action. TikTok `7665182154300624142` remains a separate incline-press checklist draft and was not the requested correction.
 
 - blind human annotations for the three clips;
 - one raw-request versus compiler generation pair per family;
@@ -145,7 +145,7 @@ Each is a paid or human gate and is listed with its unblocking condition in `PAR
 | Remove named model/provider guidance from public schemas | Compiled plans, estimates, jobs, and outputs use provider classes only; tests assert prompts and estimates contain no provider or adapter names. |
 | Typed target dimensions and generation-unit impact | `TypedDirective` carries dimension, target scope, intent, and value; the invalidation graph maps dimensions to units and finishing steps. |
 | Machine-readable QA | `QAReport` scores per dimension and attaches typed repair directives to timestamped findings. |
-| Validated recipes cite a real Fidelity Map hash | Three of seven validated recipes now do; a derivation check proves the structure matches. The other four are parked on analyzer re-runs. |
+| Recipes cite a real Fidelity Map hash | Three recipes do; two are validated and the corrected Winter Arc walk-in/stretch recipe is draft pending faithful generation. Four other validated recipes are parked on analyzer re-runs. |
 | Cost, rights scope, and approval binding in eligibility | `checkGenerationAuthority` binds source, revision, plan, estimate, expiry, rights coverage, and single-use approval ceilings, and the kernel consumes approvals inside the creation transaction. |
 
 ## 4. Risks

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "winter-arc-walk-in-stretch-checklist",
+  "revision": 2,
+  "name": "Winter Arc walk-in stretch checklist",
+  "description": "One locked-camera monochrome rear-view take in which a fully clothed subject walks into the gym, stretches both arms overhead, lowers them, and continues deeper into the room beneath a persistent challenge checklist.",
+  "provenance": {
+    "sourceAssetId": "instagram-DcqCAe_Jl9o",
+    "sourceFidelityMapHash": "484f5fe4d7a681a99b226d12d07ec5276fe3dc825bec449694b6fc7ecd1fc586",
+    "sourceRunManifestSha256": "a65edb59ce637f68a8156f82722c2bb563cb29fe3c4c92e9dc24040650c1170b",
+    "extractionPromptVersion": "analysis-v11-human-action-correction",
+    "rightsTransferPolicy": "structure_only"
+  },
+  "durationMs": 9400,
+  "aspectRatio": "9:16",
+  "lockedGrammar": [
+    "One uninterrupted natural-real-time take from a locked rear-view vertical camera",
+    "High-contrast monochrome silhouette against a bright gym entrance",
+    "Fully clothed subject walks away from the camera into the gym while raising both arms into an overhead shoulder and triceps stretch",
+    "Subject lowers both arms and keeps walking deeper into the gym; the shrinking silhouette supplies the visual progression",
+    "Shirt, trousers and carried gym bag remain present and move causally with the walk",
+    "A centered yellow serif challenge checklist remains deterministic and persistent",
+    "No shirt removal, undressing, back reveal, bodybuilding flex, body morph, cut or camera move",
+    "Audio is added during finishing and is independent of generated motion"
+  ],
+  "variables": [
+    {"key":"subject_identity","kind":"subject_identity","description":"One fictional or authorized adult identity used throughout the walk-in take.","required":false,"defaultValue":"a clearly new fictional athletic adult with a consistent rear silhouette and hair","examples":["a fictional athletic man with short dark curls","a fictional athletic woman with a dark bun"]},
+    {"key":"gender_presentation","kind":"gender_presentation","description":"Gender presentation preserved through the one-take walk and stretch.","required":false,"defaultValue":"male","examples":["male","female","androgynous"]},
+    {"key":"wardrobe","kind":"wardrobe","description":"Fully clothed unbranded gym-entry outfit that remains on for the entire clip.","required":false,"defaultValue":"a plain black T-shirt, loose dark training trousers and dark trainers","examples":["a black T-shirt and trousers","a loose grey tee and black leggings"]},
+    {"key":"carried_item","kind":"other","description":"Optional unbranded gym item carried while walking.","required":false,"defaultValue":"a dark unbranded gym bag carried at one side","examples":["a black gym bag","a rolled training towel"]},
+    {"key":"setting","kind":"setting","description":"Backlit gym entrance and visible weight room that create depth as the subject walks away.","required":false,"defaultValue":"a gym entrance with a bright weight room beyond, mirrors and subtle background activity","examples":["a bright gym doorway","a backlit warehouse gym entrance"]},
+    {"key":"checklist_title","kind":"caption_text","description":"Exact deterministic heading above the challenge list.","required":false,"defaultValue":"Winter Arc challenge","examples":["GymLevels consistency challenge","30-day training reset"]},
+    {"key":"checklist_items","kind":"caption_text","description":"Exact numbered challenge items rendered beneath the heading.","required":false,"defaultValue":"1. Water only; 2. No junk food; 3. 7-8 hours sleep; 4. Gym 4x per week; 5. Run 1x per week; 6. 10k steps daily; 7. No phone during meals; 8. 20 min outside daily; 9. Be grateful daily; 10. Track 5 daily wins","examples":["ten custom fitness habits","five concise consistency rules"]},
+    {"key":"product_promo","kind":"product_promo","description":"A subtle app integration placed naturally in one tracking-oriented checklist item.","required":false,"defaultValue":"Track workouts in GymLevels","examples":["Log every workout in GymLevels","Plan sessions with GymLevels"]},
+    {"key":"audio_policy","kind":"audio","description":"Authorized source audio or a rights-safe replacement.","required":false,"defaultValue":"new royalty-cleared motivational audio synchronized to the walking cadence","examples":["reuse authorized source audio","new restrained cinematic beat"]}
+  ],
+  "shots": [
+    {
+      "id": "walk-in-overhead-stretch",
+      "startMs": 0,
+      "endMs": 9400,
+      "transitionIn": "none",
+      "transitionDurationMs": 0,
+      "generationStrategy": "image_to_video",
+      "providerDurationMs": 10000,
+      "anchorPromptTemplate": "Show {{subject_identity}} with {{gender_presentation}} presentation from behind at the near edge of {{setting}}, fully clothed in {{wardrobe}} and carrying {{carried_item}}, as a high-contrast monochrome silhouette from a locked vertical phone camera.",
+      "motionPromptTemplate": "In one uninterrupted natural-real-time take, walk steadily away from the locked camera and deeper into the gym. While continuing to walk, raise both arms overhead, bend the elbows into a loose shoulder and triceps stretch, make a small natural side-to-side adjustment, then release and lower both arms before continuing forward. The subject gradually becomes smaller in frame. Keep every item of clothing on throughout; preserve natural gait, fabric drape and carried-item swing. No shirt removal, undressing, back reveal, bodybuilding flex, body morph, cut, zoom, pan or camera movement.",
+      "lockedTraits": ["locked rear camera","monochrome backlight","continuous walking away","overhead stretch while walking","fully clothed throughout","natural gait and bag swing","continuous real-time take"]
+    }
+  ],
+  "deterministicLayers": [
+    {"id":"challenge-list","kind":"caption","startMs":0,"endMs":9400,"template":"Render ‘{{checklist_title}}’ and the numbered items ‘{{checklist_items}}’ as centered yellow serif text; naturally replace the final tracking-oriented item with ‘{{product_promo}}’ when a product is requested."},
+    {"id":"soundtrack","kind":"audio","startMs":0,"endMs":9400,"template":"Apply {{audio_policy}} without changing the locked visual timeline."}
+  ],
+  "promptExamples": [
+    "Use the Winter Arc walk-in stretch format with a fictional male subject and make item 10 ‘Track workouts in GymLevels’.",
+    "Create the one-take walking checklist with a fictional woman stretching overhead as she enters the gym."
+  ],
+  "validation": {
+    "status": "draft",
+    "qaMode": "hybrid",
+    "sourceOutputId": "instagram-DcqCAe_Jl9o-action-correction-pending",
+    "notes": [
+      "Corrected on 2026-09-03 after direct full-timeline source review and operator confirmation: the subject stays fully clothed, stretches overhead while walking into the gym, lowers the arms and continues forward.",
+      "The earlier analyzer and generated output incorrectly interpreted the overhead stretch as shirt removal and a flex; that output is excluded as validation evidence.",
+      "The checklist remains deterministic so product wording stays exact while photographic motion remains independently repairable.",
+      "This corrected recipe remains draft until the GPT Image 2 setup-frame plus H3 Max Turbo workflow reproduces the walk, stretch, camera and timing faithfully.",
+      "The recipe transfers structure only; source identity, setting, audio, overlay rights and permissions remain separately gated."
+    ]
+  }
+}

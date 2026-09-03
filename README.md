@@ -36,4 +36,4 @@ pnpm kernel simulate fixtures/fidelity-maps/fm-childhood-to-family-gym-montage-v
 pnpm kernel:replay
 ```
 
-Three validator-accepted Fidelity Maps in `fixtures/fidelity-maps/` are linked from the `phone-laugh-to-lock-in-gym`, `winter-arc-shirt-reveal-checklist`, and `childhood-to-family-gym-montage` recipes. The evidence report is in `docs/reports/phase-0-benchmark-evidence-2026-09-03.md`; paid and human gates are listed in `PARKED_ACTIONS.md`.
+Three validator-accepted Fidelity Maps in `fixtures/fidelity-maps/` are linked from the `phone-laugh-to-lock-in-gym`, `winter-arc-walk-in-stretch-checklist`, and `childhood-to-family-gym-montage` recipes. The corrected Winter Arc recipe is draft until a generation validates the source's actual fully clothed walk-and-stretch action. The evidence report is in `docs/reports/phase-0-benchmark-evidence-2026-09-03.md`; paid and human gates are listed in `PARKED_ACTIONS.md`.

@@ -33,11 +33,10 @@ test("materialized maps stay analysis-only until a rights attestation exists", (
   }
 });
 
-test("three validated recipes cite a real Fidelity Map hash and re-derive their structure from it", () => {
+test("three recipes cite a real Fidelity Map hash and re-derive their structure from it", () => {
   const linked = recipes.filter((recipe) => recipeLineage(recipe) === "fidelity_map");
-  assert.deepEqual(linked.map((recipe) => recipe.id).sort(), ["childhood-to-family-gym-montage", "phone-laugh-to-lock-in-gym", "winter-arc-shirt-reveal-checklist"]);
+  assert.deepEqual(linked.map((recipe) => recipe.id).sort(), ["childhood-to-family-gym-montage", "phone-laugh-to-lock-in-gym", "winter-arc-walk-in-stretch-checklist"]);
   for (const recipe of linked) {
-    assert.equal(recipe.validation.status, "validated");
     const fixture = fixtures.find((candidate) => candidate.fidelityMapHash === recipe.provenance.sourceFidelityMapHash);
     assert.ok(fixture !== undefined, `${recipe.id} cites an unknown Fidelity Map hash`);
     assert.equal(fixture.recipeId, recipe.id);
@@ -64,11 +63,15 @@ test("the multi-take montage map enforces one unit per deterministic cut and pro
   assert.equal(estimate.units.filter((unit) => unit.providerClass === "video_motion" && unit.billedDurationMs === 5_000).length, 12, "sub-second shots bill the provider minimum and trim deterministically");
 });
 
-test("the ambiguous-speed map abstains with unknown playback instead of forcing real time", () => {
-  const winter = fixtures.find((fixture) => fixture.id === "fm-winter-arc-shirt-reveal-checklist-v1")!;
-  assert.equal(winter.map.playback.classification, "unknown");
-  assert.equal(winter.map.playback.estimatedMultiplier, undefined);
-  assert.ok(winter.map.playback.cues.length >= 2);
+test("the corrected Winter Arc map preserves the real-time walk and overhead stretch", () => {
+  const winter = fixtures.find((fixture) => fixture.id === "fm-winter-arc-walk-in-stretch-checklist-v2")!;
+  assert.equal(winter.map.playback.classification, "real_time");
+  assert.equal(winter.map.playback.estimatedMultiplier, 1);
+  assert.ok(winter.artifacts.some((artifact) => artifact.providerRun.mode === "human"));
+  const grammar = JSON.stringify(winter.map).toLowerCase();
+  assert.match(grammar, /walk/);
+  assert.match(grammar, /stretch/);
+  assert.doesNotMatch(grammar, /pull the shirt|shirt removal|removes shirt|back double-biceps/);
 });
 
 test("every fixture compiles deterministically and registers with the fake analyzer", () => {

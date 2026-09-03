@@ -1,11 +1,12 @@
 {
   "schemaVersion": "0.1.0",
-  "id": "fm-winter-arc-shirt-reveal-checklist-v1",
-  "recipeId": "winter-arc-shirt-reveal-checklist",
+  "id": "fm-winter-arc-walk-in-stretch-checklist-v2",
+  "recipeId": "winter-arc-walk-in-stretch-checklist",
   "family": "single-take product/checklist integration",
   "materializedFrom": {
     "analyzerOutput": "output/source-analysis/instagram-DcqCAe_Jl9o/gemini-static.json",
     "sceneDetectLog": "output/source-analysis/instagram-DcqCAe_Jl9o/scene-detect.log",
+    "humanReview": "fixtures/evidence/instagram-DcqCAe_Jl9o-human-review-v1.json",
     "sourceProbe": {
       "sha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "durationMs": 9517,
@@ -17,9 +18,10 @@
     "materializedAt": "2026-09-03",
     "notes": [
       "The delivered file is constant 30 fps; the analysis copy is the source itself.",
-      "The shared CLI output does not persist the prompt version; analysis-v10-capture-workflow is taken from the recipe provenance for this source.",
+      "The shared CLI output does not persist the prompt version; its initial action interpretation is retained as fallible model evidence rather than treated as ground truth.",
       "FFmpeg select=scene showinfo produced zero frames: single take, no hard cuts.",
-      "The analyzer could not rule out a slight speed ramp during shirt removal (1.0x-1.1x) and no independent temporal anchor was verified, so playback is recorded as unknown rather than forced to real time.",
+      "A full-timeline human review plus operator correction found that the subject remains clothed, stretches overhead while walking into the gym, lowers the arms, and continues walking; the earlier shirt-removal interpretation was rejected.",
+      "Gait, clothing motion, carried-item swing and steady recession support natural real-time playback.",
       "Rights remain unverified; analysis-only until a durable rights record exists."
     ],
     "historicalRun": {
@@ -85,6 +87,32 @@
       },
       "structuredPayloadArtifactId": "output/source-analysis/instagram-DcqCAe_Jl9o/scene-detect.log",
       "summaryTruncated": false
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "id": "instagram-DcqCAe_Jl9o:human-action-review",
+      "workspaceId": "phase-0-evidence",
+      "sourceAssetId": "instagram-DcqCAe_Jl9o",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "normalizedContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "durationMs": 9517,
+      "normalizedFps": 30,
+      "originalOffsetMs": 0,
+      "providerRun": {
+        "provider": "mission-control",
+        "exactModel": "human-source-review-v1",
+        "mode": "human",
+        "runId": "source-action-correction-2026-09-03T19:44:11Z",
+        "promptVersion": "source-action-correction-v1",
+        "latencyMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "thoughtTokens": 0,
+        "toolUseTokens": 0,
+        "processingCalls": 0
+      },
+      "structuredPayloadArtifactId": "fixtures/evidence/instagram-DcqCAe_Jl9o-human-review-v1.json",
+      "summaryTruncated": false
     }
   ],
   "evidence": [
@@ -125,14 +153,14 @@
       }
     },
     {
-      "id": "playback-ambiguous",
-      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "id": "playback-real-time",
+      "artifactId": "instagram-DcqCAe_Jl9o:human-action-review",
       "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "kind": "playback_rate",
-      "statement": "Appears real-time or a slight speed ramp during shirt removal (~1.0x-1.1x); exact ramp cannot be verified without independent anchors.",
+      "statement": "Natural real-time playback is supported by ordinary walking cadence, clothing response, carried-item swing and steady recession into the gym.",
       "status": "accepted",
-      "confidence": 0.5,
-      "directObservation": false,
+      "confidence": 0.85,
+      "directObservation": true,
       "range": {
         "startMs": 0,
         "endMs": 9517,
@@ -143,83 +171,83 @@
       }
     },
     {
-      "id": "action-reach",
-      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "id": "action-walk-and-raise",
+      "artifactId": "instagram-DcqCAe_Jl9o:human-action-review",
       "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "kind": "action",
-      "statement": "Subject faces away wearing a T-shirt and backwards cap, reaches up to grab the collar and sleeves.",
+      "statement": "Fully clothed subject walks away from the camera into the gym and begins raising both arms.",
       "status": "accepted",
       "confidence": 0.9,
       "directObservation": true,
       "range": {
         "startMs": 0,
-        "endMs": 2000,
+        "endMs": 1500,
         "originalStartMs": 0,
-        "originalEndMs": 2000,
+        "originalEndMs": 1500,
         "normalizedStartFrame": 0,
-        "normalizedEndFrame": 60
+        "normalizedEndFrame": 45
       }
     },
     {
-      "id": "action-remove",
-      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "id": "action-overhead-stretch",
+      "artifactId": "instagram-DcqCAe_Jl9o:human-action-review",
       "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "kind": "action",
-      "statement": "Subject pulls the shirt over the head and removes it.",
+      "statement": "Subject continues walking with both arms overhead, elbows bent, making a loose shoulder and triceps stretch with a small side-to-side adjustment.",
       "status": "accepted",
       "confidence": 0.9,
       "directObservation": true,
       "range": {
-        "startMs": 2000,
-        "endMs": 5000,
-        "originalStartMs": 2000,
-        "originalEndMs": 5000,
-        "normalizedStartFrame": 60,
-        "normalizedEndFrame": 150
+        "startMs": 1500,
+        "endMs": 5200,
+        "originalStartMs": 1500,
+        "originalEndMs": 5200,
+        "normalizedStartFrame": 45,
+        "normalizedEndFrame": 156
       }
     },
     {
-      "id": "action-flex",
-      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "id": "action-lower-arms",
+      "artifactId": "instagram-DcqCAe_Jl9o:human-action-review",
       "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "kind": "action",
-      "statement": "Subject flexes back and lats into a back double-biceps / lat-spread pose.",
+      "statement": "Subject releases the overhead stretch and lowers both arms while maintaining forward gait.",
       "status": "accepted",
       "confidence": 0.9,
       "directObservation": true,
       "range": {
-        "startMs": 5000,
-        "endMs": 7000,
-        "originalStartMs": 5000,
-        "originalEndMs": 7000,
-        "normalizedStartFrame": 150,
-        "normalizedEndFrame": 210
+        "startMs": 5200,
+        "endMs": 6800,
+        "originalStartMs": 5200,
+        "originalEndMs": 6800,
+        "normalizedStartFrame": 156,
+        "normalizedEndFrame": 204
       }
     },
     {
-      "id": "action-hold",
-      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "id": "action-continue-walking",
+      "artifactId": "instagram-DcqCAe_Jl9o:human-action-review",
       "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "kind": "action",
-      "statement": "Arms drop slightly, head turns slightly, posture holds as the clip ends or loops.",
+      "statement": "With arms relaxed, the subject continues walking deeper into the gym and gradually becomes smaller in the fixed frame.",
       "status": "accepted",
       "confidence": 0.85,
       "directObservation": true,
       "range": {
-        "startMs": 7000,
+        "startMs": 6800,
         "endMs": 9517,
-        "originalStartMs": 7000,
+        "originalStartMs": 6800,
         "originalEndMs": 9517,
-        "normalizedStartFrame": 210,
+        "normalizedStartFrame": 204,
         "normalizedEndFrame": 286
       }
     },
     {
       "id": "continuity-wardrobe",
-      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "artifactId": "instagram-DcqCAe_Jl9o:human-action-review",
       "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "kind": "continuity",
-      "statement": "Dark shorts and backwards cap persist; the dark T-shirt is removed mid-take.",
+      "statement": "The dark T-shirt and lower-body clothing remain on throughout; no undressing, back reveal or bodybuilding flex occurs.",
       "status": "accepted",
       "confidence": 0.9,
       "directObservation": true,
@@ -269,21 +297,21 @@
       }
     },
     {
-      "id": "motion-shirt",
-      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "id": "motion-clothing-and-bag",
+      "artifactId": "instagram-DcqCAe_Jl9o:human-action-review",
       "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "kind": "secondary_motion",
-      "statement": "Shirt fabric deforms and swings as it is pulled over the head.",
+      "statement": "The worn shirt drapes with the raised arms while the carried gym bag and loose clothing swing naturally with the walking cadence.",
       "status": "accepted",
       "confidence": 0.8,
       "directObservation": true,
       "range": {
-        "startMs": 2000,
-        "endMs": 5000,
-        "originalStartMs": 2000,
-        "originalEndMs": 5000,
-        "normalizedStartFrame": 60,
-        "normalizedEndFrame": 150
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
       }
     },
     {
@@ -291,7 +319,7 @@
       "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
       "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "kind": "secondary_motion",
-      "statement": "No other independently moving elements observed: no hair, foliage, particles, or background motion.",
+      "statement": "No other material independent motion changes the action grammar; background gym activity remains secondary.",
       "status": "accepted",
       "confidence": 0.7,
       "directObservation": true,
@@ -415,22 +443,25 @@
   ],
   "map": {
     "schemaVersion": "0.2.0",
-    "id": "fm-winter-arc-shirt-reveal-checklist-v1",
-    "revision": 1,
+    "id": "fm-winter-arc-walk-in-stretch-checklist-v2",
+    "revision": 2,
+    "parentRevisionHash": "0e312cab94bcde687aa7b00dfaf853b35a5cb22b7665287f072f52857bb52c5a",
     "sourceAssetId": "instagram-DcqCAe_Jl9o",
     "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
     "durationMs": 9517,
     "rightsStatus": "unverified",
-    "requestedChange": "Recreate the backlit single-take shirt-removal reveal with a fictional subject and a deterministic checklist overlay carrying the requested product wording.",
+    "requestedChange": "Recreate the backlit single-take walk into the gym with a fully clothed fictional subject stretching overhead while moving away, plus a deterministic checklist overlay carrying the requested product wording.",
     "playback": {
-      "classification": "unknown",
-      "confidence": 0.5,
+      "classification": "real_time",
+      "estimatedMultiplier": 1,
+      "confidence": 0.85,
       "cues": [
-        "Analyzer flagged a possible 1.0x-1.1x ramp during shirt removal",
-        "No independent temporal anchor (gait, blink, settling) was verifiable in the silhouette"
+        "Ordinary continuous walking cadence across the full take",
+        "Clothing response and carried-item swing remain coherent with the steps",
+        "Subject recedes steadily without a visible speed ramp"
       ],
       "evidenceIds": [
-        "playback-ambiguous"
+        "playback-real-time"
       ]
     },
     "lighting": {
@@ -454,40 +485,40 @@
       ]
     },
     "secondaryMotion": {
-      "summary": "The removed shirt is the only material secondary-motion field; the audit found no other independently moving elements.",
+      "summary": "Worn-shirt drape, loose clothing and a carried gym bag respond causally to the overhead stretch and walking gait.",
       "fields": [
         {
-          "id": "shirt",
-          "element": "Removed T-shirt fabric",
-          "driver": "contact",
+          "id": "clothing-and-bag",
+          "element": "Worn shirt, loose lower-body clothing and carried gym bag",
+          "driver": "inertia",
           "range": {
-            "startMs": 2000,
-            "endMs": 5000,
-            "originalStartMs": 2000,
-            "originalEndMs": 5000,
-            "normalizedStartFrame": 60,
-            "normalizedEndFrame": 150
+            "startMs": 0,
+            "endMs": 9517,
+            "originalStartMs": 0,
+            "originalEndMs": 9517,
+            "normalizedStartFrame": 0,
+            "normalizedEndFrame": 286
           },
-          "direction": "Upward over the head then to the side",
-          "amplitude": "High while in hand",
-          "cadence": "One continuous pull",
-          "coupling": "Driven by the arms; alters the silhouette edge against the backlight",
-          "confidence": 0.8,
+          "direction": "Shirt drapes upward with the arms; clothing and bag swing forward and back with the steps",
+          "amplitude": "Low-to-moderate gait-coupled motion",
+          "cadence": "Continuous step-synchronized swing",
+          "coupling": "Driven by arm elevation and walking inertia; preserves the fully clothed silhouette",
+          "confidence": 0.85,
           "directObservation": true,
           "evidenceIds": [
-            "motion-shirt"
+            "motion-clothing-and-bag"
           ]
         }
       ],
       "evidenceIds": [
-        "motion-shirt",
+        "motion-clothing-and-bag",
         "motion-none-else"
       ]
     },
     "editSegments": [
       {
         "id": "seg-1",
-        "sourceShotId": "shirt-removal-back-reveal",
+        "sourceShotId": "walk-in-overhead-stretch",
         "range": {
           "startMs": 0,
           "endMs": 9517,
@@ -500,14 +531,16 @@
         "transitionIn": "none",
         "transitionDurationMs": 0,
         "playback": {
-          "classification": "unknown",
-          "confidence": 0.5,
+          "classification": "real_time",
+          "estimatedMultiplier": 1,
+          "confidence": 0.85,
           "cues": [
-            "Possible slight ramp during removal",
-            "No verifiable anchor"
+            "Ordinary walking cadence",
+            "Coherent clothing and carried-item swing",
+            "Steady recession into the gym"
           ],
           "evidenceIds": [
-            "playback-ambiguous"
+            "playback-real-time"
           ]
         },
         "evidenceIds": [
@@ -530,8 +563,9 @@
         "Gym glass partition environment"
       ],
       "shotLocalElements": [
-        "Shirt in hand",
-        "Flex pose"
+        "Forward walking gait and steady recession",
+        "Overhead shoulder and triceps stretch",
+        "Carried gym bag and clothing swing"
       ],
       "deterministicLayers": [
         "Centered checklist text rendered deterministically for the full duration",
@@ -539,14 +573,14 @@
       ],
       "setups": [
         {
-          "id": "setup-backlit-rear",
+          "id": "setup-backlit-walk-in",
           "sourceShotIds": [
-            "shirt-removal-back-reveal"
+            "walk-in-overhead-stretch"
           ],
           "cameraSignature": "Locked-off static camera at waist/chest height, rear framing, 9:16",
           "environmentSignature": "Gym entrance with bright glass partition and signage behind the subject",
-          "subjectState": "Standing facing away, removes shirt then flexes",
-          "wardrobeState": "Dark T-shirt (removed), dark shorts, backwards cap",
+          "subjectState": "Fully clothed, facing away near the entrance, beginning to walk into the gym",
+          "wardrobeState": "Dark T-shirt and loose dark lower-body clothing remain on; dark gym bag carried at one side",
           "lightingState": "Rear backlight, monochrome, crushed shadows",
           "evidenceIds": [
             "shot-single-take",
@@ -557,11 +591,11 @@
       ],
       "generationUnits": [
         {
-          "id": "unit-shirt-removal-back-reveal",
+          "id": "unit-walk-in-overhead-stretch",
           "sourceShotIds": [
-            "shirt-removal-back-reveal"
+            "walk-in-overhead-stretch"
           ],
-          "setupId": "setup-backlit-rear",
+          "setupId": "setup-backlit-walk-in",
           "range": {
             "startMs": 0,
             "endMs": 9517,
@@ -580,7 +614,9 @@
           "preserve": [
             "Locked rear framing",
             "Backlit silhouette",
-            "Reach, remove, flex, hold action order",
+            "Walk, raise arms, stretch overhead, lower arms, continue walking action order",
+            "Fully clothed wardrobe continuity",
+            "Natural gait-coupled clothing and bag motion",
             "Monochrome grade"
           ],
           "change": [
@@ -589,10 +625,12 @@
           ],
           "evidenceIds": [
             "shot-single-take",
-            "action-reach",
-            "action-remove",
-            "action-flex",
-            "action-hold"
+            "action-walk-and-raise",
+            "action-overhead-stretch",
+            "action-lower-arms",
+            "action-continue-walking",
+            "continuity-wardrobe",
+            "motion-clothing-and-bag"
           ]
         }
       ],
@@ -608,63 +646,63 @@
         "role": "hook",
         "range": {
           "startMs": 0,
-          "endMs": 2000,
+          "endMs": 1500,
           "originalStartMs": 0,
-          "originalEndMs": 2000,
+          "originalEndMs": 1500,
           "normalizedStartFrame": 0,
-          "normalizedEndFrame": 60
+          "normalizedEndFrame": 45
         },
-        "description": "Rear view, reach for the collar",
+        "description": "Rear view: walk into the gym and begin raising both arms",
         "evidenceIds": [
-          "action-reach"
+          "action-walk-and-raise"
         ]
       },
       {
         "id": "beat-escalation",
         "role": "escalation",
         "range": {
-          "startMs": 2000,
-          "endMs": 5000,
-          "originalStartMs": 2000,
-          "originalEndMs": 5000,
-          "normalizedStartFrame": 60,
-          "normalizedEndFrame": 150
+          "startMs": 1500,
+          "endMs": 5200,
+          "originalStartMs": 1500,
+          "originalEndMs": 5200,
+          "normalizedStartFrame": 45,
+          "normalizedEndFrame": 156
         },
-        "description": "Shirt pulled over the head",
+        "description": "Continue walking while stretching both arms overhead",
         "evidenceIds": [
-          "action-remove"
+          "action-overhead-stretch"
         ]
       },
       {
         "id": "beat-payoff",
         "role": "payoff",
         "range": {
-          "startMs": 5000,
-          "endMs": 7000,
-          "originalStartMs": 5000,
-          "originalEndMs": 7000,
-          "normalizedStartFrame": 150,
-          "normalizedEndFrame": 210
+          "startMs": 5200,
+          "endMs": 6800,
+          "originalStartMs": 5200,
+          "originalEndMs": 6800,
+          "normalizedStartFrame": 156,
+          "normalizedEndFrame": 204
         },
-        "description": "Back flex against the backlight",
+        "description": "Release the stretch and lower both arms while walking",
         "evidenceIds": [
-          "action-flex"
+          "action-lower-arms"
         ]
       },
       {
-        "id": "beat-hold",
+        "id": "beat-walk-away",
         "role": "other",
         "range": {
-          "startMs": 7000,
+          "startMs": 6800,
           "endMs": 9517,
-          "originalStartMs": 7000,
+          "originalStartMs": 6800,
           "originalEndMs": 9517,
-          "normalizedStartFrame": 210,
+          "normalizedStartFrame": 204,
           "normalizedEndFrame": 286
         },
-        "description": "Relaxed hold to the end",
+        "description": "Continue deeper into the gym with arms relaxed",
         "evidenceIds": [
-          "action-hold"
+          "action-continue-walking"
         ]
       }
     ],
@@ -688,12 +726,13 @@
       {
         "id": "preserve-action-order",
         "kind": "preserve",
-        "description": "Reach, remove, flex, hold",
+        "description": "Walk away, raise arms, stretch overhead, lower arms, continue walking while fully clothed",
         "evidenceIds": [
-          "action-reach",
-          "action-remove",
-          "action-flex",
-          "action-hold"
+          "action-walk-and-raise",
+          "action-overhead-stretch",
+          "action-lower-arms",
+          "action-continue-walking",
+          "continuity-wardrobe"
         ]
       },
       {
@@ -773,5 +812,5 @@
       }
     ]
   },
-  "fidelityMapHash": "0e312cab94bcde687aa7b00dfaf853b35a5cb22b7665287f072f52857bb52c5a"
+  "fidelityMapHash": "484f5fe4d7a681a99b226d12d07ec5276fe3dc825bec449694b6fc7ecd1fc586"
 }

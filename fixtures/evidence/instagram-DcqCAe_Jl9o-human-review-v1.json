@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "0.1.0",
+  "sourceAssetId": "instagram-DcqCAe_Jl9o",
+  "sourceUrl": "https://www.instagram.com/reel/DcqCAe_Jl9o/",
+  "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+  "reviewedAt": "2026-09-03T19:44:11Z",
+  "reviewBasis": [
+    "Full 282-frame source timeline",
+    "Two-frames-per-second contact sheet",
+    "Operator correction identifying the movement as stretching while walking into the gym"
+  ],
+  "correctedActionTimeline": [
+    {"startMs": 0, "endMs": 1500, "observation": "Fully clothed subject walks away from the camera into the gym and begins raising both arms."},
+    {"startMs": 1500, "endMs": 5200, "observation": "Subject continues walking with both arms overhead, elbows bent, making a loose shoulder and triceps stretch with a small side-to-side adjustment."},
+    {"startMs": 5200, "endMs": 6800, "observation": "Subject releases the stretch and lowers both arms while maintaining forward gait."},
+    {"startMs": 6800, "endMs": 9517, "observation": "Subject continues walking deeper into the gym with arms relaxed and gradually recedes in the fixed frame."}
+  ],
+  "continuity": "The dark T-shirt and lower-body clothing remain on throughout; no undressing, back reveal or bodybuilding flex occurs.",
+  "camera": "Locked rear-facing vertical camera; the subject's decreasing size is caused by walking away, not a zoom.",
+  "playback": "Natural real-time gait is visually supported by step cadence, clothing motion and carried-item swing.",
+  "supersedes": "The action interpretation in output/source-analysis/instagram-DcqCAe_Jl9o/gemini-static.json."
+}
