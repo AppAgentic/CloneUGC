@@ -46,6 +46,7 @@ export interface GenerationJob {
   outputId?: string;
   cancelRequestedAtMs?: number;
   terminalReason?: string;
+  attentionKind?: "provider_unknown" | "qa_rights_regression";
   attentionReason?: string;
   createdAtMs: number;
   updatedAtMs: number;

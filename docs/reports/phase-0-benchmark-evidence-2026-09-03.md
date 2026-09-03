@@ -57,13 +57,13 @@ The replayed plan then compiles to a kernel plan and runs through the fake kerne
 
 | Suite | Base commit e20ed3b | This branch |
 |---|---:|---:|
-| Tests passing | 26 | 73 |
+| Tests passing | 26 | 74 |
 | Format recipes valid | 9 | 9 |
 | Recipes marked validated | 7 | 7 |
 
 No existing test was modified. `pnpm check` also runs the benchmark sample, the Fidelity Map validator, and the historical replay.
 
-An owner review added a final fail-closed hardening pass: idempotency keys are now bound to the immutable create-job request; reused artifacts must come from a published, same-workspace, same-source output whose unit hash is unchanged; provider routing is checked against the compiled plan and estimate; estimate arithmetic and provider receipts are validated; and an actual-cost overrun records the real capture but terminates the job before any further paid submission.
+An owner review added a final fail-closed hardening pass: idempotency keys are now bound to the immutable create-job request; reused artifacts must come from a published, same-workspace, same-source output whose unit hash is unchanged; provider routing is checked against the compiled plan and estimate; estimate arithmetic and provider receipts are validated; an actual-cost overrun records the real capture but terminates the job before any further paid submission; and QA lineage or rights-regression failures cannot be reconciled away or published.
 
 ## 2. Phase 0A evidence close-out
 

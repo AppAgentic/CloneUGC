@@ -275,3 +275,27 @@ test("QA findings become a typed repair revision whose invalidation touches only
   const reuse = planRepairReuse({ previousPlan: plan, previousAcceptedArtifacts: job.unitArtifacts, nextPlan, changed: directives });
   assert.deepEqual(reuse.regenerate, ["unit-2:anchor", "unit-2:motion"]);
 });
+
+test("QA lineage mismatches and rights regressions block publication", () => {
+  const harness = createHarness();
+  const { jobId } = harness.createJob();
+  harness.kernel.dispatchOutbox();
+  const worker = harness.worker("worker-a");
+  worker.claim();
+  let outcome = worker.step(jobId);
+  while (outcome.kind !== "rendered") outcome = worker.step(jobId);
+  const job = harness.kernel.getJob(jobId);
+  const plan = harness.kernel.getPlan(job.inputs.planHash);
+  const bad = harness.qa.score({ jobId, plan, masterAssetHash: job.finishing!.masterAssetHash, sourceContentSha256: job.inputs.sourceContentSha256 });
+  assert.throws(() => harness.kernel.recordQAReport(jobId, "worker-a", { ...bad, jobId: "another-job" }), /belongs to another job/);
+
+  harness.qa.rightsRegression = true;
+  while (outcome.kind !== "scored") outcome = worker.step(jobId);
+  assert.equal(outcome.kind, "scored");
+  const paused = harness.kernel.getJob(jobId);
+  assert.equal(paused.state, "needs_attention");
+  assert.equal(paused.attentionKind, "qa_rights_regression");
+  assert.equal(harness.kernel.reconcile(jobId).resumed, false, "provider reconciliation cannot clear a rights hold");
+  assert.throws(() => harness.kernel.publishOutput(jobId, "worker-a"), /rights regression/);
+  assert.equal(harness.store.count("outputs"), 0);
+});

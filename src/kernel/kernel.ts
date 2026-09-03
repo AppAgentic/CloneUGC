@@ -554,6 +554,7 @@ export class JobKernel {
       call.reconciliation = { checks: 0, lastCheckedAtMs: this.clock.nowMs(), note: reason };
       job.stages[call.stage].status = "reconciling";
       job.state = "needs_attention";
+      job.attentionKind = "provider_unknown";
       job.attentionReason = `provider call ${call.id} has an unknown outcome`;
     }, { actorId, action: "call.unknown" });
   }
@@ -647,10 +648,12 @@ export class JobKernel {
     const resumed = this.store.transaction((tx) => {
       const job = this.requireJob(tx, jobId);
       if (job.state !== "needs_attention") return false;
+      if (job.attentionKind !== "provider_unknown") return false;
       const unknown = tx.list<ProviderCall>(COLLECTIONS.providerCalls).map((entry) => entry.data).some((candidate) => candidate.jobId === jobId && candidate.state === "unknown");
       if (unknown) return false;
       for (const stage of STAGES) if (job.stages[stage].status === "reconciling") job.stages[stage].status = "running";
       job.state = "running";
+      delete job.attentionKind;
       delete job.attentionReason;
       tx.delete(COLLECTIONS.leases, jobId);
       this.saveJob(tx, job);
@@ -726,13 +729,23 @@ export class JobKernel {
 
   recordQAReport(jobId: string, workerId: string, report: Omit<QAReport, "reportHash">): QAReport {
     const finished = finalizeQAReport(report);
-    const plan = this.getPlan(this.getJob(jobId).inputs.planHash);
+    const current = this.getJob(jobId);
+    const plan = this.getPlan(current.inputs.planHash);
     assertQAReport(finished, plan);
+    if (finished.jobId !== jobId) throw new KernelError(`QA report belongs to another job`);
+    if (finished.revisionHash !== current.inputs.revisionHash) throw new KernelError(`QA report is bound to another revision`);
+    if (finished.sourceContentSha256 !== current.inputs.sourceContentSha256) throw new KernelError(`QA report is bound to another source`);
+    if (finished.outputAssetHash !== current.finishing?.masterAssetHash) throw new KernelError(`QA report is bound to another output asset`);
     this.store.transaction((tx) => {
       this.requireLease(tx, jobId, workerId);
       const job = this.requireJob(tx, jobId);
       tx.set(COLLECTIONS.qaReports, finished.id, { jobId, report: finished } satisfies StoredQAReport);
       job.qaReportId = finished.id;
+      if (finished.rightsRegression) {
+        job.state = "needs_attention";
+        job.attentionKind = "qa_rights_regression";
+        job.attentionReason = `QA report ${finished.id} detected a rights regression`;
+      }
       this.saveJob(tx, job);
     });
     return finished;
@@ -748,6 +761,10 @@ export class JobKernel {
     if (job.finishing === undefined) throw new KernelError(`job ${jobId} has no finished master to publish`);
     if (job.qaReportId === undefined) throw new KernelError(`job ${jobId} has no QA report`);
     const report = this.getQAReport(job.qaReportId)!;
+    if (report.rightsRegression) throw new KernelError(`job ${jobId} cannot publish an output with a rights regression`);
+    if (report.jobId !== jobId || report.planHash !== job.inputs.planHash || report.revisionHash !== job.inputs.revisionHash || report.sourceContentSha256 !== job.inputs.sourceContentSha256 || report.outputAssetHash !== job.finishing.masterAssetHash) {
+      throw new KernelError(`job ${jobId} has a QA report with mismatched lineage`);
+    }
     this.store.transaction((tx) => this.requireLease(tx, jobId, workerId));
     const finalPrefix = `workspaces/${job.workspaceId}/outputs/${jobId}`;
     this.assets.publishAtomically({ workspaceId: job.workspaceId, finalPrefix, entries: [{ name: "master.mp4", hash: job.finishing.masterAssetHash }, { name: "manifest.json", hash: job.finishing.manifestAssetHash }] });
