@@ -128,6 +128,8 @@ The exact evidence assembly sequence is documented in `docs/phase-0-evidence-wor
 
 ### 2.5 Not run in this session
 
+Correction recorded 2026-09-03: the first live H3 control/compiler pair used the later Instagram `DcqCAe_Jl9o` shirt-reveal recipe, but the operator intended the earlier TikTok `7669463719331630349` alternating transformation format. Candidate A was the compiler lane, but that pair is excluded from the Phase 0 gate because it tested the wrong originating format. The intended TikTok contains four before/after setup families—hip adduction, shoulder press, side-profile treadmill walking, and low-angle treadmill walking—and no undressing. The separate Instagram Winter Arc recipe remains valid for its own source. A corrected TikTok pair requires a materialized Fidelity Map and separately approved eight-take generation plan.
+
 - blind human annotations for the three clips;
 - one raw-request versus compiler generation pair per family;
 - three blind scorers with structured per-dimension QA;

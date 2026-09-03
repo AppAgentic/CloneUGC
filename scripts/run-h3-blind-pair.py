@@ -69,9 +69,13 @@ def single_post(key: str, payload: dict) -> dict:
 def parser() -> argparse.Namespace:
     result = argparse.ArgumentParser()
     result.add_argument("image", type=Path)
+    result.add_argument("source_video", type=Path)
     result.add_argument("control_prompt", type=Path)
     result.add_argument("compiler_prompt", type=Path)
+    result.add_argument("format_recipe", type=Path)
+    result.add_argument("fidelity_map_fixture", type=Path)
     result.add_argument("output_dir", type=Path)
+    result.add_argument("--intended-source-asset-id", required=True)
     result.add_argument("--expected-image-hash", required=True)
     result.add_argument("--source-video-hash", required=True)
     result.add_argument("--fidelity-map-hash", required=True)
@@ -105,6 +109,27 @@ def prepare(args: argparse.Namespace) -> dict:
     }
     if not all(prompts.values()):
         raise RuntimeError("prompts must not be empty")
+    recipe = json.loads(args.format_recipe.read_text())
+    fixture = json.loads(args.fidelity_map_fixture.read_text())
+    recipe_id = recipe.get("id")
+    provenance = recipe.get("provenance") or {}
+    if not recipe_id:
+        raise RuntimeError("format recipe requires an id")
+    if provenance.get("sourceAssetId") != args.intended_source_asset_id:
+        raise RuntimeError("format recipe does not belong to the intended source asset")
+    if provenance.get("sourceFidelityMapHash") != args.fidelity_map_hash:
+        raise RuntimeError("format recipe is not linked to the supplied Fidelity Map hash")
+    if fixture.get("recipeId") != recipe_id or (fixture.get("map") or {}).get("sourceAssetId") != args.intended_source_asset_id:
+        raise RuntimeError("Fidelity Map fixture does not belong to the intended recipe and source asset")
+    if value_hash(fixture.get("map")) != args.fidelity_map_hash:
+        raise RuntimeError("supplied Fidelity Map content does not match its declared hash")
+    if fixture.get("fidelityMapHash") != args.fidelity_map_hash:
+        raise RuntimeError("Fidelity Map fixture declares a different canonical hash")
+    if sha256(args.source_video) != args.source_video_hash or (fixture.get("map") or {}).get("sourceContentSha256") != args.source_video_hash:
+        raise RuntimeError("source video bytes do not match the Fidelity Map source")
+    units = ((fixture.get("map") or {}).get("creatorWorkflow") or {}).get("generationUnits") or []
+    if len(units) != 1:
+        raise RuntimeError("single-take pair runner requires exactly one Fidelity Map generation unit")
     order = ["control", "compiler"]
     secrets.SystemRandom().shuffle(order)
     slots = {order[0]: "A", order[1]: "B"}
@@ -114,6 +139,10 @@ def prepare(args: argparse.Namespace) -> dict:
         "route": ROUTE,
         "setupImageSha256": image_hash,
         "sourceVideoSha256": args.source_video_hash,
+        "intendedSourceAssetId": args.intended_source_asset_id,
+        "formatRecipeId": recipe_id,
+        "formatRecipeSha256": sha256(args.format_recipe),
+        "fidelityMapFixtureSha256": sha256(args.fidelity_map_fixture),
         "fidelityMapSha256": args.fidelity_map_hash,
         "spendApprovalMessageTs": args.spend_approval_ts,
         "replacementImageApprovalMessageTs": args.replacement_image_approval_ts,
@@ -211,9 +240,9 @@ def main() -> int:
     args = parser()
     if sum((args.prepare, args.execute, args.enrich)) != 1:
         raise RuntimeError("choose exactly one of --prepare, --execute, or --enrich")
-    for name in ("image", "control_prompt", "compiler_prompt", "output_dir"):
+    for name in ("image", "source_video", "control_prompt", "compiler_prompt", "format_recipe", "fidelity_map_fixture", "output_dir"):
         setattr(args, name, getattr(args, name).resolve())
-    for path in (args.image, args.control_prompt, args.compiler_prompt):
+    for path in (args.image, args.source_video, args.control_prompt, args.compiler_prompt, args.format_recipe, args.fidelity_map_fixture):
         if not path.is_file():
             raise RuntimeError(f"missing input {path}")
     sealed_path = args.output_dir / "sealed-mapping.json"
@@ -232,6 +261,9 @@ def main() -> int:
         raise RuntimeError("sealed mapping hash mismatch")
     expected_arguments = {
         "sourceVideoSha256": args.source_video_hash,
+        "intendedSourceAssetId": args.intended_source_asset_id,
+        "formatRecipeSha256": sha256(args.format_recipe),
+        "fidelityMapFixtureSha256": sha256(args.fidelity_map_fixture),
         "fidelityMapSha256": args.fidelity_map_hash,
         "spendApprovalMessageTs": args.spend_approval_ts,
         "replacementImageApprovalMessageTs": args.replacement_image_approval_ts,
@@ -247,6 +279,8 @@ def main() -> int:
         raise RuntimeError("runtime arguments differ from sealed plan")
     if sha256(args.image) != sealed["base"]["setupImageSha256"]:
         raise RuntimeError("setup image differs from sealed plan")
+    if sha256(args.source_video) != sealed["base"]["sourceVideoSha256"]:
+        raise RuntimeError("source video differs from sealed plan")
     prompt_hashes = {"control": text_hash(args.control_prompt.read_text().strip()), "compiler": text_hash(args.compiler_prompt.read_text().strip())}
     if any(prompt_hashes[lane] != sealed["lanes"][lane]["promptSha256"] for lane in prompt_hashes):
         raise RuntimeError("prompt differs from sealed plan")

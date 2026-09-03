@@ -29,6 +29,8 @@ This command can score complete real evidence only. A sample or partial fixture 
 
 For each family, generate an otherwise controlled A/B pair: direct request control versus Fidelity Map compiler. Seal the A/B-to-lane mapping away from scorers until all ballots are committed.
 
+Before spend, bind the pair to the operator-confirmed originating source asset and its exact format recipe. The runner must reject a recipe whose `provenance.sourceAssetId` differs from that intended source or whose linked Fidelity Map hash differs from the supplied map. A visually similar later recipe is not an acceptable substitute. Confirm the source action grammar from frames as well as its label.
+
 Every variant must retain an output hash and at least one paid generation unit with its request ID, seed, exact prompt/source/spec/output hashes, estimated and actual USD micros, latency, and delivered duration. High-confidence multi-take references still require independently auditable units per source setup under the compiler contract.
 
 ## 4. Collect blind ballots
