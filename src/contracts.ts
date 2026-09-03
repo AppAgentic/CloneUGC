@@ -6,6 +6,7 @@ export type AnalysisMode = "deterministic" | "human" | "static" | "agentic";
 export type RightsStatus = "unverified" | "owned" | "licensed" | "other_valid_right";
 export type PlaybackRateClass = "real_time" | "sped_up" | "slowed_down" | "variable" | "unknown";
 export type TransitionType = "none" | "hard_cut" | "dissolve" | "fade" | "wipe" | "match_cut" | "other";
+export type SecondaryMotionDriver = "airflow" | "gravity" | "inertia" | "contact" | "vibration" | "fluid" | "heat" | "mechanical" | "unknown";
 
 export interface EvidenceRange {
   startMs: Milliseconds;
@@ -50,7 +51,7 @@ export interface EvidenceClaim {
   id: string;
   artifactId: string;
   sourceContentSha256: string;
-  kind: "shot" | "edit" | "playback_rate" | "action" | "continuity" | "lighting" | "text" | "audio" | "risk" | "other";
+  kind: "shot" | "edit" | "playback_rate" | "action" | "continuity" | "lighting" | "secondary_motion" | "text" | "audio" | "risk" | "other";
   statement: string;
   status: EvidenceStatus;
   confidence: number;
@@ -106,6 +107,26 @@ export interface LightingAssessment {
   evidenceIds: string[];
 }
 
+export interface SecondaryMotionField {
+  id: string;
+  element: string;
+  driver: SecondaryMotionDriver;
+  range: EvidenceRange;
+  direction: string;
+  amplitude: string;
+  cadence: string;
+  coupling: string;
+  confidence: number;
+  directObservation: boolean;
+  evidenceIds: string[];
+}
+
+export interface SecondaryMotionAssessment {
+  summary: string;
+  fields: SecondaryMotionField[];
+  evidenceIds: string[];
+}
+
 export interface EditSegment {
   id: string;
   sourceShotId: string;
@@ -129,6 +150,7 @@ export interface FidelityMap {
   requestedChange: string;
   playback: PlaybackRateAssessment;
   lighting: LightingAssessment;
+  secondaryMotion: SecondaryMotionAssessment;
   editSegments: EditSegment[];
   beats: FidelityBeat[];
   directives: FidelityDirective[];
@@ -241,6 +263,25 @@ export function assertFidelityMap(map: FidelityMap, evidence: readonly EvidenceC
     assert(event.description.length > 0, `lighting event ${index} requires a description`);
     assert(event.evidenceIds.length > 0, `lighting event ${index} requires evidence`);
     event.evidenceIds.forEach((id) => requireAccepted(id, `lighting event ${index}`));
+  }
+  assert(map.secondaryMotion.summary.length > 0, "secondary-motion assessment requires a summary");
+  assert(map.secondaryMotion.evidenceIds.length > 0, "secondary-motion assessment requires audit evidence");
+  map.secondaryMotion.evidenceIds.forEach((id) => requireAccepted(id, "secondary-motion assessment"));
+  const secondaryMotionDrivers: SecondaryMotionDriver[] = ["airflow", "gravity", "inertia", "contact", "vibration", "fluid", "heat", "mechanical", "unknown"];
+  const secondaryMotionIds = new Set<string>();
+  for (const field of map.secondaryMotion.fields) {
+    assert(!secondaryMotionIds.has(field.id), `duplicate secondary-motion field id ${field.id}`);
+    secondaryMotionIds.add(field.id);
+    assert(field.element.length > 0, `secondary-motion field ${field.id} requires an element`);
+    assert(secondaryMotionDrivers.includes(field.driver), `secondary-motion field ${field.id} has an invalid driver`);
+    assertRange(field.range, map.durationMs, `secondary-motion field.${field.id}.range`);
+    assert(field.direction.length > 0, `secondary-motion field ${field.id} requires direction or unknown`);
+    assert(field.amplitude.length > 0, `secondary-motion field ${field.id} requires amplitude or unknown`);
+    assert(field.cadence.length > 0, `secondary-motion field ${field.id} requires cadence or unknown`);
+    assert(field.coupling.length > 0, `secondary-motion field ${field.id} requires coupling or none_observed`);
+    assert(Number.isFinite(field.confidence) && field.confidence >= 0 && field.confidence <= 1, `secondary-motion field ${field.id} confidence must be between 0 and 1`);
+    assert(field.evidenceIds.length > 0, `secondary-motion field ${field.id} requires evidence`);
+    field.evidenceIds.forEach((id) => requireAccepted(id, `secondary-motion field ${field.id}`));
   }
   assert(map.editSegments.length > 0, "Fidelity Map requires at least one edit segment");
   let expectedSegmentStart = 0;

@@ -21,6 +21,7 @@
     "claims": [
       { "id": "action-claim", "category": "action" },
       { "id": "lighting-claim", "category": "lighting" },
+      { "id": "secondary-motion-claim", "category": "secondary_motion" },
       { "id": "music-risk", "category": "rights_risk" }
     ]
   },
@@ -37,7 +38,7 @@
       "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "exactModel": "gemini-3.8-flash",
-      "promptVersion": "analysis-v5",
+      "promptVersion": "analysis-v6",
       "providerRunId": "synthetic-provider-1",
       "evidenceArtifactId": "synthetic-evidence-1",
       "structuredPayloadArtifactId": "synthetic-payload-1",
@@ -53,6 +54,7 @@
       "predictions": [
         { "claimKey": "action:raise", "annotationId": "action-claim", "adjudication": "supported" },
         { "claimKey": "lighting:warm-key", "annotationId": "lighting-claim", "adjudication": "supported" },
+        { "claimKey": "secondary-motion:hair-airflow", "annotationId": "secondary-motion-claim", "adjudication": "supported" },
         { "claimKey": "risk:music", "annotationId": "music-risk", "adjudication": "supported" }
       ],
       "latencyMs": 12000,
@@ -67,7 +69,7 @@
       "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "exactModel": "gemini-3.8-flash",
-      "promptVersion": "analysis-v5",
+      "promptVersion": "analysis-v6",
       "providerRunId": "synthetic-provider-2",
       "evidenceArtifactId": "synthetic-evidence-2",
       "structuredPayloadArtifactId": "synthetic-payload-2",
@@ -83,6 +85,7 @@
       "predictions": [
         { "claimKey": "action:raise", "annotationId": "action-claim", "adjudication": "supported" },
         { "claimKey": "lighting:warm-key", "annotationId": "lighting-claim", "adjudication": "supported" },
+        { "claimKey": "secondary-motion:hair-airflow", "annotationId": "secondary-motion-claim", "adjudication": "supported" },
         { "claimKey": "risk:music", "annotationId": "music-risk", "adjudication": "supported" }
       ],
       "latencyMs": 13000,
@@ -97,7 +100,7 @@
       "sourceContentSha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "normalizedContentSha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
       "exactModel": "gemini-3.8-flash",
-      "promptVersion": "analysis-v5",
+      "promptVersion": "analysis-v6",
       "providerRunId": "synthetic-provider-3",
       "evidenceArtifactId": "synthetic-evidence-3",
       "structuredPayloadArtifactId": "synthetic-payload-3",
@@ -113,6 +116,7 @@
       "predictions": [
         { "claimKey": "action:raise", "annotationId": "action-claim", "adjudication": "supported" },
         { "claimKey": "lighting:warm-key", "annotationId": "lighting-claim", "adjudication": "supported" },
+        { "claimKey": "secondary-motion:hair-airflow", "annotationId": "secondary-motion-claim", "adjudication": "supported" },
         { "claimKey": "risk:music", "annotationId": "music-risk", "adjudication": "supported" }
       ],
       "latencyMs": 12500,

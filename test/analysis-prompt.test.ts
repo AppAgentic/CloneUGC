@@ -8,7 +8,7 @@ import {
 } from "../src/analysis-prompt.ts";
 
 test("source-forensics prompt requires playback-rate and edit-segment analysis", () => {
-  assert.equal(SOURCE_FORENSICS_PROMPT_VERSION, "analysis-v5");
+  assert.equal(SOURCE_FORENSICS_PROMPT_VERSION, "analysis-v6");
   for (const required of [
     "real_time, sped_up, slowed_down, variable, or unknown",
     "startMs, endMs, durationMs",
@@ -25,19 +25,24 @@ test("source-forensics prompt requires playback-rate and edit-segment analysis",
     "Separate physical scene illumination from camera processing or grading",
     "catchlights",
     "explicit preserve/change instructions for lighting geometry",
+    "Audit every independently moving or deforming scene element",
+    "source -> force -> affected elements -> visible response",
+    "hair motion alone does not prove the window state",
+    "none_observed",
   ]) {
     assert.match(SOURCE_FORENSICS_PROMPT, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
 });
 
 test("comparative prompt scores lighting independently with timestamped repairs", () => {
-  assert.equal(COMPARATIVE_FIDELITY_PROMPT_VERSION, "comparison-v1");
+  assert.equal(COMPARATIVE_FIDELITY_PROMPT_VERSION, "comparison-v2");
   for (const required of [
-    "dedicated lighting score from 1 to 10",
+    "dedicated lighting and secondary-motion scores from 1 to 10",
     "scene-lighting mismatches from grading/camera-processing mismatches",
     "passing streetlights",
     "timestamp range",
     "concrete repair instruction",
+    "Treat a missing subtle motion field as a fidelity failure",
   ]) {
     assert.match(COMPARATIVE_FIDELITY_PROMPT, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }

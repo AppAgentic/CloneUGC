@@ -25,6 +25,7 @@ const annotation: BlindAnnotation = {
   claims: [
     { id: "action-claim", category: "action" },
     { id: "lighting-claim", category: "lighting" },
+    { id: "secondary-motion-claim", category: "secondary_motion" },
     { id: "music-risk", category: "rights_risk" },
   ],
 };
@@ -37,7 +38,7 @@ function makeRun(repeat: number, overrides: Partial<AnalysisRun> = {}): Analysis
     sourceContentSha256: sourceHash,
     normalizedContentSha256: normalizedHash,
     exactModel: "gemini-3.8-flash",
-    promptVersion: "analysis-v5",
+    promptVersion: "analysis-v6",
     providerRunId: `provider-${repeat}`,
     evidenceArtifactId: `evidence-${repeat}`,
     structuredPayloadArtifactId: `payload-${repeat}`,
@@ -53,6 +54,7 @@ function makeRun(repeat: number, overrides: Partial<AnalysisRun> = {}): Analysis
     predictions: [
       { claimKey: "action:raise", annotationId: "action-claim", adjudication: "supported" },
       { claimKey: "lighting:warm-key", annotationId: "lighting-claim", adjudication: "supported" },
+      { claimKey: "secondary-motion:hair-airflow", annotationId: "secondary-motion-claim", adjudication: "supported" },
       { claimKey: "risk:music", annotationId: "music-risk", adjudication: "supported" },
       { claimKey: "camera:dolly", adjudication: "unsupported" },
     ],
@@ -76,11 +78,12 @@ test("scores timing windows, claims, rights risks, and unsupported claims", () =
   assert.equal(result.segmentPlaybackRateAccuracy, 3 / 4);
   assert.equal(result.segmentPlaybackRateCoverage, 1);
   assert.equal(result.transitionTypeAccuracy, 1);
-  assert.equal(result.claimPrecision, 3 / 4);
+  assert.equal(result.claimPrecision, 4 / 5);
   assert.equal(result.claimRecall, 1);
   assert.equal(result.lightingClaimRecall, 1);
+  assert.equal(result.secondaryMotionClaimRecall, 1);
   assert.equal(result.rightsRiskRecall, 1);
-  assert.equal(result.unsupportedClaimRate, 1 / 4);
+  assert.equal(result.unsupportedClaimRate, 1 / 5);
 });
 
 test("boundary matching maximizes one-to-one matches before minimizing error", () => {

@@ -43,6 +43,17 @@ const evidence: EvidenceClaim[] = [
     directObservation: true,
     range: fullRange,
   },
+  {
+    id: "e-motion",
+    artifactId: "artifact-1",
+    sourceContentSha256: hash,
+    kind: "secondary_motion",
+    statement: "Loose hair moves continuously in airflow.",
+    status: "accepted",
+    confidence: 0.88,
+    directObservation: true,
+    range: fullRange,
+  },
 ];
 const map: FidelityMap = {
   schemaVersion: "0.2.0",
@@ -70,6 +81,23 @@ const map: FidelityMap = {
     captureArtifacts: ["Shadow noise"],
     events: [],
     evidenceIds: ["e-light"],
+  },
+  secondaryMotion: {
+    summary: "Airflow creates continuous low-amplitude hair movement.",
+    fields: [{
+      id: "motion-hair",
+      element: "Loose hair strands",
+      driver: "airflow",
+      range: fullRange,
+      direction: "Intermittently toward screen-left",
+      amplitude: "Low",
+      cadence: "Irregular continuous flutter",
+      coupling: "Hair movement changes small face shadows",
+      confidence: 0.88,
+      directObservation: true,
+      evidenceIds: ["e-motion"],
+    }],
+    evidenceIds: ["e-motion"],
   },
   editSegments: [{
     id: "s1",
@@ -133,7 +161,7 @@ test("evidence artifacts require bounded media, exact models, and lossless paylo
       exactModel: "gemini-3.8-flash",
       mode: "agentic",
       runId: "run-1",
-      promptVersion: "analysis-v5",
+      promptVersion: "analysis-v6",
       latencyMs: 1_000,
       inputTokens: 100,
       outputTokens: 100,
@@ -180,4 +208,18 @@ test("lighting is required as evidence-backed reconstruction state", () => {
     ...map,
     lighting: { ...map.lighting, evidenceIds: [] },
   }, evidence), /lighting assessment requires evidence/);
+});
+
+test("secondary motion requires a causal, evidence-backed audit", () => {
+  assert.throws(() => assertFidelityMap({
+    ...map,
+    secondaryMotion: { ...map.secondaryMotion, evidenceIds: [] },
+  }, evidence), /requires audit evidence/);
+  assert.throws(() => assertFidelityMap({
+    ...map,
+    secondaryMotion: {
+      ...map.secondaryMotion,
+      fields: [{ ...map.secondaryMotion.fields[0]!, driver: "magic" as never }],
+    },
+  }, evidence), /invalid driver/);
 });

@@ -1,4 +1,4 @@
-export const SOURCE_FORENSICS_PROMPT_VERSION = "analysis-v5";
+export const SOURCE_FORENSICS_PROMPT_VERSION = "analysis-v6";
 
 export const SOURCE_FORENSICS_PROMPT = `Analyze the complete reference video for reconstruction evidence. Return structured observations with normalized and original timestamps, confidence, and direct-observation versus inference labels.
 
@@ -22,9 +22,17 @@ Required lighting analysis:
 - Cite stable spatial evidence such as catchlights, cast-shadow direction, face-side brightness, practical-light positions, reflective surfaces, and background brightness. Mark inferred off-camera sources as inference.
 - End with explicit preserve/change instructions for lighting geometry, temperature, exposure, contrast, dynamic events, and phone-camera artifacts. Use unknown when the source cannot support a conclusion.
 
+Required secondary-motion and environmental-causality analysis:
+- Audit every independently moving or deforming scene element across the full clip, not only the primary subject action. Check hair and flyaways, loose clothing and fabric, accessories, foliage, curtains, smoke/steam, liquids, particles, reflections, shadows, background people/objects, and handheld/environment vibration.
+- For each observed motion field, timestamp onset, peak, direction, amplitude, cadence or frequency, phase/lag relative to the primary action, damping/settling, and stop time. Describe which screen regions and objects it affects.
+- Infer the physical driver only from cross-element evidence: airflow or wind, gravity, vehicle inertia, contact/impact, vibration, fluid flow, heat, mechanical motion, or unknown. For example, coordinated hair flutter plus cabin cues may support airflow from an open window; hair motion alone does not prove the window state.
+- Record causal chains explicitly as source -> force -> affected elements -> visible response, including coupled lighting/audio effects such as moving cast shadows, changing specular highlights, rustling, or microphone wind noise.
+- Distinguish genuine secondary motion from motion blur, stabilization warp, compression shimmer, rolling shutter, frame interpolation, and generative artifacts. Mark an unseen cause as inference with confidence rather than direct observation.
+- End with explicit preserve/change instructions for every material secondary-motion field. Return an evidence-backed none_observed result when no secondary motion exists; never omit the audit.
+
 Also report narrative beats, subject/action/object state, framing and camera motion, lighting and setting, overlays and on-screen text, dialogue/music/sound, continuity dependencies, creative DNA, and identity/voice/logo/watermark/music/dialogue/bystander/minor transfer risks. Do not identify people. Conflicting or weak evidence must remain disputed and must not be silently promoted into reconstruction instructions.`;
 
-export const COMPARATIVE_FIDELITY_PROMPT_VERSION = "comparison-v1";
+export const COMPARATIVE_FIDELITY_PROMPT_VERSION = "comparison-v2";
 
 export const COMPARATIVE_FIDELITY_PROMPT = `Compare the complete reference and reconstruction side by side using synchronized timestamps. Score motion timing, composition, subject/action continuity, lighting, text, and audio separately before giving an overall fidelity score.
 
@@ -34,4 +42,6 @@ For lighting fidelity, compare at matching timestamps:
 - every dynamic light event, including passing streetlights, practical flicker, screen/dashboard glow, moving shadows, and exposure/white-balance/HDR pumping;
 - low-light phone texture, grain, chroma noise, denoising, sharpening, compression, and motion blur.
 
-Separate scene-lighting mismatches from grading/camera-processing mismatches. Report each mismatch with its timestamp range, reference observation, result observation, severity, and a concrete repair instruction. Do not average lighting into general visual quality: return a dedicated lighting score from 1 to 10 and state which lighting facts matched. Mark uncertain comparisons as unknown rather than inventing measurements.`;
+For secondary-motion fidelity, inventory every source motion field before checking the result: hair/flyaways, loose fabric, accessories, foliage, smoke/steam, liquids, particles, reflections, shadows, background motion, and vibration. Compare each field's onset, direction, amplitude, cadence/frequency, phase, damping, stop time, and physical driver. Verify causal coupling—for example airflow should move all exposed hair consistently and alter nearby shadows/speculars when visible. Treat a missing subtle motion field as a fidelity failure even when the primary action matches.
+
+Separate scene-lighting mismatches from grading/camera-processing mismatches. Report each mismatch with its timestamp range, reference observation, result observation, severity, and a concrete repair instruction. Do not average lighting or secondary motion into general visual quality: return dedicated lighting and secondary-motion scores from 1 to 10 and state which facts matched. Mark uncertain comparisons as unknown rather than inventing measurements.`;
