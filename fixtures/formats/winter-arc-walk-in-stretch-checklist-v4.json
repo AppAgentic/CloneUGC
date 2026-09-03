@@ -1,7 +1,7 @@
 {
   "schemaVersion": "0.1.0",
   "id": "winter-arc-walk-in-stretch-checklist",
-  "revision": 3,
+  "revision": 4,
   "name": "Winter Arc walk-in stretch checklist",
   "description": "One monochrome rear-view handheld-follow take in which a fully clothed subject walks into the gym, stretches both arms overhead, lowers them, and continues deeper into the room beneath a persistent challenge checklist.",
   "provenance": {
@@ -45,7 +45,7 @@
       "generationStrategy": "image_to_video",
       "providerDurationMs": 10000,
       "anchorPromptTemplate": "Show {{subject_identity}} with {{gender_presentation}} presentation from behind at the near edge of {{setting}}, fully clothed in {{wardrobe}} and carrying {{carried_item}}, as a high-contrast monochrome silhouette framed by a vertical handheld phone camera positioned a few steps behind.",
-      "motionPromptTemplate": "In one uninterrupted natural-real-time take, walk steadily forward into the gym while a handheld operator follows a few steps behind. While continuing to walk, raise both arms overhead, bend the elbows into a loose shoulder and triceps stretch, make a small natural side-to-side adjustment, then release and lower both arms before continuing forward. The camera translates forward with visible background parallax, small lateral drift, and restrained gait-synchronized vertical bob; it keeps the subject broadly centered but follows slightly slower so the subject gradually recedes. Keep every item of clothing on throughout; preserve natural gait, fabric drape and carried-item swing. No shirt removal, undressing, back reveal, bodybuilding flex, body morph, cut, locked-off shot, digital zoom, orbit, pan-away or artificial stabilization.",
+      "motionPromptTemplate": "Animate this as one continuous natural-real-time vertical gym take. {{subject_identity}}, fully clothed in {{wardrobe}} and carrying {{carried_item}}, walks forward into {{setting}} while a handheld phone camera follows a few steps behind. The subject raises both arms overhead for a loose shoulder and triceps stretch while still walking, lowers both arms, and continues deeper into the room. Make the rear-follow camera visibly handheld through gentle walking bob, small side-to-side drift, physical forward movement, and changing background parallax while keeping the subject broadly centered. Preserve identity, natural gait, fabric drape, carried-item swing, monochrome backlight, and gym continuity. Keep every item of clothing on throughout. No shirt removal, undressing, back reveal, bodybuilding flex, body morph, static or locked-off camera, digital zoom, cut, orbit, pan-away or artificial stabilization.",
       "lockedTraits": ["rear handheld follow camera","forward camera translation and background parallax","subtle gait-synchronized bob and lateral drift","monochrome backlight","continuous walking away","overhead stretch while walking","fully clothed throughout","natural gait and bag swing","continuous real-time take"]
     }
   ],
@@ -58,15 +58,19 @@
     "Create the one-take walking checklist with a fictional woman stretching overhead as she enters the gym."
   ],
   "validation": {
-    "status": "draft",
+    "status": "validated",
+    "fidelityScore": 95,
     "qaMode": "hybrid",
-    "sourceOutputId": "instagram-DcqCAe_Jl9o-action-correction-pending",
+    "sourceOutputId": "h3-max-turbo-01a068ef-ada3-73f2-aa75-7bff354980ed-candidate-a",
     "notes": [
       "Corrected on 2026-09-03 after direct full-timeline source review and operator confirmation: the subject stays fully clothed, stretches overhead while walking into the gym, lowers the arms and continues forward while a handheld operator follows from behind.",
       "The earlier analyzer and generated output incorrectly interpreted the overhead stretch as shirt removal and a flex; that output is excluded as validation evidence.",
       "The checklist remains deterministic so product wording stays exact while photographic motion remains independently repairable.",
       "The first corrected action A/B pair also failed because both prompts froze the camera; those outputs are excluded from validation evidence.",
-      "This corrected recipe remains draft until the GPT Image 2 setup-frame plus H3 Max Turbo workflow reproduces the walk, stretch, handheld follow, and timing faithfully.",
+      "In the corrected handheld-follow blind pair, the operator selected Candidate A as perfect; after unsealing, A was the concise control lane, not the compiler lane.",
+      "Recipe revision 4 adopts the winning concise motion wording while preserving the v3 Fidelity Map's action, camera, lighting, continuity, timing, and deterministic-layer requirements.",
+      "The accepted run used the existing approved GPT Image 2 setup frame plus one 10-second 768P H3 Max Turbo call, seed 313086211, zero retries, and deterministic 282-frame audio-free finishing; exact evidence is persisted in fixtures/evidence/instagram-DcqCAe_Jl9o-handheld-winner-v1.json.",
+      "This validates the reusable format and production route, but the A/B result is a control win and therefore does not count as evidence that the current compiler beats a concise prompt.",
       "The recipe transfers structure only; source identity, setting, audio, overlay rights and permissions remain separately gated."
     ]
   }

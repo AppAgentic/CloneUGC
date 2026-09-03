@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "0.1.0",
+  "sourceAssetId": "instagram-DcqCAe_Jl9o",
+  "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+  "setupImageSha256": "f4b16f074e364ad99d5753ac5efba434a65e92f1c61994e96f59a3b60d943474",
+  "fidelityMapSha256": "ea97d9bc49dabe2c5e3a08c5063ae894c3ea7d61036e76cfc2654ea09887ef9e",
+  "formatRecipeId": "winter-arc-walk-in-stretch-checklist",
+  "formatRecipeRevision": 4,
+  "formatRecipeSha256": "5ba526a6dd689f4f5fc2347f9c0c561fd10941c28797e96f16b56d180f15df7a",
+  "route": "minimax/h3-max-turbo/image-to-video",
+  "durationSeconds": 10,
+  "resolution": "768P",
+  "seed": 313086211,
+  "promptExpansionMode": "balanced",
+  "spendApprovalMessageTs": "1788466889.587499",
+  "setupImageApprovalMessageTs": "1788462319.540949",
+  "operatorSelectionMessageTs": "1788467101.348629",
+  "automaticSubmissionRetries": 0,
+  "estimatedCostMicrosPerCall": 100000,
+  "estimatedPairCostMicros": 200000,
+  "candidates": [
+    {
+      "candidate": "A",
+      "lane": "control",
+      "providerRequestId": "01a068ef-ada3-73f2-aa75-7bff354980ed",
+      "promptSha256": "445ce59618b4a727d32c2105c8e81ca2d96bb76fe5326d4b2ed58fdf1ba11286",
+      "providerOutputSha256": "6b6c3d7102105d556609e73789443882d70e95b8359f90757de5f59e97e7aa23",
+      "finishedOutputSha256": "09eaad23a66e8ec90a010bf4e2a819d6790a0fb3e4067650ab692898ce043640",
+      "selected": true
+    },
+    {
+      "candidate": "B",
+      "lane": "compiler",
+      "providerRequestId": "01a068ef-db04-7d81-b97b-4208f1442a5a",
+      "promptSha256": "db8590414137d2706e889103264655e91202ae6453076081a10cfee9690ee5ef",
+      "providerOutputSha256": "6abd4e04534964fcca433be3463a07c666848fc3204a0f582598570ac8e95a0a",
+      "selected": false
+    }
+  ],
+  "winner": {
+    "candidate": "A",
+    "lane": "control",
+    "operatorVerdict": "perfect"
+  },
+  "conclusion": "The accepted control output validates the corrected walk-in stretch format and the GPT Image 2 setup-frame to H3 Max Turbo production route. Because the concise control beat the compiler lane, this pair does not prove a compiler advantage; the compiler gate remains open."
+}

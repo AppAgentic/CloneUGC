@@ -7,7 +7,7 @@ const fixtureUrl = new URL("../fixtures/formats/hand-wipe-fitness-transformation
 const recipe = JSON.parse(readFileSync(fixtureUrl, "utf8")) as FormatRecipe;
 const familyRecipe = JSON.parse(readFileSync(new URL("../fixtures/formats/childhood-to-family-gym-montage-v1.json", import.meta.url), "utf8")) as FormatRecipe;
 const checklistLoopRecipe = JSON.parse(readFileSync(new URL("../fixtures/formats/incline-press-checklist-loop-v1.json", import.meta.url), "utf8")) as FormatRecipe;
-const winterRecipe = JSON.parse(readFileSync(new URL("../fixtures/formats/winter-arc-walk-in-stretch-checklist-v3.json", import.meta.url), "utf8")) as FormatRecipe;
+const winterRecipe = JSON.parse(readFileSync(new URL("../fixtures/formats/winter-arc-walk-in-stretch-checklist-v4.json", import.meta.url), "utf8")) as FormatRecipe;
 
 test("the discovered Harrison format is a valid content-addressed recipe", () => {
   assert.doesNotThrow(() => assertFormatRecipe(recipe));
@@ -24,11 +24,11 @@ test("every processed format is stored and valid, with quality status preserved"
   recipes.forEach((item) => assert.doesNotThrow(() => assertFormatRecipe(item), item.id));
   assert.deepEqual(
     recipes.filter((item) => item.validation.status === "validated").map((item) => item.id).sort(),
-    ["alternating-gym-transformation-montage", "childhood-to-family-gym-montage", "continuous-pec-fly-advice", "hand-wipe-fitness-transformation", "phone-laugh-to-lock-in-gym", "rapid-gym-exercise-montage"],
+    ["alternating-gym-transformation-montage", "childhood-to-family-gym-montage", "continuous-pec-fly-advice", "hand-wipe-fitness-transformation", "phone-laugh-to-lock-in-gym", "rapid-gym-exercise-montage", "winter-arc-walk-in-stretch-checklist"],
   );
   assert.deepEqual(
     recipes.filter((item) => item.validation.status === "draft").map((item) => item.id).sort(),
-    ["incline-press-checklist-loop", "kitchen-finger-count-palm-wipe", "night-car-list-reaction", "winter-arc-walk-in-stretch-checklist"],
+    ["incline-press-checklist-loop", "kitchen-finger-count-palm-wipe", "night-car-list-reaction"],
   );
 });
 
@@ -75,11 +75,11 @@ test("the corrected Winter Arc walk-in recipe compiles its stretch and a natural
 
   assert.equal(plan.shots.length, 1);
   assert.equal(plan.shots[0]!.providerDurationMs, 10_000);
-  assert.match(plan.shots[0]!.motionPrompt, /walk steadily forward/i);
+  assert.match(plan.shots[0]!.motionPrompt, /walks? forward/i);
   assert.match(plan.shots[0]!.motionPrompt, /stretch/i);
-  assert.match(plan.shots[0]!.motionPrompt, /handheld operator follows/i);
+  assert.match(plan.shots[0]!.motionPrompt, /handheld (?:phone )?camera follows/i);
   assert.match(plan.shots[0]!.motionPrompt, /background parallax/i);
-  assert.match(plan.shots[0]!.motionPrompt, /gait-synchronized vertical bob/i);
+  assert.match(plan.shots[0]!.motionPrompt, /gentle walking bob|gait-synchronized vertical bob/i);
   assert.match(plan.shots[0]!.motionPrompt, /fully clothed|every item of clothing on/i);
   assert.match(plan.shots[0]!.motionPrompt, /No shirt removal, undressing, back reveal, bodybuilding flex/i);
   assert.doesNotMatch(plan.shots[0]!.motionPrompt, /pull (?:a |the )?shirt (?:over|off)|complete (?:a |the )?(?:strong )?double-biceps/i);

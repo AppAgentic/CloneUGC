@@ -40,6 +40,7 @@ test("three recipes cite a real Fidelity Map hash and re-derive their structure 
     const fixture = fixtures.find((candidate) => candidate.fidelityMapHash === recipe.provenance.sourceFidelityMapHash);
     assert.ok(fixture !== undefined, `${recipe.id} cites an unknown Fidelity Map hash`);
     assert.equal(fixture.recipeId, recipe.id);
+    assert.equal(recipe.validation.status, "validated", `${recipe.id} must have accepted generation evidence`);
     assert.doesNotThrow(() => assertRecipeDerivesFromFidelityMap(recipe, fixture));
   }
   const manifestOnly = recipes.filter((recipe) => recipeLineage(recipe) !== "fidelity_map").map((recipe) => recipe.id).sort();
