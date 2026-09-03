@@ -24,5 +24,14 @@
   },
   "notSubmitted": [{"unitId":"unit-after","lane":"compiler"}],
   "billingDisposition": "Treat both completed requests and the accepted terminal request as potentially billable; do not reuse the unspent planned call without fresh authority.",
+  "beforeTakeBlindPreflight": {
+    "model": "gemini-3.8-flash",
+    "mode": "agentic",
+    "completedAt": "2026-09-03T23:04:31Z",
+    "totalTokens": 19143,
+    "processingCalls": 5,
+    "contentSha256": "2ed0d6127bcaca8a6e901ea16e4553f1a19a87e2c7f68702a58e825103ca0c7e",
+    "verdict": "Candidate B passed all ordered choreography and endpoint criteria; Candidate A failed to return fully front before the palm cover. The sealed mapping identifies B as compiler and A as control."
+  },
   "nextAttempt": "Use the same endpoint-bound contract with concise, fully clothed workout-state wording in both lanes; create a new sealed plan and require fresh approval."
 }

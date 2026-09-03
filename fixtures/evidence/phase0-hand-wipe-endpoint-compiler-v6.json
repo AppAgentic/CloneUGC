@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "phase0-hand-wipe-endpoint-compiler-v6",
+  "sourceAssetId": "tiktok-7672577678309870861",
+  "sourceContentSha256": "0db4e5c295d0a8d7046a71e27605a8a6bf6bee8cd16f2219a2e88878f1862ec8",
+  "fidelityMapHash": "264c503ea3b8f0c0925a96561b33b2e113335cf9668c8905ccd56fd89a245474",
+  "compilerPlanSha256": "0044aef8586f351591c1724aacf542a018f0affa2c3cf3781e4616b51780a5d4",
+  "sealedPlanSha256": "2b271038e8fd94e4df560e097571cdd374057aafb0bfd4fa1cfb5fef218de730",
+  "standingSpendAuthorityMessageTs": "1788476680.107709",
+  "boundedEstimateUsdMicros": 200000,
+  "automaticPaidRetries": 0,
+  "laneMapping": {"A":"compiler","B":"control"},
+  "providerRequests": [
+    {"unitId":"unit-before","lane":"compiler","providerRequestId":"01a06985-4c36-7de1-81db-1a3cfce84486","status":"complete","seed":633403991,"outputSha256":"ae502965079f268961d55078f1b9fef3989cc327f34e6e1b7c6947d3acc48e8e"},
+    {"unitId":"unit-before","lane":"control","providerRequestId":"01a06985-6ec0-76b2-87dc-9b4e98e6a2db","status":"complete","seed":633403991,"outputSha256":"36b38421b07b79c557e3140bcb05acb6354a5291c4600e42e2913e4128dbbc02"},
+    {"unitId":"unit-after","lane":"compiler","providerRequestId":"01a06985-af67-74d3-b17a-28991dce4491","status":"complete","seed":331546966,"outputSha256":"f84808b7ff98a21a42b7d992df12ccff9050c1838133ed76bf963c5b0aff28ca"},
+    {"unitId":"unit-after","lane":"control","providerRequestId":"01a06985-d008-77e1-914c-24f72462c590","status":"provider_terminal","providerStatus":"CONTENT_POLICY_VIOLATION","seed":331546966}
+  ],
+  "compilerOutput": {
+    "outputSha256": "5d4402dbe148bdf5439e24a516f0e4632e1cf572dee1e3fbb11e1464e4119ba8",
+    "comparisonAgainstAcceptedControlSha256": "85307b18a68f468d16ec23d8b70749b25e83b4b8ad09605360b8460b55e278c4",
+    "sourceAudioByteIdentical": true,
+    "sourceAacAdtsSha256": "27191ce2afcfac7e8eae942ce3980c9d85fb06879dfd907e80fa537e607c1c5e"
+  },
+  "agenticQa": {
+    "model": "gemini-3.8-flash",
+    "mode": "agentic",
+    "completedAt": "2026-09-03T23:07:35Z",
+    "totalTokens": 19706,
+    "processingCalls": 5,
+    "contentSha256": "85307b18a68f468d16ec23d8b70749b25e83b4b8ad09605360b8460b55e278c4",
+    "verdict": "PASS: identity, exact before and after choreography, endpoint palm transition, camera, cadence and artifact integrity; commercially usable and non-inferior to the previously operator-accepted control B."
+  },
+  "outcome": "compiler_passed_outcome_comparison_same_run_control_incomplete",
+  "gateDisposition": "Strong positive compiler evidence, but not a completed same-run blind pair because the control after-take produced no artifact. Require operator review of the uploaded outcome and do not misclassify this as a complete paired benchmark."
+}
