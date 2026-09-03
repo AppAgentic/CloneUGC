@@ -4,6 +4,8 @@ Prepared: 2026-09-02
 
 Status: canonical initial plan
 
+Production-provider decision (2026-09-03): CloneUGC will not use Seedance in production. The production fidelity benchmark and execution path use GPT Image 2 for rights-safe setup-frame generation/editing and H3 Max Turbo once per independently recorded take, followed by deterministic finishing. The two direct Seedance reference-to-video outputs produced on 2026-09-03 are exploratory failed evidence only and cannot satisfy or unlock the Phase 0 gate.
+
 ## Product Thesis
 
 CloneUGC accepts a permission-safe online reference or upload under 30 seconds, identifies the creative details that make it work, and recreates it with controlled changes.
@@ -108,11 +110,11 @@ Select the hybrid lane only if its sub-second motion, causality, counting, occlu
 
 For each reference, produce two otherwise controlled variants:
 
-- **Control:** the reference plus a concise direct change request;
-- **Compiler:** the same reference and requested change, compiled from the Fidelity Map into explicit reference roles, starting state, timestamped primary and secondary motion with physical drivers, camera geometry, evidence-backed lighting geometry and dynamic events, continuity, audio, ending state, and constraints.
+- **Control:** use the same GPT Image 2 setup-frame plus H3 Max Turbo per-take workflow as production, driven by the reference and a concise direct change request;
+- **Compiler:** use the same GPT Image 2 setup-frame plus H3 Max Turbo per-take workflow, provider settings, requested change, and generation-unit boundaries, but compile each setup frame and motion prompt from the Fidelity Map into explicit reference roles, starting state, timestamped primary and secondary motion with physical drivers, camera geometry, evidence-backed lighting geometry and dynamic events, continuity, audio, ending state, and constraints;
 - **Workflow compiler:** for references classified as high-confidence multi-take, the compiler lane must additionally use one independently auditable generation unit per source shot/setup. A one-request whole-timeline render is an invalid compiler output for this family, not merely a lower-quality variant.
 
-Start at 480p to test composition and reference weighting cheaply. Re-run only winning seeds at 720p. Preserve provider request IDs, seeds, exact prompts, source/spec hashes, cost, duration, and outputs.
+Run H3 Max Turbo at its lowest approved production resolution (currently 768P) to test composition and motion before any higher-quality rerun. Preserve every GPT Image 2 and H3 Max Turbo provider request ID, returned seed where available, exact prompt, source/setup/spec hash, cost, duration, and output. Do not substitute direct source-video-to-video generation: the setup frame is the identity, gender presentation, body-state, wardrobe, environment, and first-frame control surface established by the proven workflow.
 
 Freeze one selected analyzer configuration and its evidence-backed Fidelity Map before the generation comparison. The control lane receives the source plus concise change request; the compiler lane additionally receives the compiled Fidelity Map by definition. Do not vary analyzer configuration between generation lanes, because that would confound analyzer quality with the intended raw-request-versus-compiler test.
 
@@ -164,7 +166,8 @@ If the compiler does not beat the control, stop. Do not hide a failed differenti
 ### Provider boundary
 
 - An internal adapter exposes estimate, submit, status, cancel-if-supported, and result.
-- Seedance 2.5 reference-to-video is the first benchmark route, not a permanent public product dependency.
+- GPT Image 2 setup-frame generation/editing plus H3 Max Turbo image-to-video per take is the production benchmark route. Provider names remain internal and swappable at the adapter boundary.
+- Seedance is excluded from production and from Phase 0 gate evidence. Historical Seedance runs remain labelled exploratory evidence only.
 - Reference inputs receive narrow roles: source video for motion/camera/timing, clean images for product or allowed identity, audio only when its timing or content is authorized.
 - Captions, product proof, disclosures, and UI are deterministic finishing layers rather than generated in-frame text.
 
