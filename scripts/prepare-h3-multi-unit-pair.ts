@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 import { contentHash } from "../src/canonical.ts";
 import { compilePlanFromFidelityMap } from "../src/compiler.ts";
 import { fidelityMapHash, type EvidenceClaim, type FidelityMap } from "../src/contracts.ts";
+import type { TypedDirective } from "../src/directives.ts";
 
 interface FidelityFixture {
   map: FidelityMap;
@@ -25,6 +26,7 @@ interface UnitInput {
 interface InputConfig {
   schemaVersion: "0.1.0";
   units: UnitInput[];
+  directives?: TypedDirective[];
 }
 
 function fail(message: string): never {
@@ -54,7 +56,7 @@ function main(): void {
     fidelityMapHash: mapHash,
     sourceContentSha256: fixture.map.sourceContentSha256,
     userIntent: fixture.map.requestedChange,
-    directives: [],
+    directives: config.directives ?? [],
   };
   const plan = compilePlanFromFidelityMap({ map: fixture.map, evidence: fixture.evidence, revision });
   const generative = plan.units.filter((unit) => unit.kind === "motion" && unit.strategy !== "deterministic_source");

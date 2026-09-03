@@ -367,6 +367,9 @@ function describeUnitFromMap(map: FidelityMap, unit: GenerationUnit): { anchorPr
     `Persistent elements: ${map.creatorWorkflow.persistentElements.join(", ") || "none"}.`,
   ].join(" ");
   const motionPrompt = [
+    `Requested outcome: ${map.requestedChange}.`,
+    `Subject anchor policy: ${map.creatorWorkflow.subjectAnchor}.`,
+    `Starting setup: camera ${setup.cameraSignature}; environment ${setup.environmentSignature}; subject ${setup.subjectState}; wardrobe ${setup.wardrobeState}; lighting ${setup.lightingState}.`,
     `Source shots ${unit.sourceShotIds.join(", ")} covering ${unit.range.startMs}-${unit.range.endMs}ms (${unit.targetDurationMs}ms).`,
     beats.length === 0 ? "" : `Beats: ${beats.map((beat) => `${beat.role} ${beat.range.startMs}-${beat.range.endMs}ms — ${beat.description}`).join("; ")}.`,
     `Playback: ${playback}.`,

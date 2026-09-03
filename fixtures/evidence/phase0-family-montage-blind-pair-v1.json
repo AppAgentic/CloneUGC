@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "phase0-family-montage-blind-pair-v1",
+  "sourceAssetId": "instagram-DcyIWPYtZkV",
+  "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+  "fidelityMapHash": "e003a259a09975d209f22d633a0933375e202ce196f06b2864310b4a8cf505d3",
+  "sealedPlanSha256": "1561c546cfd49e33da7c2ff7506bc48b20785c852bc3ab87dbb0e40d121a52b5",
+  "spendApprovalMessageTs": "1788468743.110259",
+  "operatorSelectionMessageTs": "1788469831.777999",
+  "estimatedCostUsdMicros": 1200000,
+  "automaticPaidRetries": 0,
+  "laneMapping": {"A": "compiler", "B": "control"},
+  "operatorSelection": "B",
+  "selectedLane": "control",
+  "providerCalls": [
+    {"unitId":"unit-adult-frontal","slot":"A","requestId":"01a0690c-9143-79e2-9363-70c790f49cab","seed":1123976509},
+    {"unitId":"unit-adult-frontal","slot":"B","requestId":"01a0690c-b2b7-7803-bbe6-69d4ebc14c53","seed":1123976509},
+    {"unitId":"unit-adult-profile","slot":"A","requestId":"01a0690c-d78d-7cc1-897b-66e65ee286b8","seed":1068429082},
+    {"unitId":"unit-adult-profile","slot":"B","requestId":"01a0690c-f86c-7800-87c3-f10abbde4b71","seed":1068429082},
+    {"unitId":"unit-stacked-arms","slot":"A","requestId":"01a0690d-1d4a-7ea2-ae84-1a3244c1fdf1","seed":1682266337},
+    {"unitId":"unit-stacked-arms","slot":"B","requestId":"01a0690d-405b-7692-b704-9d5f16754a01","seed":1682266337},
+    {"unitId":"unit-fan-arms-one","slot":"A","requestId":"01a0690d-66c1-7593-8c88-450892d1a79e","seed":1502775331},
+    {"unitId":"unit-fan-arms-one","slot":"B","requestId":"01a0690d-878d-7292-90c1-592caf058630","seed":1502775331},
+    {"unitId":"unit-group-reset","slot":"A","requestId":"01a0690d-ac60-7e50-bf25-6de20562a002","seed":1164435621},
+    {"unitId":"unit-group-reset","slot":"B","requestId":"01a0690d-cd59-7d73-85eb-4d6932a262ff","seed":1164435621},
+    {"unitId":"unit-seated-flex","slot":"A","requestId":"01a0690d-feda-75f2-a943-d9bb6c7e635b","seed":1800505539},
+    {"unitId":"unit-seated-flex","slot":"B","requestId":"01a0690e-2078-7ee2-8ae2-ea0ac9243c1a","seed":1800505539},
+    {"unitId":"unit-fan-arms-two","slot":"A","requestId":"01a0690e-467d-7293-b5b9-f9ac610b3448","seed":851582070},
+    {"unitId":"unit-fan-arms-two","slot":"B","requestId":"01a0690e-6836-7040-8eea-d332ced02ab4","seed":851582070},
+    {"unitId":"unit-seated-fan","slot":"A","requestId":"01a0690e-8ccd-7b02-91bf-d82a4ed0347c","seed":1468369897},
+    {"unitId":"unit-seated-fan","slot":"B","requestId":"01a0690e-ad96-7c33-8f1c-17035b86d133","seed":1468369897},
+    {"unitId":"unit-vertical-stack","slot":"A","requestId":"01a0690e-db45-7372-8481-5478626148f5","seed":2048651799},
+    {"unitId":"unit-vertical-stack","slot":"B","requestId":"01a0690e-fca0-7111-bedd-0d8e7f21e04f","seed":2048651799},
+    {"unitId":"unit-dumbbell-cluster","slot":"A","requestId":"01a0690f-2082-7c12-9720-3783aae04b83","seed":28697122},
+    {"unitId":"unit-dumbbell-cluster","slot":"B","requestId":"01a0690f-4141-70e3-aa97-b1267d722562","seed":28697122},
+    {"unitId":"unit-low-symmetry","slot":"A","requestId":"01a0690f-6563-7fa0-a390-b57ec40b98d7","seed":39110248},
+    {"unitId":"unit-low-symmetry","slot":"B","requestId":"01a0690f-8620-7032-8553-1048bfd1b765","seed":39110248},
+    {"unitId":"unit-hoodie-final","slot":"A","requestId":"01a0690f-b7f1-7111-8472-5e2df7533aa6","seed":1107804174},
+    {"unitId":"unit-hoodie-final","slot":"B","requestId":"01a0690f-d992-7c30-9c88-66f7e4e58fff","seed":1107804174}
+  ],
+  "finishedOutputs": {
+    "A": "5b85a5875a5fc4509ae7abf041af01070aca5adf25aa434c254c5fe0df0066d6",
+    "B": "bc1e9b1f490b7ec823eb75a7c327e26f8ba2d231a0e0943e6b04f57c7ab20d9f"
+  },
+  "outcome": "control_preferred_compiler_not_yet_accepted",
+  "typedFindings": [
+    {
+      "dimension": "identity_continuity",
+      "targetUnitId": "all",
+      "severity": "diagnostic",
+      "finding": "Compiler motion prompts omitted the concrete five-person identity roster carried by the control prompts. The shared setup frames limited visible divergence, but this remains a continuity risk across twelve independent takes."
+    },
+    {
+      "dimension": "primary_motion",
+      "targetUnitId": "all",
+      "severity": "diagnostic",
+      "finding": "Compiler prompts reduced per-take choreography to broad beat and composition labels; the concise controls named the exact pose and movement for each take. This is the leading hypothesis for the operator's control preference, not a confirmed causal attribution."
+    }
+  ]
+}

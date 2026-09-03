@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "phase0-hand-wipe-blind-pair-v1",
+  "sourceAssetId": "tiktok-7672577678309870861",
+  "sourceContentSha256": "0db4e5c295d0a8d7046a71e27605a8a6bf6bee8cd16f2219a2e88878f1862ec8",
+  "fidelityMapHash": "1a661fc7f3212451854c6e46daadf8d613a91b3b290ca88056ade500aa259212",
+  "sealedPlanSha256": "1f2a71cff70e557678d274bcbdcbf7d5eb270f70893cfdf60740c31b30d5f2a1",
+  "spendApprovalMessageTs": "1788468743.110259",
+  "operatorSelectionMessageTs": "1788469831.777999",
+  "estimatedCostUsdMicros": 300000,
+  "automaticPaidRetries": 0,
+  "laneMapping": {"A": "control", "B": "compiler"},
+  "operatorSelection": "A",
+  "selectedLane": "control",
+  "providerCalls": [
+    {"unitId":"unit-before","slot":"A","requestId":"01a0690b-cb1f-7c40-88db-a0dc6a318673","seed":1790268709,"durationSeconds":5,"outputSha256":"7d2bf423940ac2c1c62459c1b805e8a3352a0d8e34ac4aeddb91d8f7e3fc1eae"},
+    {"unitId":"unit-before","slot":"B","requestId":"01a0690b-ec1a-7281-beda-8c2a78056bea","seed":1790268709,"durationSeconds":5,"outputSha256":"5271dd0d3c929127075d83b2560f70e1f18feacd82aff8860bff73b1f4422bf9"},
+    {"unitId":"unit-after","slot":"A","requestId":"01a0690c-1219-7952-a9ef-5935cbb4702b","seed":66384656,"durationSeconds":10,"outputSha256":"ed4e77dde3688b02211689bdfeab8dcce59d8fb58ce0809fa20d6c0c77cec50a"},
+    {"unitId":"unit-after","slot":"B","requestId":"01a0690c-3f43-70d1-911b-c7a229fa3b67","seed":66384656,"durationSeconds":10,"outputSha256":"af12eb42956fbea2000e119df223fd049b645fdef62240b5e800efa9e889d4f1"}
+  ],
+  "finishedOutputs": {
+    "A": "b31ddff1ab4ecb5b634f042761747ed19cfa83f7691858aeaa29f1d8b318f6a3",
+    "B": "bf37c9204342d0b7103dbaccb3415fdd73a5444ce904b1cb8ed858f500e542d3"
+  },
+  "outcome": "control_preferred_compiler_failed",
+  "typedFindings": [
+    {
+      "dimension": "identity_continuity",
+      "targetUnitId": "unit-after",
+      "severity": "material",
+      "finding": "The compiler prompt said same identity after a fully occluded starting frame but omitted the concrete fictional woman's identity, hair and gender presentation; the revealed subject did not match the before take."
+    },
+    {
+      "dimension": "wardrobe",
+      "targetUnitId": "unit-after",
+      "severity": "material",
+      "finding": "The compiler prompt named wardrobe only as an abstract change dimension and omitted the requested green outfit value."
+    }
+  ]
+}

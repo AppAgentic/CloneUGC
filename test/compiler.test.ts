@@ -17,6 +17,10 @@ test("a Fidelity Map compiles into one anchor and one motion unit per generation
   assert.equal(plan.finishing.find((step) => step.id === "layer:1")!.kind, "audio");
   assert.match(plan.finishing.find((step) => step.id === "layer:0")!.instruction, /2 months of GymLevels/);
   assert.match(plan.units[0]!.prompt, /Static low phone/);
+  const firstMotion = plan.units.find((unit) => unit.id === "unit-1:motion")!;
+  assert.match(firstMotion.prompt, /Requested outcome:/);
+  assert.match(firstMotion.prompt, /Subject anchor policy:/);
+  assert.match(firstMotion.prompt, /Starting setup: camera .* environment .* subject .* wardrobe .* lighting /);
   assert.ok(plan.units.every((unit) => unit.constraints.some((constraint) => /identity/.test(constraint))));
   assert.match(plan.planHash, /^[a-f0-9]{64}$/);
   for (const unit of plan.units) assert.ok(!/gemini|seedance|minimax|openai/i.test(unit.prompt), "plans stay provider neutral");
