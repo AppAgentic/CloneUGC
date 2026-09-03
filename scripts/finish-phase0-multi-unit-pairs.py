@@ -56,10 +56,10 @@ def probe(path: Path) -> dict:
     return json.loads(result.stdout)
 
 
-def finish_hand_wipe(root: Path, source: Path, overlay: Path, slot: str) -> Path:
-    before = root / "run" / "unit-before" / f"slot-{slot}" / f"candidate-{slot}.mp4"
-    after = root / "run" / "unit-after" / f"slot-{slot}" / f"candidate-{slot}.mp4"
-    output = root / f"candidate-{slot}.mp4"
+def finish_hand_wipe(root: Path, source: Path, overlay: Path, slot: str, run_name: str, suffix: str) -> Path:
+    before = root / run_name / "unit-before" / f"slot-{slot}" / f"candidate-{slot}.mp4"
+    after = root / run_name / "unit-after" / f"slot-{slot}" / f"candidate-{slot}.mp4"
+    output = root / f"candidate-{slot}{suffix}.mp4"
     # Scale each complete provider take onto the source's exact 144/161-frame split.
     filters = (
         "[0:v]crop=756:1344:6:0,scale=720:1280,setpts=PTS*0.9270968,fps=30,"
@@ -80,14 +80,14 @@ def finish_hand_wipe(root: Path, source: Path, overlay: Path, slot: str) -> Path
     return output
 
 
-def finish_family(root: Path, source: Path, crops: Path, slot: str) -> Path:
-    output = root / f"candidate-{slot}.mp4"
-    video_only = root / f"candidate-{slot}-video-only.mp4"
+def finish_family(root: Path, source: Path, crops: Path, slot: str, run_name: str, suffix: str) -> Path:
+    output = root / f"candidate-{slot}{suffix}.mp4"
+    video_only = root / f"candidate-{slot}{suffix}-video-only.mp4"
     command = ["ffmpeg", "-loglevel", "error", "-y"]
     for index in range(1, 6):
         command += ["-loop", "1", "-framerate", str(FPS), "-i", str(crops / f"photo-{index:02d}.png")]
     for unit_id in FAMILY_UNIT_IDS:
-        command += ["-i", str(root / "run" / unit_id / f"slot-{slot}" / f"candidate-{slot}.mp4")]
+        command += ["-i", str(root / run_name / unit_id / f"slot-{slot}" / f"candidate-{slot}.mp4")]
     filters = []
     for index, frames in enumerate(FAMILY_FRAME_COUNTS):
         filters.append(
@@ -132,6 +132,8 @@ def comparison(source: Path, candidate: Path, output: Path, frames: int) -> None
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("workspace", type=Path)
+    parser.add_argument("--run-name", default="run")
+    parser.add_argument("--suffix", default="")
     args = parser.parse_args()
     workspace = args.workspace.resolve()
     hand_root = workspace / "tmp/phase0e-2026-09-03/hand-wipe"
@@ -142,11 +144,11 @@ def main() -> None:
     family_crops = workspace / "output/source-analysis/instagram-DcyIWPYtZkV/run-v1/photo-crops"
     outputs: dict[str, dict[str, dict]] = {"handWipe": {}, "family": {}}
     for slot in ("A", "B"):
-        hand = finish_hand_wipe(hand_root, hand_source, hand_overlay, slot)
-        hand_comparison = hand_root / f"comparison-original-left-candidate-{slot}-right.mp4"
+        hand = finish_hand_wipe(hand_root, hand_source, hand_overlay, slot, args.run_name, args.suffix)
+        hand_comparison = hand_root / f"comparison-original-left-candidate-{slot}{args.suffix}-right.mp4"
         comparison(hand_source, hand, hand_comparison, 305)
-        family = finish_family(family_root, family_source, family_crops, slot)
-        family_comparison = family_root / f"comparison-original-left-candidate-{slot}-right.mp4"
+        family = finish_family(family_root, family_source, family_crops, slot, args.run_name, args.suffix)
+        family_comparison = family_root / f"comparison-original-left-candidate-{slot}{args.suffix}-right.mp4"
         comparison(family_source, family, family_comparison, 388)
         outputs["handWipe"][slot] = {
             "candidate": {"path": str(hand), "sha256": sha256(hand), "probe": probe(hand)},
@@ -164,7 +166,7 @@ def main() -> None:
         ],
         "outputs": outputs,
     }
-    manifest_path = workspace / "tmp/phase0e-2026-09-03/finished-manifest.json"
+    manifest_path = workspace / f"tmp/phase0e-2026-09-03/finished-manifest{args.suffix}.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     print(json.dumps(manifest, indent=2, sort_keys=True))
 
