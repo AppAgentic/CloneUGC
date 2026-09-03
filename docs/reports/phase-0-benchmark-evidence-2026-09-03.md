@@ -9,7 +9,7 @@ Scope: the Phase 0A evidence close-out and the Phase 0B / Phase 1 headless kerne
 | Gate | Status | Basis |
 |---|---|---|
 | Phase 0B / Phase 1 headless kernel | **PASS (local)** | All four gate items below are covered by committed tests that run in `pnpm check`. |
-| Phase 0A evidence close-out | **PARTIAL** | Three validator-accepted Fidelity Maps are linked to validated recipes. The corrected Winter Arc walk-in/stretch pair now has blind operator evidence, but its concise control beat the compiler, so compiler advantage remains unproven. Additional blind scoring and representative pairs remain in `PARKED_ACTIONS.md`. |
+| Phase 0A evidence close-out | **PARTIAL** | Three validator-accepted Fidelity Maps are linked to validated recipes. The corrected Winter Arc walk-in/stretch pair now has blind operator evidence: A was the slight preference, then the operator judged the difference negligible and accepted compiler B for production. This establishes one-family compiler non-inferiority; additional blind scoring and representative pairs remain in `PARKED_ACTIONS.md`. |
 | Private live route (Phase 2) | **NO-GO for now** | The kernel is ready to host one analyzer, one image, and one video adapter, but the Phase 0A fidelity gate has not passed and no rights records exist for the benchmark sources. |
 
 ## 1. Headless kernel gate
@@ -97,7 +97,7 @@ Notable honesty choices baked into the fixtures:
 | Recipe | Lineage before | Lineage now | Derivation check |
 |---|---|---|---|
 | `phone-laugh-to-lock-in-gym` | run manifest | Fidelity Map | 1 shot equals 1 segment, same strategy |
-| `winter-arc-walk-in-stretch-checklist` | run manifest | Fidelity Map + human correction + blind H3 pair | 1 shot equals 1 segment; recipe ends 117 ms inside the final segment; v4 is validated by accepted Candidate A, the concise control lane |
+| `winter-arc-walk-in-stretch-checklist` | run manifest | Fidelity Map + human correction + blind H3 pair | 1 shot equals 1 segment; recipe ends 117 ms inside the final segment; A was the slight preference and compiler B was subsequently accepted as negligibly different and production-usable |
 | `childhood-to-family-gym-montage` | run manifest | Fidelity Map | 17 shots equal 17 deterministic segments; 5 deterministic-source photo units plus 12 image-to-video units |
 
 The remaining four validated recipes and three manifest/evidence-only drafts still cite run manifests or evidence hashes. Their analyzer outputs are not persisted in the repository's evidence set, so re-deriving them requires a paid analyzer run and is parked.
@@ -128,10 +128,10 @@ The exact evidence assembly sequence is documented in `docs/phase-0-evidence-wor
 
 ### 2.5 Corrected live evidence and remaining work
 
-Correction recorded 2026-09-03: the operator confirmed the intended source was Instagram `DcqCAe_Jl9o`. Direct full-timeline review shows a fully clothed subject walking away into the gym, raising both arms into an overhead shoulder/triceps stretch, lowering the arms, and continuing forward. No shirt is removed and no bodybuilding flex occurs. A first corrected-action H3 A/B pair then exposed a second miss: both prompts froze the camera, while the source is a handheld rear-follow shot with forward translation, background parallax, small lateral drift, and gait-synchronized vertical bob. Those earlier pairs remain excluded. A fresh blind pair used the same approved setup frame, seed, H3 route and settings in both lanes; the operator selected Candidate A as “perfect.” Unsealing showed A was the concise control and B was the compiler. The accepted result promotes `winter-arc-walk-in-stretch-checklist` revision 4 to validated and proves the corrected format and production route, but it is a control win—not evidence that the compiler beats a concise prompt. Exact hashes and request IDs are in `fixtures/evidence/instagram-DcqCAe_Jl9o-handheld-winner-v1.json`. TikTok `7665182154300624142` remains a separate incline-press checklist draft and was not the requested correction.
+Correction recorded 2026-09-03: the operator confirmed the intended source was Instagram `DcqCAe_Jl9o`. Direct full-timeline review shows a fully clothed subject walking away into the gym, raising both arms into an overhead shoulder/triceps stretch, lowering the arms, and continuing forward. No shirt is removed and no bodybuilding flex occurs. A first corrected-action H3 A/B pair then exposed a second miss: both prompts froze the camera, while the source is a handheld rear-follow shot with forward translation, background parallax, small lateral drift, and gait-synchronized vertical bob. Those earlier pairs remain excluded. A fresh blind pair used the same approved setup frame, seed, H3 route and settings in both lanes; the operator selected Candidate A as “perfect.” Unsealing showed A was the concise control and B was the compiler. The operator then clarified that the difference was negligible and explicitly accepted B if it simplified the product path. The result promotes `winter-arc-walk-in-stretch-checklist` revision 4 to validated, proves the corrected format and production route, and establishes the current compiler as non-inferior for this family. It does not prove compiler superiority, and the complete three-family scoring gate remains open. Exact hashes, request IDs, and both operator decisions are in `fixtures/evidence/instagram-DcqCAe_Jl9o-handheld-winner-v1.json`. TikTok `7665182154300624142` remains a separate incline-press checklist draft and was not the requested correction.
 
 - blind human annotations for the three clips;
-- a complete raw-request versus compiler generation pair corpus across all three families (the Winter Arc pair is complete but is a control win);
+- a complete raw-request versus compiler generation pair corpus across all three families (the Winter Arc pair is complete and its compiler output is operator-accepted as non-inferior);
 - three blind scorers with structured per-dimension QA;
 - static-versus-hybrid analyzer bake-off with repeated runs.
 
@@ -145,12 +145,12 @@ Each is a paid or human gate and is listed with its unblocking condition in `PAR
 | Remove named model/provider guidance from public schemas | Compiled plans, estimates, jobs, and outputs use provider classes only; tests assert prompts and estimates contain no provider or adapter names. |
 | Typed target dimensions and generation-unit impact | `TypedDirective` carries dimension, target scope, intent, and value; the invalidation graph maps dimensions to units and finishing steps. |
 | Machine-readable QA | `QAReport` scores per dimension and attaches typed repair directives to timestamped findings. |
-| Recipes cite a real Fidelity Map hash | Three recipes do and all three are validated. The Winter Arc validation is a control win, so compiler advantage remains open. Four other validated recipes are parked on analyzer re-runs. |
+| Recipes cite a real Fidelity Map hash | Three recipes do and all three are validated. The Winter Arc compiler is operator-accepted as negligibly different from the slight control preference; cross-format evidence remains open. Four other validated recipes are parked on analyzer re-runs. |
 | Cost, rights scope, and approval binding in eligibility | `checkGenerationAuthority` binds source, revision, plan, estimate, expiry, rights coverage, and single-use approval ceilings, and the kernel consumes approvals inside the creation transaction. |
 
 ## 4. Risks
 
 - The in-memory store emulates Firestore transaction semantics synchronously. Asynchronous contention, document size limits, and index behavior are not exercised; the Phase 2 adapter must run the same tests against the Firestore emulator.
 - Atomic publication is two steps: the asset store commits master and manifest atomically, then the store transaction records the output. A crash between the two leaves published objects without a record; the tests show a retry republishes the same hashes, but orphan cleanup is not implemented.
-- Compiled prompts are assembled from map fields by fixed rules. They are provider-neutral and deterministic, but the first corrected live comparison lost to a concise control, so minimum-sufficient prompt compilation remains an open quality problem.
+- Compiled prompts are assembled from map fields by fixed rules. They are provider-neutral and deterministic. The first corrected live comparison slightly preferred the concise control, but the operator judged the difference negligible and accepted the compiler output; broader quality remains untested across the other two benchmark families.
 - Materialized maps are faithful to persisted evidence, but the evidence itself is one static analyzer pass per clip with no repeats, so claim stability is unknown.

@@ -15,6 +15,7 @@
   "spendApprovalMessageTs": "1788466889.587499",
   "setupImageApprovalMessageTs": "1788462319.540949",
   "operatorSelectionMessageTs": "1788467101.348629",
+  "operatorClarificationMessageTs": "1788467717.965769",
   "automaticSubmissionRetries": 0,
   "estimatedCostMicrosPerCall": 100000,
   "estimatedPairCostMicros": 200000,
@@ -40,7 +41,13 @@
   "winner": {
     "candidate": "A",
     "lane": "control",
-    "operatorVerdict": "perfect"
+    "operatorVerdict": "perfect",
+    "preferenceStrength": "negligible"
   },
-  "conclusion": "The accepted control output validates the corrected walk-in stretch format and the GPT Image 2 setup-frame to H3 Max Turbo production route. Because the concise control beat the compiler lane, this pair does not prove a compiler advantage; the compiler gate remains open."
+  "productionAcceptance": {
+    "candidate": "B",
+    "lane": "compiler",
+    "operatorVerdict": "The difference from A was negligible; Candidate B is acceptable if it simplifies the product path."
+  },
+  "conclusion": "Candidate A remains the slight blind preference, but the operator clarified that the difference was negligible and accepted Candidate B for the product path. The pair validates the corrected walk-in stretch format, the GPT Image 2 setup-frame to H3 Max Turbo route, and this compiler output as commercially usable. It establishes compiler non-inferiority for this family, not compiler superiority."
 }
