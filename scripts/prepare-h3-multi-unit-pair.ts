@@ -25,6 +25,10 @@ interface UnitInput {
   imageProvenance: string;
   identityVisibility?: "visible" | "fully_occluded";
   identityAnchor?: string;
+  endImagePath?: string;
+  endImageSha256?: string;
+  endImageProvenance?: string;
+  endIdentityVisibility?: "visible" | "fully_occluded";
 }
 
 interface InputConfig {
@@ -58,6 +62,17 @@ export function assertIdentityAnchor(prompt: string, visibility: UnitInput["iden
   const anchorTerms = anchor.toLocaleLowerCase().match(/[a-z0-9]+/g) ?? [];
   if (anchorTerms.some((term) => !promptTerms.has(term))) {
     fail(`fully occluded setup frame prompt is missing identity anchor: ${anchor}`);
+  }
+}
+
+export function assertIdentityEndpoint(
+  startVisibility: UnitInput["identityVisibility"],
+  endVisibility: UnitInput["endIdentityVisibility"],
+  hasEndImage: boolean,
+  unitId = "unit",
+): void {
+  if (startVisibility === "fully_occluded" && (!hasEndImage || endVisibility !== "visible")) {
+    fail(`${unitId} fully occluded start requires a visible endpoint identity anchor`);
   }
 }
 
@@ -118,6 +133,13 @@ function main(): void {
     ].filter((part) => part.length > 0).join(" ");
     assertIdentityAnchor(control, input.identityVisibility, input.identityAnchor);
     assertIdentityAnchor(compiler, input.identityVisibility, input.identityAnchor);
+    const requiresEndImage = motion.dependsOn.some((id) => id.endsWith(":end-anchor"));
+    if (requiresEndImage !== Boolean(input.endImagePath && input.endImageSha256 && input.endImageProvenance)) {
+      fail(`unit ${input.id} endpoint image configuration does not match the compiled plan`);
+    }
+    const endImagePath = input.endImagePath ? resolve(dirname(configPath), input.endImagePath) : undefined;
+    if (endImagePath && fileSha256(endImagePath) !== input.endImageSha256) fail(`unit ${input.id} endpoint image hash mismatch`);
+    assertIdentityEndpoint(input.identityVisibility, input.endIdentityVisibility, Boolean(endImagePath), `unit ${input.id}`);
     const unitDir = resolve(outputDir, input.id);
     mkdirSync(unitDir, { recursive: true });
     const controlPath = resolve(unitDir, "control.txt");
@@ -129,6 +151,10 @@ function main(): void {
       imagePath: resolve(dirname(configPath), input.imagePath),
       imageSha256: input.imageSha256,
       imageProvenance: input.imageProvenance,
+      endImagePath,
+      endImageSha256: input.endImageSha256,
+      endImageProvenance: input.endImageProvenance,
+      endIdentityVisibility: input.endIdentityVisibility,
       identityVisibility: input.identityVisibility ?? "visible",
       identityAnchor: input.identityAnchor,
       controlPromptPath: controlPath,

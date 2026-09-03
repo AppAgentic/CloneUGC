@@ -78,6 +78,8 @@ def prior_control(args: argparse.Namespace, units: list[dict]) -> tuple[dict, li
             raise RuntimeError(f"prior pair is missing unit {unit['id']}")
         if saved.get("setupImageSha256") != unit["imageSha256"] or saved.get("durationSeconds") != unit["durationSeconds"]:
             raise RuntimeError(f"prior control inputs differ for unit {unit['id']}")
+        if saved.get("endImageSha256") != unit["endImageSha256"]:
+            raise RuntimeError(f"prior control endpoint differs for unit {unit['id']}")
         control = saved.get("prompts", {}).get("control", {})
         if control.get("slot") != args.accepted_control_slot or control.get("sha256") != text_hash(unit["control"]):
             raise RuntimeError(f"prior control prompt differs for unit {unit['id']}")
@@ -144,6 +146,7 @@ def build_plan(args: argparse.Namespace, units: list[dict], prior: dict, accepte
             "id": unit["id"],
             "durationSeconds": unit["durationSeconds"],
             "setupImageSha256": unit["imageSha256"],
+            "endImageSha256": unit["endImageSha256"],
             "seed": prior_by_id[unit["id"]]["seed"],
             "prompts": {"compiler": {"slot": "compiler-retest", "sha256": text_hash(unit["compiler"])}},
         } for unit in units],
@@ -199,7 +202,8 @@ def main() -> int:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         for unit in units:
             image_url = client.upload_file(unit["image"])
-            submit(args, plan, unit, "compiler", client, key, image_url)
+            end_image_url = client.upload_file(unit["endImage"]) if unit["endImage"] is not None else None
+            submit(args, plan, unit, "compiler", client, key, image_url, end_image_url)
     return 0
 
 

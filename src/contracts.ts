@@ -160,6 +160,11 @@ export interface GenerationUnit {
   targetDurationMs: Milliseconds;
   providerDurationMs: Milliseconds;
   anchorFrameStrategy: AnchorFrameStrategy;
+  endpointFrame?: {
+    anchorFrameStrategy: AnchorFrameStrategy;
+    prompt: string;
+    evidenceIds: string[];
+  };
   motionStrategy: MotionGenerationStrategy;
   transitionIn: TransitionType;
   transitionDurationMs: Milliseconds;
@@ -401,6 +406,12 @@ export function assertFidelityMap(map: FidelityMap, evidence: readonly EvidenceC
       plannedShotIds.add(shotId);
     }
     assert(anchorStrategies.includes(unit.anchorFrameStrategy), `generation unit ${unit.id} has an invalid anchor-frame strategy`);
+    if (unit.endpointFrame !== undefined) {
+      assert(anchorStrategies.includes(unit.endpointFrame.anchorFrameStrategy), `generation unit ${unit.id} has an invalid endpoint-frame strategy`);
+      assert(unit.endpointFrame.prompt.length > 0, `generation unit ${unit.id} endpoint frame requires a prompt`);
+      assert(unit.endpointFrame.evidenceIds.length > 0, `generation unit ${unit.id} endpoint frame requires evidence`);
+      unit.endpointFrame.evidenceIds.forEach((id) => requireAccepted(id, `generation unit ${unit.id} endpoint frame`));
+    }
     assert(motionStrategies.includes(unit.motionStrategy), `generation unit ${unit.id} has an invalid motion strategy`);
     assert(transitionTypes.includes(unit.transitionIn), `generation unit ${unit.id} has an invalid transition type`);
     assert(Number.isInteger(unit.transitionDurationMs) && unit.transitionDurationMs >= 0, `generation unit ${unit.id} transition duration must be non-negative`);

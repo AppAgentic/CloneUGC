@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { assertControlStateHash, assertIdentityAnchor, providerDurationSeconds, providerPromptExclusions } from "../scripts/prepare-h3-multi-unit-pair.ts";
+import { assertControlStateHash, assertIdentityAnchor, assertIdentityEndpoint, providerDurationSeconds, providerPromptExclusions } from "../scripts/prepare-h3-multi-unit-pair.ts";
 
 test("fails closed when the control prompt state is not the approved creative state", () => {
   const approved = "a".repeat(64);
@@ -25,6 +25,13 @@ test("requires explicit identity text when the setup frame is fully occluded", (
   assert.throws(() => assertIdentityAnchor("Reveal the subject.", "fully_occluded", anchor), /missing identity anchor/);
   assert.throws(() => assertIdentityAnchor("Reveal the subject.", "fully_occluded"), /require an explicit identity anchor/);
   assert.doesNotThrow(() => assertIdentityAnchor("The setup visibly anchors identity.", "visible"));
+});
+
+test("requires a visible endpoint identity anchor when a take starts fully occluded", () => {
+  assert.throws(() => assertIdentityEndpoint("fully_occluded", undefined, false), /requires a visible endpoint/);
+  assert.throws(() => assertIdentityEndpoint("fully_occluded", "fully_occluded", true), /requires a visible endpoint/);
+  assert.doesNotThrow(() => assertIdentityEndpoint("fully_occluded", "visible", true));
+  assert.doesNotThrow(() => assertIdentityEndpoint("visible", undefined, false));
 });
 
 test("translates internal rights constraints into short provider exclusions", () => {

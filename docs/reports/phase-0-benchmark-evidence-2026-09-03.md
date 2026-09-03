@@ -76,7 +76,7 @@ Four maps were materialized from evidence already persisted under `output/` (rea
 | `fm-phone-laugh-to-lock-in-gym-v1` | single-take performance | 6139 ms | 1 / 1 | 14.6 s | 873 / 867 / 548 |
 | `fm-winter-arc-walk-in-stretch-checklist-v3` | single-take product/checklist | 9517 ms | 1 / 1 | 11.7 s | 1118 / 709 / 116 |
 | `fm-childhood-to-family-gym-montage-v1` | multi-take posing montage | 12933 ms | 17 / 17 | 14.5 s | 1493 / 981 / 582 |
-| `fm-hand-wipe-fitness-transformation-v1` | two-take matched transition | 10031 ms | 2 / 2 | persisted Agentic run | persisted with artifact |
+| `fm-hand-wipe-fitness-transformation-v2` | two-take matched transition | 10031 ms | 2 / 2 | persisted Agentic run + corrected choreography | persisted with artifact |
 
 Hashes:
 
@@ -85,7 +85,7 @@ Hashes:
 | phone-laugh | `d792607c67c22199c61c0275a014ca5e94db1a7746957051136a0123f98873ab` |
 | winter-arc walk-in/stretch | `ea97d9bc49dabe2c5e3a08c5063ae894c3ea7d61036e76cfc2654ea09887ef9e` |
 | family montage | `e003a259a09975d209f22d633a0933375e202ce196f06b2864310b4a8cf505d3` |
-| hand-wipe transformation | `1a661fc7f3212451854c6e46daadf8d613a91b3b290ca88056ade500aa259212` |
+| hand-wipe transformation | `264c503ea3b8f0c0925a96561b33b2e113335cf9668c8905ccd56fd89a245474` |
 
 Notable honesty choices baked into the fixtures:
 
@@ -139,6 +139,8 @@ Two further source-bound blind pairs then ran on the production GPT Image setup-
 The compiler was repaired to render the requested outcome, subject-anchor policy, complete setup state, and typed resolved identity, wardrobe and body-state values into every affected motion prompt. A second 28-call blind retest completed with zero retries. For hand-wipe, A was control and B compiler; the operator rejected A because it changed from a woman to a man and preferred B. Audit established that A's approved woman setup frame had accidentally been paired with a stale male control-state prompt, so this was a benchmark input-provenance failure rather than a provider instruction failure. B preserved the requested woman but its 10-second after take invented a second palm occlusion; compressing that take into the 5241 ms source interval exposed the error. Preparation now binds the approved control-state hash, requires explicit identity text for a fully occluded setup frame, and chooses a 5-second H3 take through a 10% near-real-time tolerance. A zero-generation repair reuses the selected compiler before take and the previously operator-accepted 5-second after take. For family montage, A was control and B compiler; the operator selected A without yet stating whether B was materially worse or still commercially acceptable. The family gate therefore remains unresolved rather than being labelled a compiler failure or non-inferiority. Exact evidence is in `fixtures/evidence/phase0-hand-wipe-blind-pair-v2.json` and `fixtures/evidence/phase0-family-montage-blind-pair-v2.json`.
 
 A third hand-wipe pair removed those confounds: both lanes used the same accepted setup frames, per-take seeds, five-second provider durations, 768P settings, and identical deterministic finishing. The operator selected B, the concise control; the sealed Gemini 3.8 Agentic preflight independently selected B. A was the compiler. Its before-take prompt had leaked the global cross-cut hand-withdraw/reveal interval into the local before take, causing an early palm cover, withdrawal, idle gap, and failed join; its after take also revealed a different identity. This is a fair compiler failure and the reconstruction gate remains closed. The compiler now emits only unit-contained action beats, an explicit local start or endpoint, resolved subject state, camera, and compact exclusions. Global timestamps, cross-boundary actions, rights prose, and deterministic-finishing instructions no longer enter paid provider prompts. The fix passes the full local suite, but requires a two-call compiler-only retest against immutable Candidate B before it can count as evidence. Exact failed evidence is in `fixtures/evidence/phase0-hand-wipe-blind-pair-v3.json`.
+
+The two-call compiler-only retest confirmed that fix solved the palm timing but did not make the candidate non-inferior. Gemini 3.8 Agentic found that it omitted the raised-arm back flex, skipped the opening after-state flex, and revealed a different older/tanned woman. Audit traced those failures to two upstream contract defects: the materialized Fidelity Map reduced the exact arm/body sequence to an abstract “back pose,” and the after take began from a fully palm-occluded setup with no visible identity pixels. The map now carries the exact observed choreography, and the compiled plan can require an H3 endpoint frame. A fully occluded start now fails preparation unless paired with a visible endpoint identity anchor. This follows the current H3 Max Turbo API's supported `end_image_url` first-to-last keyframe contract. The failed retest is preserved in `fixtures/evidence/phase0-hand-wipe-compiler-retest-v4.json`; no further generation counts until a fresh equal-input pair passes blind review.
 
 - blind human annotations for the three clips;
 - compiler repairs and a fresh raw-request versus compiler retest for hand-wipe and family montage; the current pairs preferred the controls;

@@ -48,7 +48,7 @@ test("four recipes cite a real Fidelity Map hash and re-derive their structure f
 });
 
 test("the hand-wipe map preserves two independent takes and one identity lineage", () => {
-  const handWipe = fixtures.find((fixture) => fixture.id === "fm-hand-wipe-fitness-transformation-v1")!;
+  const handWipe = fixtures.find((fixture) => fixture.id === "fm-hand-wipe-fitness-transformation-v2")!;
   assert.equal(handWipe.map.creatorWorkflow.captureMode, "multi_take");
   assert.equal(handWipe.map.creatorWorkflow.generationUnits.length, 2);
   assert.deepEqual(handWipe.map.editSegments.map((segment) => segment.transitionIn), ["none", "match_cut"]);

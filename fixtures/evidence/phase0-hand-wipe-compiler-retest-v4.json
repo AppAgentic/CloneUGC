@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "phase0-hand-wipe-compiler-retest-v4",
+  "extends": "phase0-hand-wipe-blind-pair-v3",
+  "sourceAssetId": "tiktok-7672577678309870861",
+  "sourceContentSha256": "0db4e5c295d0a8d7046a71e27605a8a6bf6bee8cd16f2219a2e88878f1862ec8",
+  "fidelityMapHash": "1a661fc7f3212451854c6e46daadf8d613a91b3b290ca88056ade500aa259212",
+  "compilerPlanSha256": "44edfc3c91c50eb3c3d359b39756c366bbd3462f8fe590604ec4eef58e0ee365",
+  "sealedPlanSha256": "aecd6958dfed0d3407c9994cc155c0cbdcf1b9a594035013fa48aef0380653d9",
+  "priorPairSealedPlanSha256": "df7816ed9886eb1a9ab21f18a0d43bfdc1a243b635c85548c677ed9eb9937225",
+  "spendApprovalMessageTs": "1788475683.539809",
+  "estimatedCostUsdMicros": 100000,
+  "automaticPaidRetries": 0,
+  "reusedAcceptedControl": {
+    "slot": "B",
+    "outputSha256": "dab4033bd0b397c5c9dffda9d66050aa70593433d1841de69c2ce870f2d56db3"
+  },
+  "providerRequests": [
+    {"unitId":"unit-before","providerRequestId":"01a06975-a362-7680-935d-b5f33129e36c","seed":423523829,"promptSha256":"4d3fea9fd2e2f5386cfc59244e3f785e53980a49426c8d1c9d1e917bb830c364","setupImageSha256":"f349b6df002f4e5776d500d0639d3d8baa466b6227a6d0870b67632641320449","outputSha256":"edba0225c7b704dba83ba11f0cf859f60f6885b746044d8f964123741c6672bd","elapsedSeconds":8.03},
+    {"unitId":"unit-after","providerRequestId":"01a06975-c9f4-7a52-ad50-99fc9ec7e267","seed":366642371,"promptSha256":"a0fca8ead7bacec578304fee4aed7988791a7bd8d3baa698e6937e4b2f79a4b9","setupImageSha256":"e1232a30ea6418327eeb7c1308debf533f53630ed2380cab30366cb9632b3d95","outputSha256":"2dc0116e02ae1e25090d3401a3d5bbe59e45e1915599450b3befc5d3a35ef2c2","elapsedSeconds":7.785}
+  ],
+  "finishedOutputSha256": "f7ba90d69f227dfc947ca816a804d513bb7ffb778d7759f4262e55dc3373d9ce",
+  "comparisonSha256": "8d2d87d9159b2f3b274104ff10296f78fecd5063318f2874c456f3211d4977ea",
+  "blindPreflight": {"model":"gemini-3.8-flash","mode":"agentic","completedAt":"2026-09-03T22:50:34Z","totalTokens":21367,"processingCalls":5,"contentSha256":"8d2d87d9159b2f3b274104ff10296f78fecd5063318f2874c456f3211d4977ea","verdict":"commercially unusable and inferior to accepted control B"},
+  "outcome": "compiler_failed_missing_choreography_and_visible_identity_anchor",
+  "typedFindings": [
+    {"dimension":"primary_motion","targetUnitId":"unit-before","severity":"material","finding":"The palm endpoint timing passed, but the compiler omitted the raised-arm double-biceps back flex because the Fidelity Map described the action only as a back pose."},
+    {"dimension":"primary_motion","targetUnitId":"unit-after","severity":"material","finding":"The compiler skipped the opening hands-behind-back chest and lat flex and moved to the waistband too early."},
+    {"dimension":"identity","targetUnitId":"unit-after","severity":"material","finding":"The after take began from a fully occluded setup frame with no visible identity pixels and revealed a different older, tanned woman despite text-only identity instructions."}
+  ],
+  "nextContractRevision": "Require explicit per-take choreography in evidence and allow H3 first-to-last keyframe generation so an occluded start can be bound to a visible same-identity endpoint."
+}

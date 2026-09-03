@@ -207,6 +207,7 @@ interface UnitSeed {
   startMs: number;
   endMs: number;
   anchorStrategy: AnchorFrameStrategy;
+  endpointFrame?: { strategy: AnchorFrameStrategy; prompt: string };
   motionStrategy: MotionGenerationStrategy;
   transitionIn: TransitionType;
   transitionDurationMs: number;
@@ -273,6 +274,26 @@ function buildPlan(input: {
         dimensions: ANCHOR_DIMENSIONS,
       }));
       dependsOn.push(anchorId);
+      if (seed.endpointFrame !== undefined) {
+        const endpointAnchorId = `${seed.id}:end-anchor`;
+        units.push(finishUnit({
+          id: endpointAnchorId,
+          kind: "anchor",
+          sourceShotIds: seed.sourceShotIds,
+          setupId: seed.setupId,
+          startMs: seed.startMs,
+          endMs: seed.endMs,
+          targetDurationMs: 0,
+          strategy: seed.endpointFrame.strategy,
+          prompt: `${seed.endpointFrame.prompt}${directiveSuffix}`,
+          preserve,
+          change,
+          constraints: hardConstraints,
+          dependsOn: [anchorId],
+          dimensions: ANCHOR_DIMENSIONS,
+        }));
+        dependsOn.push(endpointAnchorId);
+      }
     }
     units.push(finishUnit({
       id: motionId,
@@ -393,7 +414,6 @@ function describeUnitFromMap(map: FidelityMap, unit: GenerationUnit): { anchorPr
   const motionPrompt = [
     "Create only one continuous take at natural real-time speed, starting exactly from the supplied setup frame.",
     `Camera: ${setup.cameraSignature}. Environment: ${setup.environmentSignature}. Subject: ${setup.subjectState}. Wardrobe: ${setup.wardrobeState}. Lighting: ${setup.lightingState}.`,
-    `Required action order and continuity: ${unit.preserve.join("; ")}.`,
     beats.length === 0 ? "" : `Action: ${beats.map((beat) => withoutTerminalPunctuation(beat.description)).join(" Then ")}.`,
     endpointDirection(unit.trimInstruction),
     nonRealtimePlayback.length === 0 ? "" : `Playback treatment: ${nonRealtimePlayback}.`,
@@ -420,6 +440,10 @@ export function compilePlanFromFidelityMap(input: { map: FidelityMap; evidence: 
       startMs: unit.range.startMs,
       endMs: unit.range.endMs,
       anchorStrategy: unit.anchorFrameStrategy,
+      ...(unit.endpointFrame === undefined ? {} : { endpointFrame: {
+        strategy: unit.endpointFrame.anchorFrameStrategy,
+        prompt: unit.endpointFrame.prompt,
+      } }),
       motionStrategy: unit.motionStrategy,
       transitionIn: unit.transitionIn,
       transitionDurationMs: unit.transitionDurationMs,

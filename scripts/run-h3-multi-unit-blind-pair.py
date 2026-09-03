@@ -123,6 +123,12 @@ def resolve_units(manifest_path: Path) -> list[dict]:
         for path in (image, control, compiler):
             if not path.is_file():
                 raise RuntimeError(f"unit {unit_id} input is missing: {path}")
+        end_image = (root / raw["endImagePath"]).resolve() if raw.get("endImagePath") else None
+        if end_image is not None:
+            if not end_image.is_file() or sha256(end_image) != raw.get("endImageSha256"):
+                raise RuntimeError(f"unit {unit_id} endpoint image is missing or has the wrong hash")
+            if not raw.get("endImageProvenance"):
+                raise RuntimeError(f"unit {unit_id} endpoint image requires provenance")
         if sha256(image) != raw.get("imageSha256"):
             raise RuntimeError(f"unit {unit_id} setup image hash mismatch")
         control_text = control.read_text().strip()
@@ -130,6 +136,7 @@ def resolve_units(manifest_path: Path) -> list[dict]:
         if not control_text or not compiler_text:
             raise RuntimeError(f"unit {unit_id} prompts must not be empty")
         identity_visibility = raw.get("identityVisibility", "visible")
+        end_identity_visibility = raw.get("endIdentityVisibility")
         identity_anchor = raw.get("identityAnchor")
         if identity_visibility not in {"visible", "fully_occluded"}:
             raise RuntimeError(f"unit {unit_id} has invalid identity visibility")
@@ -141,14 +148,20 @@ def resolve_units(manifest_path: Path) -> list[dict]:
                 prompt_terms = set(re.findall(r"[a-z0-9]+", prompt.lower()))
                 if not required_terms.issubset(prompt_terms):
                     raise RuntimeError(f"unit {unit_id} {lane} prompt is missing the identity anchor")
+            if end_image is None or end_identity_visibility != "visible":
+                raise RuntimeError(f"unit {unit_id} fully occluded start requires a visible endpoint identity anchor")
         result.append({
             "id": unit_id,
             "durationSeconds": duration,
             "image": image,
             "imageSha256": raw["imageSha256"],
             "imageProvenance": raw.get("imageProvenance", "existing operator-approved setup frame"),
+            "endImage": end_image,
+            "endImageSha256": raw.get("endImageSha256"),
+            "endImageProvenance": raw.get("endImageProvenance"),
             "identityVisibility": identity_visibility,
             "identityAnchor": identity_anchor,
+            "endIdentityVisibility": end_identity_visibility,
             "targetDurationMs": raw.get("targetDurationMs"),
             "maxAbsoluteRetimePercent": raw.get("maxAbsoluteRetimePercent"),
             "control": control_text,
@@ -211,9 +224,12 @@ def prepare(args: argparse.Namespace) -> dict:
             "id": unit["id"],
             "durationSeconds": unit["durationSeconds"],
             "setupImageSha256": unit["imageSha256"],
+            "endImageSha256": unit["endImageSha256"],
+            "endImageProvenance": unit["endImageProvenance"],
             "imageProvenance": unit["imageProvenance"],
             "identityVisibility": unit["identityVisibility"],
             "identityAnchor": unit["identityAnchor"],
+            "endIdentityVisibility": unit["endIdentityVisibility"],
             "targetDurationMs": unit["targetDurationMs"],
             "maxAbsoluteRetimePercent": unit["maxAbsoluteRetimePercent"],
             "seed": secrets.SystemRandom().randrange(1, 2**31),
@@ -277,12 +293,14 @@ def verify_runtime(args: argparse.Namespace, sealed: dict, units: list[dict]) ->
         saved = sealed_by_id.get(unit["id"])
         if saved is None or saved["setupImageSha256"] != unit["imageSha256"]:
             raise RuntimeError(f"unit {unit['id']} setup image differs from sealed plan")
+        if saved.get("endImageSha256") != unit["endImageSha256"]:
+            raise RuntimeError(f"unit {unit['id']} endpoint image differs from sealed plan")
         for lane in ("control", "compiler"):
             if saved["prompts"][lane]["sha256"] != text_hash(unit[lane]):
                 raise RuntimeError(f"unit {unit['id']} {lane} prompt differs from sealed plan")
 
 
-def submit(args: argparse.Namespace, sealed: dict, unit: dict, lane: str, client: fal_client.SyncClient, key: str, image_url: str) -> None:
+def submit(args: argparse.Namespace, sealed: dict, unit: dict, lane: str, client: fal_client.SyncClient, key: str, image_url: str, end_image_url: str | None = None) -> None:
     saved = next(item for item in sealed["units"] if item["id"] == unit["id"])
     slot = saved["prompts"][lane]["slot"]
     receipt_path = args.output_dir / unit["id"] / f"slot-{slot}" / "receipt.json"
@@ -294,6 +312,7 @@ def submit(args: argparse.Namespace, sealed: dict, unit: dict, lane: str, client
         "unitId": unit["id"],
         "slot": slot,
         "setupImageSha256": unit["imageSha256"],
+        "endImageSha256": unit["endImageSha256"],
         "promptSha256": saved["prompts"][lane]["sha256"],
         "seed": saved["seed"],
         "durationSeconds": saved["durationSeconds"],
@@ -312,6 +331,8 @@ def submit(args: argparse.Namespace, sealed: dict, unit: dict, lane: str, client
         "prompt_expansion_mode": "balanced",
         "image_url": image_url,
     }
+    if end_image_url is not None:
+        payload["end_image_url"] = end_image_url
     try:
         response = single_post(key, payload)
         request_id = response.get("request_id")
@@ -405,8 +426,9 @@ def main() -> int:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         for unit in units:
             image_url = client.upload_file(unit["image"])
+            end_image_url = client.upload_file(unit["endImage"]) if unit["endImage"] is not None else None
             for lane in sealed["submissionOrder"]:
-                submit(args, sealed, unit, lane, client, key, image_url)
+                submit(args, sealed, unit, lane, client, key, image_url, end_image_url)
     return 0
 
 

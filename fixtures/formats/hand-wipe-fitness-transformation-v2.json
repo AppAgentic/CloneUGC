@@ -6,7 +6,7 @@
   "description": "A fixed-phone before/after reveal built as two independently recorded takes joined by a hand covering and uncovering the lens.",
   "provenance": {
     "sourceAssetId": "tiktok-7672577678309870861",
-    "sourceFidelityMapHash": "1a661fc7f3212451854c6e46daadf8d613a91b3b290ca88056ade500aa259212",
+    "sourceFidelityMapHash": "264c503ea3b8f0c0925a96561b33b2e113335cf9668c8905ccd56fd89a245474",
     "sourceRunManifestSha256": "a8546e00aeacb4eb61e7b9d2c3ed9f2262313ff3d30ede98ed099308010a36f1",
     "extractionPromptVersion": "analysis-v9-human-workflow-review",
     "rightsTransferPolicy": "structure_only"

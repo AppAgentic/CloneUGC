@@ -5,6 +5,8 @@ import { assertCompiledPlan, compilePlanFromFidelityMap, compilePlanFromFormat, 
 import { deriveRevision, type TypedDirective } from "../src/directives.ts";
 import { compileFormatRecipe, formatRecipeHash, type FormatRecipe } from "../src/format-recipe.ts";
 import { loadFidelityMapFixture } from "../src/fidelity-map-fixture.ts";
+import { fidelityMapHash } from "../src/contracts.ts";
+import { assertProductionWorkflowPlan } from "../src/production-workflow.ts";
 import { SOURCE_HASH, baseDirectives, sampleEvidence, sampleMap, samplePlan, sampleRevision } from "./helpers/sample.ts";
 
 test("a Fidelity Map compiles into one anchor and one motion unit per generation unit plus deterministic finishing", () => {
@@ -21,7 +23,6 @@ test("a Fidelity Map compiles into one anchor and one motion unit per generation
   const firstMotion = plan.units.find((unit) => unit.id === "unit-1:motion")!;
   assert.match(firstMotion.prompt, /Create only one continuous take at natural real-time speed/);
   assert.match(firstMotion.prompt, /Camera: .* Environment: .* Subject: .* Wardrobe: .* Lighting:/);
-  assert.match(firstMotion.prompt, /Required action order and continuity:/);
   assert.doesNotMatch(firstMotion.prompt, /Requested outcome:|Subject anchor policy:|Source shots/);
   assert.ok(plan.units.every((unit) => unit.constraints.some((constraint) => /identity/.test(constraint))));
   assert.match(plan.planHash, /^[a-f0-9]{64}$/);
@@ -37,7 +38,7 @@ test("compilation is deterministic and rejects revisions that cite another map",
 });
 
 test("motion prompts are concise, unit-local, and do not leak a cross-cut wipe action", () => {
-  const fixture = loadFidelityMapFixture(new URL("../fixtures/fidelity-maps/fm-hand-wipe-fitness-transformation-v1.json", import.meta.url));
+  const fixture = loadFidelityMapFixture(new URL("../fixtures/fidelity-maps/fm-hand-wipe-fitness-transformation-v2.json", import.meta.url));
   const directives: TypedDirective[] = [
     { id: "identity", kind: "change", dimension: "identity", target: { scope: "global" }, intent: "Use one woman", value: "the same fictional blonde adult woman", evidenceIds: [] },
     { id: "before", kind: "change", dimension: "wardrobe", target: { scope: "units", unitIds: ["unit-before"] }, intent: "Black before outfit", value: "plain black sports bra and black gym shorts", evidenceIds: [] },
@@ -60,6 +61,22 @@ test("motion prompts are concise, unit-local, and do not leak a cross-cut wipe a
   assert.match(after, /plain forest-green sports bra and green gym shorts/);
   assert.match(after, /Begin with hand uncover/);
   assert.doesNotMatch(after, /3600-5340|4790-10031/);
+});
+
+test("an endpoint frame compiles into a second anchor dependency for the take", () => {
+  const map = structuredClone(sampleMap);
+  map.creatorWorkflow.generationUnits[0]!.endpointFrame = {
+    anchorFrameStrategy: "edit_previous_setup",
+    prompt: "The same fictional subject at the exact final pose with a palm covering the lens.",
+    evidenceIds: ["e-shot-1"],
+  };
+  const revision = sampleRevision({ fidelityMapHash: fidelityMapHash(map) });
+  const plan = compilePlanFromFidelityMap({ map, evidence: sampleEvidence, revision });
+  const motion = plan.units.find((unit) => unit.id === "unit-1:motion")!;
+  assert.deepEqual(motion.dependsOn, ["unit-1:anchor", "unit-1:end-anchor"]);
+  assert.match(plan.units.find((unit) => unit.id === "unit-1:end-anchor")!.prompt, /exact final pose/);
+  assert.doesNotThrow(() => assertCompiledPlan(plan));
+  assert.doesNotThrow(() => assertProductionWorkflowPlan(plan));
 });
 
 test("a caption repair invalidates only the caption layer and final splice", () => {

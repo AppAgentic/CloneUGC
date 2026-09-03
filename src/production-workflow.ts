@@ -39,11 +39,11 @@ function assertMicros(value: number, field: string): void {
   assert(Number.isSafeInteger(value) && value >= 0, `${field} must be a non-negative integer of USD micros`);
 }
 
-function pairedAnchor(plan: CompiledPlan, motion: PlanUnit): PlanUnit {
-  assert(motion.dependsOn.length === 1, `motion unit ${motion.id} must depend on exactly one setup frame`);
-  const anchor = plan.units.find((unit) => unit.id === motion.dependsOn[0]);
-  assert(anchor !== undefined && anchor.kind === "anchor", `motion unit ${motion.id} must depend on an anchor unit`);
-  return anchor;
+function pairedAnchors(plan: CompiledPlan, motion: PlanUnit): PlanUnit[] {
+  assert(motion.dependsOn.length >= 1 && motion.dependsOn.length <= 2, `motion unit ${motion.id} must depend on one start frame and at most one endpoint frame`);
+  const anchors = motion.dependsOn.map((id) => plan.units.find((unit) => unit.id === id));
+  assert(anchors.every((anchor): anchor is PlanUnit => anchor !== undefined && anchor.kind === "anchor"), `motion unit ${motion.id} dependencies must be anchor units`);
+  return anchors;
 }
 
 export function assertProductionWorkflowPlan(plan: CompiledPlan): void {
@@ -51,7 +51,7 @@ export function assertProductionWorkflowPlan(plan: CompiledPlan): void {
   const anchors = plan.units.filter((unit) => unit.kind === "anchor");
   const motions = plan.units.filter((unit) => unit.kind === "motion");
   assert(motions.length > 0, "production plan requires at least one motion unit");
-  assert(anchors.length === motions.length, "production plan requires one setup frame per take");
+  assert(anchors.length >= motions.length && anchors.length <= motions.length * 2, "production plan requires one start frame and at most one endpoint frame per take");
   if (plan.singleGenerationProhibited) {
     assert(motions.length > 1, "a multi-take plan cannot collapse into one motion request");
   }
@@ -61,12 +61,13 @@ export function assertProductionWorkflowPlan(plan: CompiledPlan): void {
   }
   for (const motion of motions) {
     assert(motion.strategy === "image_to_video", `motion unit ${motion.id} must use image-to-video`);
-    const anchor = pairedAnchor(plan, motion);
-    assert(anchor.setupId === motion.setupId, `motion unit ${motion.id} and its setup frame must share a setup id`);
-    assert(
-      anchor.sourceShotIds.length === motion.sourceShotIds.length && anchor.sourceShotIds.every((id, index) => id === motion.sourceShotIds[index]),
-      `motion unit ${motion.id} and its setup frame must cover the same source shots`,
-    );
+    for (const anchor of pairedAnchors(plan, motion)) {
+      assert(anchor.setupId === motion.setupId, `motion unit ${motion.id} and its setup frames must share a setup id`);
+      assert(
+        anchor.sourceShotIds.length === motion.sourceShotIds.length && anchor.sourceShotIds.every((id, index) => id === motion.sourceShotIds[index]),
+        `motion unit ${motion.id} and its setup frames must cover the same source shots`,
+      );
+    }
   }
 }
 
