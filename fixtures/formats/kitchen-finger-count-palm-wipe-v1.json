@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "kitchen-finger-count-palm-wipe",
+  "revision": 1,
+  "name": "Finger-count palm-wipe reveal",
+  "description": "A close-lens 1–2–3–4 finger count followed by a palm-cover cut into a rear-facing reveal and single turn toward camera.",
+  "provenance": {"sourceAssetId":"tiktok-7665104129970195726","sourceRunManifestSha256":"5e5c31103849e8207d88d45aa41360d6a89a450f77ee21bbda8fc39bb671fa56","extractionPromptVersion":"analysis-v7","rightsTransferPolicy":"structure_only"},
+  "durationMs": 5687,
+  "aspectRatio": "9:16",
+  "lockedGrammar": ["Two independently recorded kitchen takes","Close-lens 1–2–3–4 finger count","Palm fully hides the cut around 3.9s","Reveal begins back-facing","One turn toward camera while holding hair or braid","No overlay text"],
+  "variables": [
+    {"key":"subject_identity","kind":"subject_identity","description":"Same fictional or authorized person in both takes.","required":false,"defaultValue":"a clearly new fictional adult with a consistent face","examples":["a woman with copper box braids","a blonde man"]},
+    {"key":"gender_presentation","kind":"gender_presentation","description":"Presentation preserved across both takes.","required":false,"defaultValue":"female","examples":["female","male"]},
+    {"key":"wardrobe","kind":"wardrobe","description":"Wardrobe shared across the hidden cut.","required":false,"defaultValue":"casual fitted homewear","examples":["black gymwear","a green lounge set"]},
+    {"key":"setting","kind":"setting","description":"Matched environment for both takes.","required":false,"defaultValue":"an ordinary home kitchen","examples":["a bright kitchen","a bedroom"]},
+    {"key":"audio_policy","kind":"audio","description":"Authorized or replacement music.","required":false,"defaultValue":"new royalty-cleared rhythmic music","examples":["reuse authorized source music","silent"]}
+  ],
+  "shots": [
+    {"id":"finger-count","startMs":0,"endMs":3900,"transitionIn":"none","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"Create {{subject_identity}} with {{gender_presentation}} presentation in {{setting}}, wearing {{wardrobe}}, close to a locked vertical phone with one finger raised near the lens.","motionPromptTemplate":"Count clearly and evenly from one to two to three to four with distinct stable finger states, then move an open palm forward until the lens is fully covered at 3.9s. Keep {{subject_identity}} stable.","lockedTraits":["locked phone","four ordered finger states","full palm cover at end"]},
+    {"id":"turn-reveal","startMs":3900,"endMs":5687,"transitionIn":"match_cut","transitionDurationMs":400,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"Begin fully palm-occluded in the same {{setting}}, then reveal the same {{subject_identity}} with {{gender_presentation}} presentation and {{wardrobe}} from behind.","motionPromptTemplate":"Pull the palm away, reveal the subject already back-facing, then make one clean turn toward camera while holding their hair. Do not turn away and back. Preserve {{subject_identity}}.","lockedTraits":["starts fully occluded","back-facing reveal","one turn only","hair held during turn"]}
+  ],
+  "deterministicLayers": [
+    {"id":"palm-join","kind":"transition","startMs":3700,"endMs":4200,"template":"Join the two takes only through full palm occlusion; no dissolve or generated morph."},
+    {"id":"soundtrack","kind":"audio","startMs":0,"endMs":5687,"template":"Apply {{audio_policy}} over the exact format timeline."}
+  ],
+  "promptExamples": ["Use the finger-count palm-wipe format with a blonde woman in green gymwear."],
+  "validation": {"status":"draft","fidelityScore":46,"qaMode":"hybrid","sourceOutputId":"max-turbo-7665104129970195726-final","notes":["The first attempt incorrectly used one generation and missed the hidden two-take reset.","Recipe stores the corrected two-take grammar but needs a new live validation before default reuse."]}
+}

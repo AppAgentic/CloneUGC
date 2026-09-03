@@ -1,4 +1,4 @@
-export const SOURCE_FORENSICS_PROMPT_VERSION = "analysis-v6";
+export const SOURCE_FORENSICS_PROMPT_VERSION = "analysis-v9";
 
 export const SOURCE_FORENSICS_PROMPT = `Analyze the complete reference video for reconstruction evidence. Return structured observations with normalized and original timestamps, confidence, and direct-observation versus inference labels.
 
@@ -12,6 +12,24 @@ Required timeline analysis:
 - Do not mistake native/captured frame rate for playback rate: 60 fps versus 24 fps changes temporal sampling, not synchronized wall-clock action duration. Treat dubbed music or audio pitch as supporting evidence only, never decisive evidence.
 - Separate playback-rate changes from cuts, jump cuts, speed ramps, freeze frames, reverse motion, loop points, and ordinary fast subject movement. Mark uncertain classifications as unknown rather than forcing real time.
 - Report segment lengths even when adjacent segments show the same subject or setting.
+
+Required creator-workflow reconstruction:
+- Before assigning distinct subject identities, test the complete-video hypotheses same_person_across_states, different_people, and unknown. Do not infer different people from body size, wardrobe, hairstyle, or accessories alone.
+- Build an identity lineage across all shots from relatively stable facial evidence such as face geometry, eyes/brows, nose, mouth/smile, ears, hairline, and other persistent features. Reconcile that evidence with matched camera/exercise pairs, chronological alternation, captions, audio beats, and the video's apparent narrative.
+- Explicitly test transformation stories such as before/after weight loss, aging, makeup, styling, costume, or time-separated progress. Repeated A/B shots of the same action and framing are narrative evidence that must be assessed before creating separate subject anchors.
+- Return the chosen identity hypothesis, confidence, supporting and conflicting evidence. If the same person appears in different states, use one identity lineage with distinct state anchors (for example before and after), preserving the transformation relationship rather than inventing unrelated characters.
+- When one identity appears across different body states, describe the visible state change separately from identity. Preserve stable bone structure and characteristic facial features while mapping state-specific soft-tissue distribution and silhouette.
+- For each state and matched shot pair, inspect cheek and lower-face fullness, face width-to-height, jawline visibility, chin and submental/neck fullness, shoulder and upper-arm silhouette, torso width and projection, waist/hip silhouette, garment drape/tension, seated compression, and pose-dependent folds. State which cues are direct observations and which may be caused by camera angle, lens, expression, pose, clothing, or lighting.
+- Produce prompt-ready relative deltas between states, not vague labels such as larger or slimmer. If a heavier-state face materially shows fuller cheeks, a wider lower face, a softened jaw boundary, or more neck/submental fullness, make those explicit preservation requirements while keeping the same eyes, nose, mouth, hairline, and underlying face geometry.
+- Do not estimate BMI, body-fat percentage, health, attractiveness, or medical status from video. Do not invent numeric volume changes. Use relative visual language grounded in matched frames and return unknown where clothing or perspective obscures a region.
+- Before approving a state anchor, compare it with the source at a matched angle and with the other state anchor. Reject it when the identity drifts or when the intended before/after morphology is not visibly legible, including a heavier body paired with an implausibly unchanged sculpted face.
+- Infer how the creator likely recorded and assembled the reference: single_take, multi_take, hybrid, or unknown. Cite concrete discontinuities in camera placement, crop, environment, lighting, wardrobe, equipment, subject pose, and background state. A full-frame hand or object occlusion does not prove continuous capture; if the setup resets underneath it, model it as a cut between independently recorded takes.
+- Distinguish source shots from generation units. Group adjacent source shots into one generation unit only when direct continuity evidence makes a single generative take plausible. When capture mode is multi_take with confidence at or above 0.70, require one generation unit per source shot rather than asking one video model to hallucinate setup changes.
+- For every capture setup, record camera, environment, subject, wardrobe, and lighting signatures plus the source shots using it. Identify which properties persist globally and which are local to one setup.
+- Define a subject-anchor policy that avoids unauthorized identity transfer. For each generation unit choose one anchor-frame strategy: generate, edit_subject_anchor, edit_previous_setup, or use_authorized_reference. Prefer one rights-safe subject anchor plus GPT Image edits for new wardrobe, pose, equipment, environment, and camera framing when identity should persist across separately recorded shots.
+- For every generation unit, specify its exact source range, target duration, provider duration, deterministic trim instruction, motion-generation strategy, transition-in type and duration, preserve fields, change fields, and evidence. Provider minimum duration may exceed the source shot, but deterministic trimming must restore the source timeline before assembly.
+- Separate model-generated pixels from deterministic finishing. Persistent captions, logos, disclosures, audio, music, and exact cut timing belong in deterministic layers unless the user explicitly authorizes and requests another treatment.
+- Emit a single-generation prohibition when setup discontinuities make an all-in-one generation structurally wrong. Confidence must reflect the evidence; use unknown instead of inventing how the creator filmed it.
 
 Required lighting analysis:
 - Treat lighting as timestamped reconstruction evidence, not a generic mood adjective. Report the global lighting setup and any per-segment changes.

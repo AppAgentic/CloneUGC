@@ -7,6 +7,9 @@ export type RightsStatus = "unverified" | "owned" | "licensed" | "other_valid_ri
 export type PlaybackRateClass = "real_time" | "sped_up" | "slowed_down" | "variable" | "unknown";
 export type TransitionType = "none" | "hard_cut" | "dissolve" | "fade" | "wipe" | "match_cut" | "other";
 export type SecondaryMotionDriver = "airflow" | "gravity" | "inertia" | "contact" | "vibration" | "fluid" | "heat" | "mechanical" | "unknown";
+export type CreatorCaptureMode = "single_take" | "multi_take" | "hybrid" | "unknown";
+export type AnchorFrameStrategy = "generate" | "edit_subject_anchor" | "edit_previous_setup" | "use_authorized_reference";
+export type MotionGenerationStrategy = "image_to_video" | "reference_to_video" | "text_to_video" | "deterministic_source";
 
 export interface EvidenceRange {
   startMs: Milliseconds;
@@ -138,6 +141,47 @@ export interface EditSegment {
   evidenceIds: string[];
 }
 
+export interface CaptureSetup {
+  id: string;
+  sourceShotIds: string[];
+  cameraSignature: string;
+  environmentSignature: string;
+  subjectState: string;
+  wardrobeState: string;
+  lightingState: string;
+  evidenceIds: string[];
+}
+
+export interface GenerationUnit {
+  id: string;
+  sourceShotIds: string[];
+  setupId: string;
+  range: EvidenceRange;
+  targetDurationMs: Milliseconds;
+  providerDurationMs: Milliseconds;
+  anchorFrameStrategy: AnchorFrameStrategy;
+  motionStrategy: MotionGenerationStrategy;
+  transitionIn: TransitionType;
+  transitionDurationMs: Milliseconds;
+  trimInstruction: string;
+  preserve: string[];
+  change: string[];
+  evidenceIds: string[];
+}
+
+export interface CreatorWorkflowPlan {
+  captureMode: CreatorCaptureMode;
+  confidence: number;
+  rationale: string[];
+  subjectAnchor: string;
+  persistentElements: string[];
+  shotLocalElements: string[];
+  deterministicLayers: string[];
+  setups: CaptureSetup[];
+  generationUnits: GenerationUnit[];
+  evidenceIds: string[];
+}
+
 export interface FidelityMap {
   schemaVersion: "0.2.0";
   id: string;
@@ -152,6 +196,7 @@ export interface FidelityMap {
   lighting: LightingAssessment;
   secondaryMotion: SecondaryMotionAssessment;
   editSegments: EditSegment[];
+  creatorWorkflow: CreatorWorkflowPlan;
   beats: FidelityBeat[];
   directives: FidelityDirective[];
   risks: RiskConstraint[];
@@ -301,6 +346,75 @@ export function assertFidelityMap(map: FidelityMap, evidence: readonly EvidenceC
     expectedSegmentStart = segment.range.endMs;
   }
   assert(expectedSegmentStart === map.durationMs, "edit segments must cover the full source timeline");
+
+  const captureModes: CreatorCaptureMode[] = ["single_take", "multi_take", "hybrid", "unknown"];
+  const anchorStrategies: AnchorFrameStrategy[] = ["generate", "edit_subject_anchor", "edit_previous_setup", "use_authorized_reference"];
+  const motionStrategies: MotionGenerationStrategy[] = ["image_to_video", "reference_to_video", "text_to_video", "deterministic_source"];
+  const workflow = map.creatorWorkflow;
+  assert(captureModes.includes(workflow.captureMode), "creator workflow has an invalid capture mode");
+  assert(Number.isFinite(workflow.confidence) && workflow.confidence >= 0 && workflow.confidence <= 1, "creator workflow confidence must be between 0 and 1");
+  assert(workflow.rationale.length > 0, "creator workflow requires evidence-backed rationale");
+  assert(workflow.subjectAnchor.length > 0, "creator workflow requires a subject-anchor policy");
+  assert(workflow.evidenceIds.length > 0, "creator workflow requires evidence");
+  workflow.evidenceIds.forEach((id) => requireAccepted(id, "creator workflow"));
+  assert(workflow.setups.length > 0, "creator workflow requires at least one capture setup");
+  assert(workflow.generationUnits.length > 0, "creator workflow requires at least one generation unit");
+
+  const editSegmentByShot = new Map(map.editSegments.map((segment) => [segment.sourceShotId, segment]));
+  assert(editSegmentByShot.size === map.editSegments.length, "sourceShotId must be unique across edit segments");
+  const setupIds = new Set<string>();
+  const setupByShot = new Map<string, string>();
+  for (const setup of workflow.setups) {
+    assert(!setupIds.has(setup.id), `duplicate capture setup id ${setup.id}`);
+    setupIds.add(setup.id);
+    assert(setup.sourceShotIds.length > 0, `capture setup ${setup.id} requires source shots`);
+    for (const shotId of setup.sourceShotIds) {
+      assert(editSegmentByShot.has(shotId), `capture setup ${setup.id} references unknown source shot ${shotId}`);
+      assert(!setupByShot.has(shotId), `source shot ${shotId} appears in multiple capture setups`);
+      setupByShot.set(shotId, setup.id);
+    }
+    for (const field of [setup.cameraSignature, setup.environmentSignature, setup.subjectState, setup.wardrobeState, setup.lightingState]) {
+      assert(field.length > 0, `capture setup ${setup.id} requires explicit state signatures`);
+    }
+    assert(setup.evidenceIds.length > 0, `capture setup ${setup.id} requires evidence`);
+    setup.evidenceIds.forEach((id) => requireAccepted(id, `capture setup ${setup.id}`));
+  }
+  assert(setupByShot.size === editSegmentByShot.size, "every source shot must appear in exactly one capture setup");
+
+  let expectedUnitStart = 0;
+  const plannedShotIds = new Set<string>();
+  const generationUnitIds = new Set<string>();
+  for (const unit of workflow.generationUnits) {
+    assert(!generationUnitIds.has(unit.id), `duplicate generation unit id ${unit.id}`);
+    generationUnitIds.add(unit.id);
+    assert(setupIds.has(unit.setupId), `generation unit ${unit.id} references unknown setup ${unit.setupId}`);
+    assertRange(unit.range, map.durationMs, `generation unit.${unit.id}.range`);
+    assert(unit.range.startMs === expectedUnitStart, `generation unit ${unit.id} leaves a gap or overlap`);
+    assert(unit.range.endMs > unit.range.startMs, `generation unit ${unit.id} must have positive duration`);
+    assert(unit.targetDurationMs === unit.range.endMs - unit.range.startMs, `generation unit ${unit.id} target duration does not match its range`);
+    assert(Number.isInteger(unit.providerDurationMs) && unit.providerDurationMs >= unit.targetDurationMs, `generation unit ${unit.id} provider duration must cover its target`);
+    assert(unit.sourceShotIds.length > 0, `generation unit ${unit.id} requires source shots`);
+    for (const shotId of unit.sourceShotIds) {
+      assert(editSegmentByShot.has(shotId), `generation unit ${unit.id} references unknown source shot ${shotId}`);
+      assert(setupByShot.get(shotId) === unit.setupId, `generation unit ${unit.id} assigns source shot ${shotId} to the wrong setup`);
+      assert(!plannedShotIds.has(shotId), `source shot ${shotId} appears in multiple generation units`);
+      plannedShotIds.add(shotId);
+    }
+    assert(anchorStrategies.includes(unit.anchorFrameStrategy), `generation unit ${unit.id} has an invalid anchor-frame strategy`);
+    assert(motionStrategies.includes(unit.motionStrategy), `generation unit ${unit.id} has an invalid motion strategy`);
+    assert(transitionTypes.includes(unit.transitionIn), `generation unit ${unit.id} has an invalid transition type`);
+    assert(Number.isInteger(unit.transitionDurationMs) && unit.transitionDurationMs >= 0, `generation unit ${unit.id} transition duration must be non-negative`);
+    assert(unit.trimInstruction.length > 0, `generation unit ${unit.id} requires a deterministic trim instruction`);
+    assert(unit.preserve.length > 0, `generation unit ${unit.id} requires preserve instructions`);
+    assert(unit.evidenceIds.length > 0, `generation unit ${unit.id} requires evidence`);
+    unit.evidenceIds.forEach((id) => requireAccepted(id, `generation unit ${unit.id}`));
+    expectedUnitStart = unit.range.endMs;
+  }
+  assert(expectedUnitStart === map.durationMs, "generation units must cover the full source timeline");
+  assert(plannedShotIds.size === editSegmentByShot.size, "every source shot must appear in exactly one generation unit");
+  if (workflow.captureMode === "multi_take" && workflow.confidence >= 0.7) {
+    assert(workflow.generationUnits.every((unit) => unit.sourceShotIds.length === 1), "high-confidence multi-take sources require one generation unit per source shot");
+  }
 
   let previousBeatStart = -1;
   for (const beat of map.beats) {

@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "phone-laugh-to-lock-in-gym",
+  "revision": 1,
+  "name": "Phone laugh to gym lock-in",
+  "description": "A static-camera single-take gym reaction in which a seated subject laughs at a phone, abruptly becomes serious, puts the phone down, and grips the next exercise handle.",
+  "provenance": {
+    "sourceAssetId": "tiktok-7662235938470415629",
+    "sourceRunManifestSha256": "70bc370f2d83f2ce0b1b14a45bca2f0ecfe7ce057bb31dce893cca2da386cbf1",
+    "extractionPromptVersion": "analysis-v10",
+    "rightsTransferPolicy": "structure_only"
+  },
+  "durationMs": 6139,
+  "aspectRatio": "9:16",
+  "lockedGrammar": [
+    "One uninterrupted natural-real-time take from a locked vertical phone camera",
+    "Subject begins seated at an exercise station and laughs while looking at a phone",
+    "Laughter snaps abruptly to a focused deadpan expression at the midpoint",
+    "Subject puts the phone aside, turns toward the equipment, plants both feet, and grips the handle",
+    "Hair, loose clothing, equipment, reflections, and background patrons retain causal secondary motion",
+    "Hook caption is deterministic and disappears before the final equipment setup"
+  ],
+  "variables": [
+    {
+      "key": "subject_identity",
+      "kind": "subject_identity",
+      "description": "A fictional or authorized identity used for the entire take.",
+      "required": false,
+      "defaultValue": "a clearly new fictional young adult woman with a consistent face and hair",
+      "examples": [
+        "a fictional blonde woman with a loose high ponytail",
+        "a fictional Black woman with shoulder-length twists"
+      ]
+    },
+    {
+      "key": "gender_presentation",
+      "kind": "gender_presentation",
+      "description": "Gender presentation preserved unless the user explicitly changes it.",
+      "required": false,
+      "defaultValue": "female",
+      "examples": ["female", "male", "androgynous"]
+    },
+    {
+      "key": "wardrobe",
+      "kind": "wardrobe",
+      "description": "Loose gym clothing that visibly responds to the seated turn and foot placement.",
+      "required": false,
+      "defaultValue": "a dark sleeveless workout top, oversized light-grey sweatpants, and white trainers",
+      "examples": [
+        "a black cropped tee with grey joggers",
+        "a green tank with loose black sweatpants"
+      ]
+    },
+    {
+      "key": "setting",
+      "kind": "setting",
+      "description": "A busy exercise setting with a seated station and subtle background activity.",
+      "required": false,
+      "defaultValue": "a commercial gym with a red brick wall, mirrors, cable machines, a seated row bench, and moving background patrons",
+      "examples": [
+        "a brick-wall commercial gym at a seated row station",
+        "a community gym at a leg-extension station"
+      ]
+    },
+    {
+      "key": "phone_prop",
+      "kind": "other",
+      "description": "The handheld object that causes the opening laugh and is put aside before the set.",
+      "required": false,
+      "defaultValue": "a plain unbranded smartphone",
+      "examples": ["a plain smartphone", "an unbranded phone with a dark case"]
+    },
+    {
+      "key": "caption_text",
+      "kind": "caption_text",
+      "description": "Exact deterministic setup caption.",
+      "required": false,
+      "defaultValue": "when you just saw the funniest video of your life on your fyp but it's time to lock in for your next set",
+      "examples": [
+        "when the group chat is hilarious but your rest timer is over",
+        "when the meme is elite but it's time for the next set"
+      ]
+    },
+    {
+      "key": "audio_policy",
+      "kind": "audio",
+      "description": "Authorized or replacement audio aligned to the laugh-to-focus switch.",
+      "required": false,
+      "defaultValue": "a rights-safe exaggerated laugh followed by an abrupt focused beat",
+      "examples": [
+        "reuse authorized source audio",
+        "new comic laughter that cuts to a heavy focus sound"
+      ]
+    }
+  ],
+  "shots": [
+    {
+      "id": "laugh-to-lock-in",
+      "startMs": 0,
+      "endMs": 6139,
+      "transitionIn": "none",
+      "transitionDurationMs": 0,
+      "generationStrategy": "image_to_video",
+      "providerDurationMs": 6600,
+      "anchorPromptTemplate": "Create {{subject_identity}} with {{gender_presentation}} presentation seated sideways at an exercise station in {{setting}}, wearing {{wardrobe}}, laughing at {{phone_prop}}. Preserve the locked vertical phone framing, cool even gym light, visible exercise handle and natural background activity.",
+      "motionPromptTemplate": "In one uninterrupted locked-camera take at natural real-time speed, {{subject_identity}} laughs hard at {{phone_prop}} for the opening half, abruptly snaps to a serious focused expression, puts the phone aside, rotates toward the equipment, plants both feet, leans forward and grips the exercise handle by the end. Keep identity and {{wardrobe}} stable; preserve causal hair, loose-fabric, equipment, reflection and background-patron motion.",
+      "lockedTraits": [
+        "single take and fixed camera",
+        "laugh-phone-deadpan-put-down-turn-feet-grip action order",
+        "abrupt emotional switch",
+        "natural real-time motion",
+        "subtle moving gym background"
+      ]
+    }
+  ],
+  "deterministicLayers": [
+    {
+      "id": "hook-caption",
+      "kind": "caption",
+      "startMs": 0,
+      "endMs": 3650,
+      "template": "Render exact text ‘{{caption_text}}’ in four centered upper-frame lines using heavy rounded white sans-serif with a black outline."
+    },
+    {
+      "id": "soundtrack",
+      "kind": "audio",
+      "startMs": 0,
+      "endMs": 6139,
+      "template": "Use this audio policy: {{audio_policy}}. Align the abrupt laugh-to-focus change to the subject's expression switch."
+    }
+  ],
+  "promptExamples": [
+    "Use the phone-laugh-to-lock-in format with a blonde woman at a seated row and keep the original caption.",
+    "Recreate the lock-in reaction with a man at a leg-extension machine and caption it ‘when the group chat is funny but rest time is over’."
+  ],
+  "validation": {
+    "status": "validated",
+    "fidelityScore": 67,
+    "qaMode": "static",
+    "sourceOutputId": "tiktok-7662235938470415629-run-v1-final",
+    "notes": [
+      "Validated with one GPT Image 2 identity-replacement setup frame, one six-second H3 Max Turbo take, and deterministic caption/audio finishing.",
+      "Gemini 3.7 Flash static comparison scored overall reconstruction quality 67/100 and explicitly judged the result strong enough for reusable-format validation.",
+      "The strongest preserved grammar is the single-take laugh-to-deadpan-to-equipment action sequence; small background-patron and handle-grip timing differences remain acceptable variation.",
+      "The recipe transfers structure only; source identity, voice, music, overlay rights, logos and exact setting remain separately rights-gated."
+    ]
+  }
+}

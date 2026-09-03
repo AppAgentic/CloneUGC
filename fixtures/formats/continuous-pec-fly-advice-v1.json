@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "continuous-pec-fly-advice",
+  "revision": 1,
+  "name": "Continuous exercise advice",
+  "description": "One locked gym take of a repeated exercise with synchronized equipment motion and a persistent instructional caption.",
+  "provenance": {"sourceAssetId":"tiktok-7668460329155710222","sourceRunManifestSha256":"a0191ad7b69735074d06b62b0016b7876eb3d755380ee240c619a02150450d06","extractionPromptVersion":"analysis-v7","rightsTransferPolicy":"structure_only"},
+  "durationMs": 7000,
+  "aspectRatio": "9:16",
+  "lockedGrammar": ["One continuous real-time exercise take","Locked vertical phone camera","Approximately three concentric and eccentric phases","Hands, machine arms, cable and weight stack move causally together","Persistent six-line advice caption","No cuts or transitions"],
+  "variables": [
+    {"key":"subject_identity","kind":"subject_identity","description":"Fictional or authorized exerciser.","required":false,"defaultValue":"a clearly new fictional adult exerciser with a consistent face and body","examples":["a blonde woman","a Black man"]},
+    {"key":"gender_presentation","kind":"gender_presentation","description":"Presentation for the exerciser.","required":false,"defaultValue":"male","examples":["male","female"]},
+    {"key":"wardrobe","kind":"wardrobe","description":"Workout clothes.","required":false,"defaultValue":"plain dark gymwear without logos","examples":["black gymwear","green workout clothes"]},
+    {"key":"exercise","kind":"other","description":"Machine exercise and causal equipment path.","required":false,"defaultValue":"seated pec fly","examples":["seated pec fly","lat pulldown"]},
+    {"key":"caption_text","kind":"caption_text","description":"Exact persistent instructional caption.","required":true,"examples":["If your chest isn't growing, try starting with flies..."]},
+    {"key":"audio_policy","kind":"audio","description":"Authorized or replacement backing audio.","required":false,"defaultValue":"new royalty-cleared gym music","examples":["reuse authorized source audio","no music"]}
+  ],
+  "shots": [{"id":"exercise-take","startMs":0,"endMs":7000,"transitionIn":"none","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":7000,"anchorPromptTemplate":"Create {{subject_identity}} with {{gender_presentation}} presentation seated at a {{exercise}} machine in an ordinary commercial gym, wearing {{wardrobe}}, arms at the correct opening position under flat overhead light.","motionPromptTemplate":"Perform about three controlled {{exercise}} inward phases and eccentric returns over seven seconds at natural real-time cadence. Hands, handles, machine arms, cable and weight stack must move together causally. Keep {{subject_identity}} and the locked camera stable.","lockedTraits":["single locked take","real-time repetition cadence","causal equipment motion","stable background"]}],
+  "deterministicLayers": [
+    {"id":"advice-caption","kind":"caption","startMs":0,"endMs":7000,"template":"Render this exact persistent centered six-line caption: {{caption_text}}"},
+    {"id":"soundtrack","kind":"audio","startMs":0,"endMs":7000,"template":"Use {{audio_policy}} without changing the motion timing."}
+  ],
+  "promptExamples": ["Use the continuous exercise advice format with a woman doing pec fly and my chest-training caption."],
+  "validation": {"status":"validated","fidelityScore":85,"qaMode":"hybrid","sourceOutputId":"max-turbo-7668460329155710222-final","notes":["One setup edit plus one video generation reproduced the continuous take and zero-cut structure.","Minor hand/handle smoothing and cable-area texture flicker remain."]}
+}

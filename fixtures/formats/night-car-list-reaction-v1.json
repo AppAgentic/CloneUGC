@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "night-car-list-reaction",
+  "revision": 1,
+  "name": "Night-car list reaction",
+  "description": "One fixed nighttime car take with a hair touch, gaze turn and smile beneath a persistent list overlay.",
+  "provenance": {"sourceAssetId":"tiktok-7568649649284730167","sourceEvidenceHash":"2508ec5aa12c4292c940a57365e1dacd536397f603b7626d19ae2c26b2c3478f","extractionPromptVersion":"analysis-v6","rightsTransferPolicy":"structure_only"},
+  "durationMs": 7500,
+  "aspectRatio": "9:16",
+  "lockedGrammar": ["One uninterrupted real-time car take","Static low console phone","Neutral look to hair touch to side gaze to smile","Persistent upper-third list overlay","Passing exterior light and subtle hair airflow"],
+  "variables": [
+    {"key":"subject_identity","kind":"subject_identity","description":"Fictional or authorized person.","required":false,"defaultValue":"a clearly new fictional adult with a consistent face","examples":["a blonde woman","a dark-haired man"]},
+    {"key":"gender_presentation","kind":"gender_presentation","description":"Presentation preserved through the take.","required":false,"defaultValue":"female","examples":["female","male"]},
+    {"key":"wardrobe","kind":"wardrobe","description":"Car-seat wardrobe and restraint.","required":false,"defaultValue":"a burgundy jacket with a tan seatbelt","examples":["a black hoodie with seatbelt","a green jacket with seatbelt"]},
+    {"key":"caption_text","kind":"caption_text","description":"Exact multiline list overlay.","required":true,"examples":["My odd top 5 plus five list items"]},
+    {"key":"audio_policy","kind":"audio","description":"Authorized or replacement soundtrack.","required":false,"defaultValue":"a dramatic rhythmic soundtrack","examples":["reuse authorized source audio","new royalty-cleared dramatic audio"]}
+  ],
+  "shots": [{"id":"car-take","startMs":0,"endMs":7500,"transitionIn":"none","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":8000,"anchorPromptTemplate":"Create {{subject_identity}} with {{gender_presentation}} presentation seated in a dark nighttime car, wearing {{wardrobe}}, framed by a fixed low console phone with passing exterior light.","motionPromptTemplate":"At natural real-time speed, begin neutral, raise one hand around 1.1s, touch/tuck hair around 2.1–3.4s, turn gaze toward the driver around 3.4–4.2s, then smile through the end. Keep {{subject_identity}} stable and include subtle airflow.","lockedTraits":["fixed low console camera","single take","hair-touch timing","gaze-turn timing","ending smile"]}],
+  "deterministicLayers": [
+    {"id":"list-caption","kind":"caption","startMs":0,"endMs":7500,"template":"Render this exact upper-third multiline text for the full clip: {{caption_text}}"},
+    {"id":"soundtrack","kind":"audio","startMs":0,"endMs":7500,"template":"Use {{audio_policy}} and preserve the 7.5-second timing."}
+  ],
+  "promptExamples": ["Use the night-car list format with a blonde woman and my five-item workout list."],
+  "validation": {"status":"draft","fidelityScore":60,"qaMode":"agentic","sourceOutputId":"seedance-night-car-list-v1","notes":["Text and audio scored 10/10, but motion timing scored 5.5/10 and visual fidelity 4/10.","Keep stored for iteration; do not present as a proven high-fidelity default yet."]}
+}

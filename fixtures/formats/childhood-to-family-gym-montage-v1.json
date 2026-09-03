@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "childhood-to-family-gym-montage",
+  "revision": 1,
+  "name": "Childhood photo to family gym montage",
+  "description": "Five hard-cut crops of one childhood sibling photo reveal into twelve independently recorded adult gym formations with the same fictional family identity lineage.",
+  "provenance": {
+    "sourceAssetId": "instagram-DcyIWPYtZkV",
+    "sourceRunManifestSha256": "a65edb59ce637f68a8156f82722c2bb563cb29fe3c4c92e9dc24040650c1170b",
+    "extractionPromptVersion": "analysis-v10-capture-workflow",
+    "rightsTransferPolicy": "structure_only"
+  },
+  "durationMs": 12933,
+  "aspectRatio": "9:16",
+  "lockedGrammar": [
+    "One fictional sibling group remains recognizable from childhood through adulthood",
+    "Five editorial crops of one childhood photograph fill the opening five seconds",
+    "Twelve independently generated adult gym takes follow in source-timed order",
+    "Every transition is a zero-duration hard cut with no dissolves or generated morphs",
+    "Adult formations alternate frontal, profile, stacked-arm, fan-arm, seated and low-angle lineups",
+    "Dark high-contrast directional gym lighting remains coherent across adult takes",
+    "The opening hook is deterministic and audio is applied only during finishing"
+  ],
+  "variables": [
+    {
+      "key": "family_identity",
+      "kind": "subject_identity",
+      "description": "A fully fictional or authorized sibling group used consistently as children and adults.",
+      "required": false,
+      "defaultValue": "five clearly fictional siblings with stable distinct faces, hair colors, builds and plausible family resemblance",
+      "examples": ["five fictional blonde siblings", "three sisters and two brothers with mixed hair colors"]
+    },
+    {
+      "key": "group_composition",
+      "kind": "gender_presentation",
+      "description": "The number and gender presentation of siblings maintained through the entire format.",
+      "required": false,
+      "defaultValue": "exactly one adult woman and four adult men",
+      "examples": ["three women and two men", "five men"]
+    },
+    {
+      "key": "childhood_wardrobe",
+      "kind": "wardrobe",
+      "description": "Simple coordinated clothes for the childhood photograph.",
+      "required": false,
+      "defaultValue": "simple dark sleeveless tops with one light top and loose colored trousers",
+      "examples": ["coordinated 2000s casualwear", "matching black-and-green sportswear"]
+    },
+    {
+      "key": "adult_wardrobe",
+      "kind": "wardrobe",
+      "description": "Coherent adult workout wardrobe across the twelve takes.",
+      "required": false,
+      "defaultValue": "dark sleeveless gymwear with burgundy and blue trousers, ending in loose hoodies",
+      "examples": ["black GymLevels training outfits", "coordinated green-and-grey gymwear"]
+    },
+    {
+      "key": "setting",
+      "kind": "setting",
+      "description": "Adult reveal environment.",
+      "required": false,
+      "defaultValue": "a dark commercial gym with mirrors, dumbbells, a lifting platform and hard overhead spotlights",
+      "examples": ["a moody private gym", "a bright modern weight room"]
+    },
+    {
+      "key": "caption_text",
+      "kind": "caption_text",
+      "description": "Exact deterministic opening hook.",
+      "required": false,
+      "defaultValue": "pov: the whole family locked in",
+      "examples": ["pov: the whole family locked in on GymLevels", "we all started training together"]
+    },
+    {
+      "key": "audio_policy",
+      "kind": "audio",
+      "description": "Authorized source audio or a replacement beat aligned to all hard cuts.",
+      "required": false,
+      "defaultValue": "new royalty-cleared beat with accents at every photo and adult-take cut",
+      "examples": ["reuse authorized source audio", "new percussive gym track"]
+    }
+  ],
+  "shots": [
+    {"id":"photo-wide","startMs":0,"endMs":1733,"transitionIn":"none","transitionDurationMs":0,"generationStrategy":"deterministic_source","providerDurationMs":1733,"anchorPromptTemplate":"Create one childhood photograph of {{family_identity}} matching {{group_composition}}, wearing {{childhood_wardrobe}}.","motionPromptTemplate":"Hold the photograph still in a wide editorial crop.","lockedTraits":["one shared childhood photo","all siblings visible","wide crop"]},
+    {"id":"photo-left","startMs":1733,"endMs":2233,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"deterministic_source","providerDurationMs":500,"anchorPromptTemplate":"Reuse the exact same childhood photograph of {{family_identity}}.","motionPromptTemplate":"Hard-cut to a tighter left-side crop; no generated motion.","lockedTraits":["same photo pixels","left crop","hard cut"]},
+    {"id":"photo-right","startMs":2233,"endMs":2833,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"deterministic_source","providerDurationMs":600,"anchorPromptTemplate":"Reuse the exact same childhood photograph of {{family_identity}}.","motionPromptTemplate":"Hard-cut to a tighter right-side crop; no generated motion.","lockedTraits":["same photo pixels","right crop","hard cut"]},
+    {"id":"photo-medium","startMs":2833,"endMs":3800,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"deterministic_source","providerDurationMs":967,"anchorPromptTemplate":"Reuse the exact same childhood photograph of {{family_identity}}.","motionPromptTemplate":"Hard-cut to a medium centered crop; no generated motion.","lockedTraits":["same photo pixels","medium crop","hard cut"]},
+    {"id":"photo-return","startMs":3800,"endMs":5000,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"deterministic_source","providerDurationMs":1200,"anchorPromptTemplate":"Reuse the exact same childhood photograph of {{family_identity}}.","motionPromptTemplate":"Hard-cut back to the wide photo framing and hold.","lockedTraits":["same photo pixels","wide return","adult reveal setup"]},
+    {"id":"adult-frontal","startMs":5000,"endMs":5467,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"Show the adult version of {{family_identity}} matching {{group_composition}} in {{adult_wardrobe}}, frontal in {{setting}}.","motionPromptTemplate":"Immediately settle into a synchronized frontal flex at natural real-time speed.","lockedTraits":["adult identity reveal","frontal lineup","dark directional light"]},
+    {"id":"adult-profile","startMs":5467,"endMs":5967,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The same adult {{family_identity}} in {{adult_wardrobe}}, arranged in a side-profile lineup in {{setting}}.","motionPromptTemplate":"Immediately tighten posture into a coordinated profile flex.","lockedTraits":["same identities","profile lineup","hard cut"]},
+    {"id":"stacked-arms","startMs":5967,"endMs":6600,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The same adult {{family_identity}} in {{adult_wardrobe}}, layered vertically behind a centered phone in {{setting}}.","motionPromptTemplate":"Immediately complete a practical stacked-arm formation, keeping every body and limb distinct.","lockedTraits":["phone centered","stacked-arm illusion","no merged anatomy"]},
+    {"id":"fan-arms-one","startMs":6600,"endMs":7300,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The same adult {{family_identity}} in {{adult_wardrobe}}, layered around the central sibling in {{setting}}.","motionPromptTemplate":"Immediately fan all arms outward into a symmetrical formation and hold.","lockedTraits":["fan formation","central sibling","symmetry"]},
+    {"id":"group-reset","startMs":7300,"endMs":7800,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The visible members of the same adult {{family_identity}} in {{adult_wardrobe}}, posed in a compact half-circle in {{setting}}.","motionPromptTemplate":"Make one brief natural group reset and settle into the pose.","lockedTraits":["source-specific visible count","half-circle","real-time reset"]},
+    {"id":"seated-flex","startMs":7800,"endMs":8400,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The same adult {{family_identity}} in {{adult_wardrobe}}, with the central sibling seated and the others surrounding them in {{setting}}.","motionPromptTemplate":"The seated subject immediately completes a double-biceps flex while the group holds formation.","lockedTraits":["seated center","double-biceps","surrounding formation"]},
+    {"id":"fan-arms-two","startMs":8400,"endMs":8867,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The same adult {{family_identity}} in {{adult_wardrobe}}, layered tightly around the central sibling in {{setting}}.","motionPromptTemplate":"Immediately sweep into a second dynamic fan-arm formation.","lockedTraits":["dynamic fan","tight layering","instant action"]},
+    {"id":"seated-fan","startMs":8867,"endMs":9467,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The same adult {{family_identity}} in {{adult_wardrobe}}, seated low behind foreground gym equipment in {{setting}}.","motionPromptTemplate":"Immediately complete a wide seated fan-arm pose and hold naturally.","lockedTraits":["foreground equipment","seated fan","low camera"]},
+    {"id":"vertical-stack","startMs":9467,"endMs":10033,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The same adult {{family_identity}} in {{adult_wardrobe}}, vertically stacked by depth in {{setting}}.","motionPromptTemplate":"Immediately tighten into the vertical formation with small synchronized arm movement.","lockedTraits":["vertical depth stack","same identities","locked camera"]},
+    {"id":"dumbbell-cluster","startMs":10033,"endMs":11067,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The same adult {{family_identity}} in {{adult_wardrobe}}, clustered around a center phone behind large foreground dumbbells in {{setting}}.","motionPromptTemplate":"Settle immediately into the cluster while the elevated rear sibling raises both arms slightly.","lockedTraits":["foreground dumbbells","center phone","clustered depth"]},
+    {"id":"low-symmetry","startMs":11067,"endMs":11533,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The same adult {{family_identity}} in {{adult_wardrobe}}, arranged symmetrically above a low barbell camera in {{setting}}.","motionPromptTemplate":"Immediately complete the strong symmetrical formation around the central sibling.","lockedTraits":["very low camera","barbell foreground","symmetrical formation"]},
+    {"id":"hoodie-final","startMs":11533,"endMs":12933,"transitionIn":"hard_cut","transitionDurationMs":0,"generationStrategy":"image_to_video","providerDurationMs":5000,"anchorPromptTemplate":"The same adult {{family_identity}} matching {{group_composition}}, now in loose hoodie variations of {{adult_wardrobe}}, front-facing in {{setting}}.","motionPromptTemplate":"Make one brief synchronized posture adjustment and finish in a confident final lineup.","lockedTraits":["final lineup","loose hoodies","same family identities"]}
+  ],
+  "deterministicLayers": [
+    {"id":"opening-hook","kind":"caption","startMs":0,"endMs":5000,"template":"Render exact text ‘{{caption_text}}’ over every childhood-photo crop using heavy white sans-serif with a black outline."},
+    {"id":"soundtrack","kind":"audio","startMs":0,"endMs":12933,"template":"Apply {{audio_policy}} and align every visual hard cut to the corresponding beat accent."}
+  ],
+  "promptExamples": [
+    "Use the family gym montage with five fictional blonde siblings and caption it ‘pov: the whole family locked in on GymLevels’.",
+    "Make the childhood-to-gym family reveal with three sisters and two brothers in black-and-green outfits."
+  ],
+  "validation": {
+    "status": "validated",
+    "qaMode": "hybrid",
+    "sourceOutputId": "instagram-DcyIWPYtZkV-run-v1-gymlevels",
+    "notes": [
+      "Validated through 14 setup images, twelve independent five-second motion generations, exact source frame-count finishing and zero automatic retries.",
+      "Manual full-timeline review confirmed stable fictional sibling identities, source-specific subject counts, hard cuts, formation variety and dark directional lighting.",
+      "The childhood image is generated once and reframed deterministically; all adult takes use separate setup and motion units.",
+      "The recipe transfers structure only; identities, childhood photos, audio, settings, logos and permissions never carry into a new instantiation."
+    ]
+  }
+}

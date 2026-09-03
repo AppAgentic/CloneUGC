@@ -8,7 +8,7 @@ import {
 } from "../src/analysis-prompt.ts";
 
 test("source-forensics prompt requires playback-rate and edit-segment analysis", () => {
-  assert.equal(SOURCE_FORENSICS_PROMPT_VERSION, "analysis-v6");
+  assert.equal(SOURCE_FORENSICS_PROMPT_VERSION, "analysis-v9");
   for (const required of [
     "real_time, sped_up, slowed_down, variable, or unknown",
     "startMs, endMs, durationMs",
@@ -29,6 +29,25 @@ test("source-forensics prompt requires playback-rate and edit-segment analysis",
     "source -> force -> affected elements -> visible response",
     "hair motion alone does not prove the window state",
     "none_observed",
+    "single_take, multi_take, hybrid, or unknown",
+    "same_person_across_states",
+    "Do not infer different people from body size, wardrobe, hairstyle, or accessories alone",
+    "identity lineage across all shots",
+    "before/after weight loss",
+    "Repeated A/B shots of the same action and framing",
+    "one identity lineage with distinct state anchors",
+    "state-specific soft-tissue distribution and silhouette",
+    "cheek and lower-face fullness",
+    "garment drape/tension",
+    "prompt-ready relative deltas",
+    "Do not estimate BMI, body-fat percentage, health, attractiveness, or medical status",
+    "heavier body paired with an implausibly unchanged sculpted face",
+    "full-frame hand or object occlusion does not prove continuous capture",
+    "one generation unit per source shot",
+    "edit_subject_anchor",
+    "Provider minimum duration may exceed the source shot",
+    "Persistent captions, logos, disclosures, audio, music, and exact cut timing belong in deterministic layers",
+    "single-generation prohibition",
   ]) {
     assert.match(SOURCE_FORENSICS_PROMPT, new RegExp(required.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }

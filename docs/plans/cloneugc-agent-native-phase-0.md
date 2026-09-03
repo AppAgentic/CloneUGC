@@ -36,6 +36,7 @@ The first durable schema should include:
 
 - source timeline and shot boundaries;
 - ordered edit segments with exact start, end, duration, source-shot identity, and transition type;
+- an evidence-backed creator-workflow plan: single-take versus multi-take/hybrid classification, independently recorded capture setups, global continuity anchors, per-shot GPT Image generation/edit strategy, per-shot video-generation units, provider-duration padding, deterministic trims, and final splice instructions;
 - global and per-segment playback-rate classification (`real_time`, `sped_up`, `slowed_down`, `variable`, or `unknown`), estimated multiplier where defensible, confidence, and observed cues;
 - hook, setup, escalation, payoff, and CTA beats;
 - camera position, lens feel, framing, path, triggers, and screen-space subject position;
@@ -51,6 +52,14 @@ The first durable schema should include:
 
 Each revision is immutable and content-addressed. Generation estimates and approvals bind to the exact revision hash.
 
+### Reusable Format Recipes
+
+Once a reconstruction exposes a useful creative pattern, the user can save its structure as a versioned, content-addressed Format Recipe. A recipe stores the durable grammar—shot count and timing, creator capture setups, camera geometry, action order, transitions, playback-rate intent, lighting changes, deterministic caption/audio layers, and provider-duration requirements—without silently carrying over source identity, voice, music, logos, dialogue, or other rights.
+
+The recipe declares a small set of prompt-controlled variables such as subject identity, gender presentation, before/after appearance states, wardrobe, setting, caption text, product promotion, and audio policy. A conversational request is resolved into those variables, then compiled into fresh per-shot anchor prompts, motion prompts, deterministic finishing instructions, an immutable plan hash, a new rights scope, and a bounded cost estimate. Unknown variables fail closed; changing one variable does not rewrite the locked format grammar.
+
+The first validated recipe is `hand-wipe-fitness-transformation`: two independently generated real-time takes, one consistent identity, a hand-to-lens match transition, a before/after lighting change, and a deterministic hook caption plus audio payoff. It lives at `fixtures/formats/hand-wipe-fitness-transformation-v1.json` and proves that the Harrison format can be recreated with a different character, gender, wardrobe, setting, or app caption without re-analyzing the original video.
+
 ### Gemini video-understanding strategy
 
 Use Gemini Agentic Video through the Files and Interactions APIs as the first forensic-analysis provider. The shared adapter is currently live on the exact model `gemini-3.7-flash`; Google's current guide also lists `gemini-3.8-flash`, and a same-day analysis-only canary verified that it supports the required Agentic Video contract. Before the corpus analysis bake-off, compare 3.7 and 3.8 on one permission-safe calibration clip using identical prompts and a blind annotation, then pin one exact model identifier across every lane and repeat. Never use a moving model alias or mix models inside the corpus benchmark. Keep processing mode explicit and persist the model, mode, latency, token breakdown, file provenance, interaction lineage, prompt version, and evidence timestamps with every candidate Fidelity Map.
@@ -65,6 +74,7 @@ For CloneUGC's short references, agentic processing is a targeted semantic preci
 6. Persist the structured provider response and processing steps as a private evidence artifact before producing a bounded human-readable summary. The current shared CLI truncates summaries at 6,000 UTF-8 bytes, so its displayed JSON summary is useful for inspection but is not the durable Fidelity Map source.
 7. Merge the structured outputs into an evidence graph before compiling the Fidelity Map. Every accepted claim must retain a timestamp or interval, normalized frame index where applicable, confidence, analysis mode, and source prompt. Conflicts and missing evidence remain explicit; disputed claims cannot reach the compiler.
 8. If Agentic Video times out, is safety-blocked, exhausts its budget, or loses its interaction state, preserve the static map with an explicit degraded-analysis reason. An expired file may be re-uploaded under a new lineage event; it must never be silently treated as the same provider interaction.
+9. Reconstruct how the creator made the artifact, not only what the flattened export contains. Camera/environment/wardrobe/equipment discontinuities define independently recorded setups even when a palm, whip, or object occlusion hides the cut. At confidence >=0.70, a multi-take classification prohibits compiling the whole source into one video-model request: create one rights-safe subject anchor, generate or edit a setup-specific frame for each take, animate each take independently, trim to its exact source interval, then reproduce the source cuts and persistent overlay/audio deterministically.
 
 This routing is deliberate. Google's September 2026 Agentic Video release adds dynamic timeline navigation, adaptive frame rate and resolution, transcript/audio inspection, sub-second moment retrieval, anomaly detection, and action/object counting. Those published capabilities map directly to reconstruction forensics. Improved causality, occlusion, and continuity analysis remain CloneUGC hypotheses to test, while static processing remains faster and cheaper for broad coverage of a short clip.
 
@@ -100,6 +110,7 @@ For each reference, produce two otherwise controlled variants:
 
 - **Control:** the reference plus a concise direct change request;
 - **Compiler:** the same reference and requested change, compiled from the Fidelity Map into explicit reference roles, starting state, timestamped primary and secondary motion with physical drivers, camera geometry, evidence-backed lighting geometry and dynamic events, continuity, audio, ending state, and constraints.
+- **Workflow compiler:** for references classified as high-confidence multi-take, the compiler lane must additionally use one independently auditable generation unit per source shot/setup. A one-request whole-timeline render is an invalid compiler output for this family, not merely a lower-quality variant.
 
 Start at 480p to test composition and reference weighting cheaply. Re-run only winning seeds at 720p. Preserve provider request IDs, seeds, exact prompts, source/spec hashes, cost, duration, and outputs.
 
@@ -166,6 +177,9 @@ If the compiler does not beat the control, stop. Do not hide a failed differenti
 - `PATCH /v1/reconstructions/{id}` — create a new Fidelity Map revision
 - `POST /v1/reconstructions/{id}/estimates` — freeze a bounded cost estimate
 - `POST /v1/reconstructions/{id}/generations` — confirm rights/spend and start a job
+- `POST /v1/formats` — save a validated reconstruction's structure as a reusable Format Recipe
+- `GET /v1/formats/{id}` — read a recipe and its prompt-controlled variables
+- `POST /v1/formats/{id}/instantiate` — resolve a user prompt into a new immutable reconstruction plan and estimate
 - `GET /v1/jobs/{id}` — status, progress, evidence, and outputs
 - `POST /v1/jobs/{id}/cancel` — request cancellation
 - `POST /v1/outputs/{id}/approve` — approve immutable export
@@ -185,6 +199,8 @@ Expose a remote Streamable HTTP MCP server after the Phase 0 gate. Keep the publ
 6. `get_job`
 7. `approve_export`
 8. `cancel_job`
+9. `list_formats`
+10. `instantiate_format`
 
 The agent may analyze, draft, and revise without spend. Paid generation requires a current estimate and explicit confirmation bound to the immutable source plus Fidelity Map hash. OAuth scopes should remain coarse: read/analyze and create/generate. Every call is audited and revocable.
 

@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "hand-wipe-fitness-transformation",
+  "revision": 1,
+  "name": "Two-state hand-wipe transformation",
+  "description": "A fixed-phone before/after reveal built as two independently recorded takes joined by a hand covering and uncovering the lens.",
+  "provenance": {
+    "sourceAssetId": "tiktok-7672577678309870861",
+    "sourceRunManifestSha256": "a8546e00aeacb4eb61e7b9d2c3ed9f2262313ff3d30ede98ed099308010a36f1",
+    "extractionPromptVersion": "analysis-v9",
+    "rightsTransferPolicy": "structure_only"
+  },
+  "durationMs": 10031,
+  "aspectRatio": "9:16",
+  "lockedGrammar": [
+    "Two independently generated takes with one identity lineage",
+    "Locked low vertical phone camera and matched room geometry",
+    "Before-state turn from front to side/side profile to back double-biceps",
+    "Hand approaches and covers the lens at the end of shot one",
+    "Shot two begins fully occluded, then reveals the changed state",
+    "The audio payoff lands on the hand-wipe reveal",
+    "Caption is deterministic and appears only over the before take",
+    "Motion remains natural real-time"
+  ],
+  "variables": [
+    {
+      "key": "subject_identity",
+      "kind": "subject_identity",
+      "description": "A fictional or authorized identity description used consistently in both takes.",
+      "required": false,
+      "defaultValue": "a clearly new fictional young adult with a consistent face and hair across both states",
+      "examples": ["a blonde young woman with a chin-length bob", "a Black young man with short tight curls"]
+    },
+    {
+      "key": "gender_presentation",
+      "kind": "gender_presentation",
+      "description": "Gender presentation to preserve across the format unless explicitly changed.",
+      "required": false,
+      "defaultValue": "male",
+      "examples": ["male", "female", "androgynous"]
+    },
+    {
+      "key": "before_state",
+      "kind": "body_state",
+      "description": "Observable non-medical appearance and pose for the opening state.",
+      "required": false,
+      "defaultValue": "relaxed posture, softer cheek and jaw contours, relaxed chest and abdomen, no flexing",
+      "examples": ["beginner physique with relaxed posture", "off-season muscular build without flexing"]
+    },
+    {
+      "key": "after_state",
+      "kind": "body_state",
+      "description": "Observable non-medical appearance and pose for the reveal state.",
+      "required": false,
+      "defaultValue": "leaner facial contours and visibly flexed chest, shoulders, arms and abdomen",
+      "examples": ["athletic and flexed", "more muscular with a confident posture"]
+    },
+    {
+      "key": "before_wardrobe",
+      "kind": "wardrobe",
+      "description": "Opening-take wardrobe.",
+      "required": false,
+      "defaultValue": "dark grey athletic shorts and wireless earbuds",
+      "examples": ["black leggings and earbuds", "dark shorts and earbuds"]
+    },
+    {
+      "key": "after_wardrobe",
+      "kind": "wardrobe",
+      "description": "Reveal-take wardrobe.",
+      "required": false,
+      "defaultValue": "light grey sweatpants without earbuds",
+      "examples": ["light grey sweatpants", "green shorts without earbuds"]
+    },
+    {
+      "key": "setting",
+      "kind": "setting",
+      "description": "Matched environment shared by both takes.",
+      "required": false,
+      "defaultValue": "a small ordinary beige bathroom with a ceiling vent, framed wall art and toilet",
+      "examples": ["a home bathroom", "a simple bedroom mirror corner"]
+    },
+    {
+      "key": "caption_text",
+      "kind": "caption_text",
+      "description": "Exact deterministic hook caption.",
+      "required": false,
+      "defaultValue": "2 months of commitment",
+      "examples": ["2 months of GymLevels app", "90 days of consistency"]
+    },
+    {
+      "key": "audio_policy",
+      "kind": "audio",
+      "description": "Authorized audio structure or replacement direction.",
+      "required": false,
+      "defaultValue": "spoken setup followed by a music beat drop synchronized to the reveal",
+      "examples": ["reuse authorized source audio", "new motivational voiceover with a beat drop"]
+    }
+  ],
+  "shots": [
+    {
+      "id": "before-take",
+      "startMs": 0,
+      "endMs": 4790,
+      "transitionIn": "none",
+      "transitionDurationMs": 0,
+      "generationStrategy": "image_to_video",
+      "providerDurationMs": 5000,
+      "anchorPromptTemplate": "Create {{subject_identity}} with {{gender_presentation}} presentation in {{setting}}, wearing {{before_wardrobe}} and showing {{before_state}}. Preserve the locked low phone framing and warm ordinary indoor light.",
+      "motionPromptTemplate": "At natural real-time speed, turn from front to side, rotate to a back double-biceps pose, return toward side profile, then reach one hand forward until it covers the lens. Keep {{subject_identity}} and {{before_state}} stable throughout.",
+      "lockedTraits": ["fixed low phone camera", "front-side-back-side action order", "hand reaches lens", "warm opening light"]
+    },
+    {
+      "id": "after-take",
+      "startMs": 4790,
+      "endMs": 10031,
+      "transitionIn": "match_cut",
+      "transitionDurationMs": 550,
+      "generationStrategy": "image_to_video",
+      "providerDurationMs": 5250,
+      "anchorPromptTemplate": "Begin fully hand-occluded in the same {{setting}}, then reveal {{subject_identity}} with {{gender_presentation}} presentation, wearing {{after_wardrobe}} and showing {{after_state}} under brighter cooler light. Preserve the exact identity established in the opening take.",
+      "motionPromptTemplate": "Pull the hand away in the first half-second, step back, flex with hands behind the back, adjust the waistband briefly, then turn to a quarter-side pose. Keep the exact same {{subject_identity}} while expressing {{after_state}} at natural real-time speed.",
+      "lockedTraits": ["same identity as opening", "hand starts over lens", "matched camera and room", "brighter cooler reveal light", "flex-and-turn action order"]
+    }
+  ],
+  "deterministicLayers": [
+    {
+      "id": "hook-caption",
+      "kind": "caption",
+      "startMs": 0,
+      "endMs": 4690,
+      "template": "Render exact text ‘{{caption_text}}’ in bold white centered sans-serif with a subtle dark shadow."
+    },
+    {
+      "id": "soundtrack",
+      "kind": "audio",
+      "startMs": 0,
+      "endMs": 10031,
+      "template": "Use this audio policy: {{audio_policy}}. Align the payoff beat to 4790ms."
+    },
+    {
+      "id": "hand-wipe-join",
+      "kind": "transition",
+      "startMs": 4240,
+      "endMs": 5340,
+      "template": "Join the independently generated takes through their hand-occluded frames; do not use a dissolve or generated morph."
+    }
+  ],
+  "promptExamples": [
+    "Recreate this format with a blonde woman, black gymwear before, green gymwear after, and the caption ‘90 days with GymLevels’.",
+    "Use the same format with a new male character in a bedroom and caption it ‘2 months of GymLevels app’."
+  ],
+  "validation": {
+    "status": "validated",
+    "sourceOutputId": "max-turbo-7672577678309870861-final-gymlevels",
+    "notes": [
+      "Validated with two independent H3 Max Turbo takes and deterministic finishing.",
+      "The source was an ad-hoc Phase 0 run, so provenance points to its immutable run manifest; product-created recipes will point to their Fidelity Map hash.",
+      "The reusable recipe transfers structure only; source identity, voice, music, logos and exact dialogue remain separately rights-gated."
+    ]
+  }
+}

@@ -6,6 +6,7 @@
   "packageManager": "pnpm@10.33.1",
   "scripts": {
     "benchmark:sample": "node --experimental-strip-types scripts/score-analysis.ts fixtures/benchmark/sample-analysis-case.json",
+    "format:compile": "node --experimental-strip-types scripts/compile-format.ts",
     "check": "pnpm typecheck && pnpm test && pnpm benchmark:sample",
     "test": "node --experimental-strip-types --test test/*.test.ts",
     "typecheck": "tsc --noEmit"

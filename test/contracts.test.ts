@@ -115,6 +115,42 @@ const map: FidelityMap = {
     },
     evidenceIds: ["e1"],
   }],
+  creatorWorkflow: {
+    captureMode: "single_take",
+    confidence: 0.9,
+    rationale: ["Camera, setting, wardrobe, and subject motion remain continuous."],
+    subjectAnchor: "Generate one fictional rights-safe subject anchor.",
+    persistentElements: ["Subject identity"],
+    shotLocalElements: ["Opening pose"],
+    deterministicLayers: ["Captions", "audio"],
+    setups: [{
+      id: "setup-1",
+      sourceShotIds: ["shot-1"],
+      cameraSignature: "Static low phone",
+      environmentSignature: "Car interior",
+      subjectState: "Passenger seated",
+      wardrobeState: "Blue shirt",
+      lightingState: "Warm practical",
+      evidenceIds: ["e1"],
+    }],
+    generationUnits: [{
+      id: "unit-1",
+      sourceShotIds: ["shot-1"],
+      setupId: "setup-1",
+      range: fullRange,
+      targetDurationMs: 10_000,
+      providerDurationMs: 10_000,
+      anchorFrameStrategy: "generate",
+      motionStrategy: "image_to_video",
+      transitionIn: "none",
+      transitionDurationMs: 0,
+      trimInstruction: "Use the complete generated take.",
+      preserve: ["Framing", "subject", "lighting"],
+      change: ["Shirt color"],
+      evidenceIds: ["e1"],
+    }],
+    evidenceIds: ["e1"],
+  },
   beats: [{ id: "b1", role: "hook", range, description: "Opening action", evidenceIds: ["e1"] }],
   directives: [{ id: "d1", kind: "preserve", description: "Preserve framing", evidenceIds: ["e1"] }],
   risks: [],
@@ -222,4 +258,82 @@ test("secondary motion requires a causal, evidence-backed audit", () => {
       fields: [{ ...map.secondaryMotion.fields[0]!, driver: "magic" as never }],
     },
   }, evidence), /invalid driver/);
+});
+
+test("high-confidence multi-take sources require one generation unit per source shot", () => {
+  const secondSegment = {
+    ...map.editSegments[0]!,
+    id: "s2",
+    sourceShotId: "shot-2",
+    range: { ...fullRange, startMs: 5_000, originalStartMs: 7_000, normalizedStartFrame: 150 },
+    durationMs: 5_000,
+    transitionIn: "hard_cut" as const,
+  };
+  const firstSegment = {
+    ...map.editSegments[0]!,
+    range: { ...fullRange, endMs: 5_000, originalEndMs: 7_000, normalizedEndFrame: 150 },
+    durationMs: 5_000,
+  };
+  const combinedUnit = {
+    ...map.creatorWorkflow.generationUnits[0]!,
+    sourceShotIds: ["shot-1", "shot-2"],
+  };
+  assert.throws(() => assertFidelityMap({
+    ...map,
+    editSegments: [firstSegment, secondSegment],
+    creatorWorkflow: {
+      ...map.creatorWorkflow,
+      captureMode: "multi_take",
+      confidence: 0.95,
+      setups: [{ ...map.creatorWorkflow.setups[0]!, sourceShotIds: ["shot-1", "shot-2"] }],
+      generationUnits: [combinedUnit],
+    },
+  }, evidence), /one generation unit per source shot/);
+});
+
+test("high-confidence multi-take sources accept independently anchored and trimmed units", () => {
+  const firstSegment = {
+    ...map.editSegments[0]!,
+    range: { ...fullRange, endMs: 5_000, originalEndMs: 7_000, normalizedEndFrame: 150 },
+    durationMs: 5_000,
+  };
+  const secondSegment = {
+    ...map.editSegments[0]!,
+    id: "s2",
+    sourceShotId: "shot-2",
+    range: { ...fullRange, startMs: 5_000, originalStartMs: 7_000, normalizedStartFrame: 150 },
+    durationMs: 5_000,
+    transitionIn: "hard_cut" as const,
+  };
+  const firstSetup = map.creatorWorkflow.setups[0]!;
+  const secondSetup = { ...firstSetup, id: "setup-2", sourceShotIds: ["shot-2"], cameraSignature: "Static high phone" };
+  const firstUnit = {
+    ...map.creatorWorkflow.generationUnits[0]!,
+    range: firstSegment.range,
+    targetDurationMs: 5_000,
+    providerDurationMs: 5_000,
+    trimInstruction: "Trim generated take to source shot 1.",
+  };
+  const secondUnit = {
+    ...firstUnit,
+    id: "unit-2",
+    sourceShotIds: ["shot-2"],
+    setupId: "setup-2",
+    range: secondSegment.range,
+    anchorFrameStrategy: "edit_subject_anchor" as const,
+    transitionIn: "hard_cut" as const,
+    trimInstruction: "Trim generated take to source shot 2.",
+  };
+
+  assert.doesNotThrow(() => assertFidelityMap({
+    ...map,
+    editSegments: [firstSegment, secondSegment],
+    creatorWorkflow: {
+      ...map.creatorWorkflow,
+      captureMode: "multi_take",
+      confidence: 0.95,
+      setups: [firstSetup, secondSetup],
+      generationUnits: [firstUnit, secondUnit],
+    },
+  }, evidence));
 });
