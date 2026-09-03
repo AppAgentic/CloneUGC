@@ -6,6 +6,7 @@
   "description": "A static-camera single-take gym reaction in which a seated subject laughs at a phone, abruptly becomes serious, puts the phone down, and grips the next exercise handle.",
   "provenance": {
     "sourceAssetId": "tiktok-7662235938470415629",
+    "sourceFidelityMapHash": "d792607c67c22199c61c0275a014ca5e94db1a7746957051136a0123f98873ab",
     "sourceRunManifestSha256": "70bc370f2d83f2ce0b1b14a45bca2f0ecfe7ce057bb31dce893cca2da386cbf1",
     "extractionPromptVersion": "analysis-v10",
     "rightsTransferPolicy": "structure_only"
@@ -139,6 +140,7 @@
     "qaMode": "static",
     "sourceOutputId": "tiktok-7662235938470415629-run-v1-final",
     "notes": [
+      "Linked on 2026-09-03 to validator-accepted Fidelity Map fm-phone-laugh-to-lock-in-gym-v1 (fixtures/fidelity-maps/fm-phone-laugh-to-lock-in-gym-v1.json), materialized from the persisted analyzer output and deterministic scene detection for this source.",
       "Validated with one GPT Image 2 identity-replacement setup frame, one six-second H3 Max Turbo take, and deterministic caption/audio finishing.",
       "Gemini 3.7 Flash static comparison scored overall reconstruction quality 67/100 and explicitly judged the result strong enough for reusable-format validation.",
       "The strongest preserved grammar is the single-take laugh-to-deadpan-to-equipment action sequence; small background-patron and handle-grip timing differences remain acceptable variation.",

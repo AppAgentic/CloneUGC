@@ -6,6 +6,7 @@
   "description": "One locked-camera monochrome rear-view take in which a subject removes a shirt, reveals a flexed back, and holds beneath a persistent challenge checklist.",
   "provenance": {
     "sourceAssetId": "instagram-DcqCAe_Jl9o",
+    "sourceFidelityMapHash": "0e312cab94bcde687aa7b00dfaf853b35a5cb22b7665287f072f52857bb52c5a",
     "sourceRunManifestSha256": "a65edb59ce637f68a8156f82722c2bb563cb29fe3c4c92e9dc24040650c1170b",
     "extractionPromptVersion": "analysis-v10-capture-workflow",
     "rightsTransferPolicy": "structure_only"
@@ -57,6 +58,7 @@
     "qaMode": "hybrid",
     "sourceOutputId": "instagram-DcqCAe_Jl9o-run-v1-gymlevels",
     "notes": [
+      "Linked on 2026-09-03 to validator-accepted Fidelity Map fm-winter-arc-shirt-reveal-checklist-v1 (fixtures/fidelity-maps/fm-winter-arc-shirt-reveal-checklist-v1.json), materialized from the persisted analyzer output and deterministic scene detection for this source.",
       "Validated with one setup image, one ten-second motion generation, deterministic checklist finishing and no retry.",
       "Full-timeline review confirmed one stable fictional subject, causal shirt removal, back reveal, flex, locked camera and monochrome backlight.",
       "The checklist is deliberately deterministic so product wording remains exact while the photographic motion stays unchanged.",

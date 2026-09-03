@@ -18,3 +18,4 @@ export * from "./adapters/fake-asset-store.ts";
 export * from "./adapters/fake-render.ts";
 export * from "./adapters/fake-qa.ts";
 export * from "./adapters/fake-analyzer.ts";
+export * from "./fidelity-map-fixture.ts";
