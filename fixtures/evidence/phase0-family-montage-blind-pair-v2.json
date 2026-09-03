@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "phase0-family-montage-blind-pair-v2",
+  "supersedes": "phase0-family-montage-blind-pair-v1",
+  "sourceAssetId": "instagram-DcyIWPYtZkV",
+  "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+  "fidelityMapHash": "e003a259a09975d209f22d633a0933375e202ce196f06b2864310b4a8cf505d3",
+  "compilerPlanSha256": "fd75a27ce6edbf0bb30417a49ca7fd8f092d458a17fae8e2c85a8f4a3e8da762",
+  "sealedPlanSha256": "fd7e0c7b3e54db0a0d949d6a73985cf57182c24889b4cf51e842fb9bf5d5d7ed",
+  "spendApprovalMessageTs": "1788470292.051159",
+  "operatorSelectionMessageTs": "1788471029.864689",
+  "estimatedCostUsdMicros": 1200000,
+  "automaticPaidRetries": 0,
+  "laneMapping": {"A": "control", "B": "compiler"},
+  "operatorSelection": "A",
+  "selectedLane": "control",
+  "providerRequestIds": [
+    "01a06924-5a54-7471-a60c-7ae7e8ad037e", "01a06924-7ee8-7a72-9fde-035f3a338218",
+    "01a06924-a5e4-7f72-b65d-98945f2c5839", "01a06924-c684-7b61-a00f-e33a0b07e627",
+    "01a06924-ed08-73c3-a368-962ce7dd4f57", "01a06925-0e93-74f0-8cab-27bc51fd6f5a",
+    "01a06925-3510-7061-83ca-352b1f30dca9", "01a06925-5516-7150-9429-dd0eb7171d04",
+    "01a06925-8411-7570-95b1-2810be29c96f", "01a06925-a6e9-71b0-9529-9c66fcaa9323",
+    "01a06925-cc8b-7a41-b622-eca9ba681611", "01a06925-ee20-7ab2-aeaf-d8c884b0cc29",
+    "01a06926-1f9c-7e61-a615-74ef006cfcb1", "01a06926-4070-7a91-aa65-f67c4b225d4d",
+    "01a06926-65ea-7453-8523-4c0b47b8a413", "01a06926-875b-7b52-bbd0-7249310c8777",
+    "01a06926-ad9e-7bf2-81df-e2fd3adcfd30", "01a06926-cda2-74a3-ae76-87f17a207627",
+    "01a06926-f2d3-7543-85a9-a348bf5f1831", "01a06927-1355-7931-bde3-16de8100c659",
+    "01a06927-38a9-7a02-9599-5832c273bcd1", "01a06927-59ac-7073-9890-b51d907c71a8",
+    "01a06927-7e7e-7a81-87b4-332dbb14d1f9", "01a06927-a040-7972-9f85-3f8d4874ba73"
+  ],
+  "finishedOutputs": {
+    "A": "d933a9c0d743e1d2b697db1af5ef9fe3b9926ba6e3429b7016d9d3ec65c723ef",
+    "B": "d7f65f0d50192435696b9d940ff908226eb2ca75bce8785a4234d2a3b8f18fdd"
+  },
+  "outcome": "control_preferred_compiler_acceptability_unresolved",
+  "nextDecision": "Ask whether the compiler candidate B is still commercially acceptable or materially worse than A; do not infer non-inferiority from an unexplained preference."
+}

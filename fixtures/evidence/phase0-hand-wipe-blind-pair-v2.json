@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "phase0-hand-wipe-blind-pair-v2",
+  "supersedes": "phase0-hand-wipe-blind-pair-v1",
+  "sourceAssetId": "tiktok-7672577678309870861",
+  "sourceContentSha256": "0db4e5c295d0a8d7046a71e27605a8a6bf6bee8cd16f2219a2e88878f1862ec8",
+  "fidelityMapHash": "1a661fc7f3212451854c6e46daadf8d613a91b3b290ca88056ade500aa259212",
+  "compilerPlanSha256": "87bacafcd222167e8b4a8436f88990a9a1bdbecca199e538ccd64772a7bc6e61",
+  "sealedPlanSha256": "ca81004fd1f91d94bcbc5a3e1e0562ddc4cf7a3de6aee8d7cb2fc9134834e6fa",
+  "spendApprovalMessageTs": "1788470292.051159",
+  "operatorSelectionMessageTs": "1788471029.864689",
+  "estimatedCostUsdMicros": 300000,
+  "automaticPaidRetries": 0,
+  "laneMapping": {"A": "control", "B": "compiler"},
+  "operatorSelection": "B",
+  "selectionInterpretation": "A was rejected for changing from a woman to a man; B was preferred with a slight palm-transition error.",
+  "selectedLane": "compiler",
+  "providerRequestIds": [
+    "01a06923-928b-7890-9aac-3c660496b6d7",
+    "01a06923-b445-73f0-a502-3a7cecb63065",
+    "01a06923-d933-78e2-90ab-ac67e8ca964b",
+    "01a06924-0717-7350-afa4-827367688c68"
+  ],
+  "finishedOutputs": {
+    "A": "778b1514f822a0578c17109ba22e40e079e9199965886749e73bff76a99ae1d5",
+    "B": "aa84f5970352606fa7128465477b90d5f70f0be323adf11e2af3c5a298a866cf"
+  },
+  "outcome": "compiler_preferred_with_minor_repair",
+  "typedFindings": [
+    {
+      "dimension": "transition",
+      "targetUnitId": "unit-after",
+      "severity": "minor",
+      "finding": "The compiler candidate preserved the requested woman and green after-state but showed a slight palm artifact at the wipe boundary; repair should remain scoped to the transition region."
+    }
+  ]
+}
