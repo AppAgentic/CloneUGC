@@ -27,10 +27,11 @@ test("job creation is idempotent per workspace key and consumed approvals cannot
   assert.equal(again.created, false);
   assert.equal(again.job.id, first.jobId);
   assert.equal(harness.store.count("jobs"), 1);
+  assert.throws(() => harness.kernel.createJob({ ...first.input, actorId: "another-actor" }), /idempotency key was already used for a different generation request/);
   assert.throws(() => harness.kernel.createJob({ ...first.input, idempotencyKey: "different" }), /already consumed/);
   assert.throws(() => harness.kernel.createJob({ ...first.input, idempotencyKey: "forged", rightsTokenId: "not-minted", spendTokenId: "not-minted-either" }), /not server-minted/);
   const rejected = harness.kernel.listAudit().filter((event) => event.action === "job.create" && event.result === "rejected");
-  assert.equal(rejected.length, 2);
+  assert.equal(rejected.length, 3);
 });
 
 test("a rejected job leaves no reservation, no outbox event, and no consumed token", () => {
@@ -216,7 +217,34 @@ test("an estimate that assumes reuse without artifacts, or artifacts without reu
   const reuseEstimate = sampleEstimate(plan, harness.clock.nowMs(), ["unit-1:anchor"]);
   assert.throws(() => harness.createJob({ plan, estimate: reuseEstimate }), /assumes reuse of unit-1:anchor/);
   const staged = harness.assets.put("accepted-anchor", { workspaceId: "workspace-1", prefix: "tmp/x", provenance: "test" });
-  assert.throws(() => harness.createJob({ plan, estimate: sampleEstimate(plan, harness.clock.nowMs()), reusedUnitArtifacts: { "unit-1:anchor": staged.hash } }), /charges for unit-1:anchor although its artifact is reused/);
+  assert.throws(() => harness.createJob({ plan, estimate: reuseEstimate, reusedUnitArtifacts: { "unit-1:anchor": staged.hash } }), /not an accepted unchanged output in this workspace/);
+
+  const first = harness.createJob({ plan });
+  runToSettled(harness, first.jobId);
+  const accepted = harness.kernel.getJob(first.jobId).unitArtifacts["unit-1:anchor"]!;
+  assert.throws(() => harness.createJob({ plan, estimate: sampleEstimate(plan, harness.clock.nowMs()), reusedUnitArtifacts: { "unit-1:anchor": accepted } }), /charges for unit-1:anchor although its artifact is reused/);
+});
+
+test("invalid provider routing and cost overruns fail closed", () => {
+  const harness = createHarness();
+  const { jobId, estimate } = harness.createJob();
+  harness.kernel.dispatchOutbox();
+  const worker = harness.worker("worker-a");
+  worker.claim();
+  assert.throws(() => harness.kernel.reserveProviderCall(jobId, "worker-a", "motion", "unit-1:motion", "image_anchor"), /cannot use provider class/);
+  assert.throws(() => harness.kernel.reserveProviderCall(jobId, "worker-a", "qa", "unit-1:motion", "video_motion"), /cannot reserve a paid provider call/);
+
+  let outcome = worker.step(jobId);
+  while (outcome.kind !== "submitted") outcome = worker.step(jobId);
+  const call = harness.kernel.listCalls(jobId)[0]!;
+  const submission = harness.image.submissions.get(call.receipt!.providerRequestId)!;
+  submission.actualCostUsdMicros = estimate.maxCostUsdMicros + 1;
+  outcome = worker.step(jobId);
+  assert.equal(outcome.kind, "failed");
+  assert.equal(harness.kernel.getJob(jobId).state, "failed");
+  assert.equal(harness.kernel.ledgerSummary(jobId).capturedUsdMicros, estimate.maxCostUsdMicros + 1);
+  assert.equal(harness.kernel.listCalls(jobId)[0]!.state, "succeeded", "the accepted provider result remains auditable even though the job stops");
+  assert.throws(() => harness.kernel.markFailed(call.id, "test", "bad", -1), /non-negative integer/);
 });
 
 test("QA findings become a typed repair revision whose invalidation touches only the affected units", () => {

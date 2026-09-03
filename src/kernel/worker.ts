@@ -178,6 +178,7 @@ export class Worker {
     if (status.state === "pending") return { kind: "waiting", callId: call.id };
     if (status.state === "failed") {
       this.kernel.markFailed(call.id, this.id, status.reason, status.actualCostUsdMicros);
+      if (isTerminal(this.kernel.getJob(job.id).state)) return { kind: "failed", reason: "actual provider cost exceeded the approved spend ceiling" };
       return this.afterFailedCall(job, call, status.reason);
     }
     const bytes = adapter.fetchResult(call.receipt!);
@@ -187,6 +188,7 @@ export class Worker {
     }
     const staged = this.kernel.assets.put(bytes, { workspaceId: job.workspaceId, prefix: `tmp/${job.id}/${call.stage}`, provenance: `provider call ${call.id}` });
     const result = this.kernel.completeProviderCall(call.id, this.id, { actualCostUsdMicros: status.actualCostUsdMicros, resultAssetHash: staged.hash });
+    if (result.overCeiling) return { kind: "failed", reason: "actual provider cost exceeded the approved spend ceiling" };
     return { kind: "unit_complete", unitId: unit.id, captured: result.captured };
   }
 

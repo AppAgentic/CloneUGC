@@ -3,7 +3,7 @@ import { checkGenerationAuthority, type ApprovalToken, type RightsRecord } from 
 import { assertCompiledPlan, type CompiledPlan } from "../compiler.ts";
 import type { EvidenceClaim, FidelityMap } from "../contracts.ts";
 import { assertReconstructionRevision, type ReconstructionRevision } from "../directives.ts";
-import { assertGenerationEstimate, type GenerationEstimate, type ProviderClass, type Resolution } from "../estimate.ts";
+import { assertGenerationEstimate, providerClassForUnit, type GenerationEstimate, type ProviderClass, type Resolution } from "../estimate.ts";
 import { assertQAReport, finalizeQAReport, type QAReport } from "../qa.ts";
 import type { AssetStore, ProviderAdapter, QAScorer, RenderAdapter } from "./adapters.ts";
 import { MemoryStore, SequentialIds, type Clock, type Transaction } from "./store.ts";
@@ -12,6 +12,7 @@ import {
   STAGES,
   type AuditEvent,
   type GenerationJob,
+  type IdempotencyRecord,
   type JobState,
   type LedgerEntry,
   type OutboxEvent,
@@ -224,6 +225,25 @@ export class JobKernel {
     return true;
   }
 
+  private createJobRequestHash(input: CreateJobInput): string {
+    return contentHash({
+      workspaceId: input.workspaceId,
+      actorId: input.actorId,
+      planHash: input.plan.planHash,
+      revisionHash: input.plan.revisionHash,
+      estimateHash: input.estimate.estimateHash,
+      sourceContentSha256: input.plan.sourceContentSha256,
+      rightsRecordId: input.rightsRecordId,
+      rightsTokenId: input.rightsTokenId,
+      spendTokenId: input.spendTokenId,
+      reusedUnitArtifacts: input.reusedUnitArtifacts ?? {},
+    });
+  }
+
+  private assertActualCost(value: number): void {
+    if (!Number.isSafeInteger(value) || value < 0) throw new KernelError("actual provider cost must be a non-negative integer of USD micros");
+  }
+
   private finalize(tx: Transaction, job: GenerationJob, state: "succeeded" | "failed" | "cancelled", reason: string, actorId: string): void {
     if (isTerminal(job.state)) return;
     job.state = state;
@@ -257,8 +277,12 @@ export class JobKernel {
 
   createJob(input: CreateJobInput): { job: GenerationJob; created: boolean } {
     const result = this.store.transaction((tx): { job: GenerationJob; created: boolean } | { rejected: string[] } => {
-      const existing = tx.get<{ jobId: string }>(COLLECTIONS.idempotency, `${input.workspaceId}:${input.idempotencyKey}`);
-      if (existing !== undefined) return { job: this.requireJob(tx, existing.jobId), created: false };
+      const requestHash = this.createJobRequestHash(input);
+      const existing = tx.get<IdempotencyRecord>(COLLECTIONS.idempotency, `${input.workspaceId}:${input.idempotencyKey}`);
+      if (existing !== undefined) {
+        if (existing.requestHash !== requestHash) return { rejected: ["idempotency key was already used for a different generation request"] };
+        return { job: this.requireJob(tx, existing.jobId), created: false };
+      }
 
       const rights = tx.get<RightsRecord>(COLLECTIONS.rights, input.rightsRecordId);
       const rightsToken = tx.get<ApprovalToken>(COLLECTIONS.approvals, input.rightsTokenId);
@@ -276,13 +300,25 @@ export class JobKernel {
         ...(spendToken === undefined ? {} : { spendToken }),
       });
       const reasons = [...check.reasons];
+      if (input.workspaceId.length === 0) reasons.push("workspace identity is required");
+      if (input.actorId.length === 0) reasons.push("actor identity is required");
+      if (input.idempotencyKey.length === 0) reasons.push("idempotency key is required");
       if (rightsToken === undefined && input.rightsTokenId.length > 0) reasons.push("rights approval is not server-minted");
       if (spendToken === undefined && input.spendTokenId.length > 0) reasons.push("spend approval is not server-minted");
       const reused: Record<string, string> = {};
       for (const [unitId, hash] of Object.entries(input.reusedUnitArtifacts ?? {})) {
-        if (!input.plan.units.some((unit) => unit.id === unitId)) reasons.push(`reused artifact targets unknown unit ${unitId}`);
+        const currentUnit = input.plan.units.find((unit) => unit.id === unitId);
+        if (currentUnit === undefined) reasons.push(`reused artifact targets unknown unit ${unitId}`);
         else if (!this.assets.has(hash)) reasons.push(`reused artifact ${hash} for ${unitId} is missing from the asset store`);
-        else reused[unitId] = hash;
+        else {
+          const accepted = tx.list<OutputArtifact>(COLLECTIONS.outputs).map((entry) => entry.data).some((output) => {
+            if (output.workspaceId !== input.workspaceId || output.sourceContentSha256 !== input.plan.sourceContentSha256 || output.unitArtifacts[unitId] !== hash) return false;
+            const previousPlan = tx.get<CompiledPlan>("plans", output.planHash);
+            return previousPlan?.units.find((unit) => unit.id === unitId)?.unitHash === currentUnit.unitHash;
+          });
+          if (!accepted) reasons.push(`reused artifact ${hash} for ${unitId} is not an accepted unchanged output in this workspace`);
+          else reused[unitId] = hash;
+        }
       }
       for (const estimateUnit of input.estimate.units) {
         if (estimateUnit.reused && reused[estimateUnit.unitId] === undefined) reasons.push(`estimate assumes reuse of ${estimateUnit.unitId} but no accepted artifact was supplied`);
@@ -326,7 +362,7 @@ export class JobKernel {
       tx.set(COLLECTIONS.approvals, spendToken!.id, { ...spendToken!, consumedByJobId: jobId, consumedAtMs: now });
       this.ledgerOnce(tx, { id: `reserve:${jobId}`, jobId, kind: "reserve", amountUsdMicros: input.estimate.maxCostUsdMicros });
       this.enqueueOutbox(tx, jobId, "job.dispatch");
-      tx.set(COLLECTIONS.idempotency, `${input.workspaceId}:${input.idempotencyKey}`, { jobId });
+      tx.set(COLLECTIONS.idempotency, `${input.workspaceId}:${input.idempotencyKey}`, { jobId, requestHash } satisfies IdempotencyRecord);
       this.audit(tx, { actorId: input.actorId, authority: `${rightsToken!.id},${spendToken!.id}`, action: "job.create", objectHashes: { planHash: input.plan.planHash, revisionHash: input.plan.revisionHash, estimateHash: input.estimate.estimateHash }, result: "ok" });
       return { job, created: true };
     });
@@ -457,6 +493,17 @@ export class JobKernel {
       this.requireLease(tx, jobId, workerId);
       const job = this.requireJob(tx, jobId);
       if (job.cancelRequestedAtMs !== undefined) throw new KernelError(`job ${jobId} has a pending cancellation; no new provider calls`);
+      if (stage !== "anchor" && stage !== "motion") throw new KernelError(`stage ${stage} cannot reserve a paid provider call`);
+      const plan = tx.get<CompiledPlan>("plans", job.inputs.planHash);
+      const estimate = tx.get<GenerationEstimate>("estimates", job.inputs.estimateHash);
+      if (plan === undefined || estimate === undefined) throw new KernelError(`job ${jobId} is missing its registered plan or estimate`);
+      const unit = plan.units.find((candidate) => candidate.id === unitId);
+      if (unit === undefined || unit.kind !== stage) throw new KernelError(`unit ${unitId} does not belong to stage ${stage}`);
+      const expectedClass = providerClassForUnit(unit);
+      if (providerClass !== expectedClass || expectedClass === "deterministic_finishing") throw new KernelError(`unit ${unitId} cannot use provider class ${providerClass}`);
+      const estimateUnit = estimate.units.find((candidate) => candidate.unitId === unitId);
+      if (estimateUnit === undefined || estimateUnit.reused) throw new KernelError(`unit ${unitId} has no payable estimate entry`);
+      if (job.capturedUsdMicros + estimateUnit.costUsdMicros > job.reservationUsdMicros) throw new KernelError(`unit ${unitId} would exceed the approved spend ceiling`);
       const calls = tx.list<ProviderCall>(COLLECTIONS.providerCalls).map((entry) => entry.data).filter((call) => call.jobId === jobId && call.stage === stage && call.unitId === unitId);
       const active = calls.find((call) => ACTIVE_CALL_STATES.has(call.state));
       if (active !== undefined) return active;
@@ -494,6 +541,7 @@ export class JobKernel {
 
   /** Persists the provider receipt. Deliberately does not require the lease: the receipt is the record of money already spent. */
   markSubmitted(callId: string, actorId: string, receipt: ProviderReceipt): ProviderCall {
+    if (receipt.providerRequestId.length === 0 || !Number.isSafeInteger(receipt.acceptedAtMs) || receipt.acceptedAtMs < 0) throw new KernelError("provider receipt is invalid");
     return this.transitionCall(callId, ["submitting", "unknown"], "submitted", (call) => {
       call.receipt = receipt;
     }, { actorId, action: "call.submitted" });
@@ -511,23 +559,26 @@ export class JobKernel {
   }
 
   markFailed(callId: string, actorId: string, reason: string, actualCostUsdMicros = 0): ProviderCall {
+    this.assertActualCost(actualCostUsdMicros);
     return this.transitionCall(callId, ["reserved", "submitting", "submitted", "unknown"], "failed", (call, tx, job) => {
       call.failureReason = reason;
       call.actualCostUsdMicros = actualCostUsdMicros;
       if (actualCostUsdMicros > 0 && this.ledgerOnce(tx, { id: `capture:${call.id}`, jobId: job.id, kind: "capture", amountUsdMicros: actualCostUsdMicros, providerCallId: call.id })) {
         job.capturedUsdMicros += actualCostUsdMicros;
       }
+      if (job.capturedUsdMicros > job.reservationUsdMicros) this.finalize(tx, job, "failed", "actual provider cost exceeded the approved spend ceiling", actorId);
     }, { actorId, action: "call.failed" });
   }
 
   /** Captures actual cost exactly once and records the accepted unit artifact. Idempotent for repeated delivery. */
-  completeProviderCall(callId: string, workerId: string, outcome: { actualCostUsdMicros: number; resultAssetHash: string }): { call: ProviderCall; captured: boolean } {
+  completeProviderCall(callId: string, workerId: string, outcome: { actualCostUsdMicros: number; resultAssetHash: string }): { call: ProviderCall; captured: boolean; overCeiling: boolean } {
+    this.assertActualCost(outcome.actualCostUsdMicros);
     return this.store.transaction((tx) => {
       const call = tx.get<ProviderCall>(COLLECTIONS.providerCalls, callId);
       if (call === undefined) throw new KernelError(`provider call ${callId} does not exist`);
       this.requireLease(tx, call.jobId, workerId);
       const job = this.requireJob(tx, call.jobId);
-      if (call.state === "succeeded") return { call, captured: false };
+      if (call.state === "succeeded") return { call, captured: false, overCeiling: job.capturedUsdMicros > job.reservationUsdMicros };
       if (call.state !== "submitted") throw new KernelError(`provider call ${callId} is ${call.state}; expected submitted`);
       if (!this.assets.has(outcome.resultAssetHash)) throw new KernelError(`result asset ${outcome.resultAssetHash} was not staged before completion`);
       call.state = "succeeded";
@@ -538,9 +589,10 @@ export class JobKernel {
       if (captured) job.capturedUsdMicros += outcome.actualCostUsdMicros;
       job.unitArtifacts[call.unitId] = outcome.resultAssetHash;
       tx.set(COLLECTIONS.providerCalls, callId, call);
+      if (job.capturedUsdMicros > job.reservationUsdMicros) this.finalize(tx, job, "failed", "actual provider cost exceeded the approved spend ceiling", workerId);
       this.saveJob(tx, job);
       this.audit(tx, { actorId: workerId, action: "call.succeeded", objectHashes: { call: callId, artifact: outcome.resultAssetHash }, result: "ok", detail: `captured ${outcome.actualCostUsdMicros}` });
-      return { call, captured };
+      return { call, captured, overCeiling: job.capturedUsdMicros > job.reservationUsdMicros };
     });
   }
 

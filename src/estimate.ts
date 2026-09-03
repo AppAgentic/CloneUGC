@@ -157,10 +157,27 @@ export function estimateGeneration(input: {
 
 export function assertGenerationEstimate(estimate: GenerationEstimate): void {
   const { id, estimateHash, ...core } = estimate;
+  assert(estimate.schemaVersion === "0.1.0", "unsupported estimate schema version");
+  assert(estimate.currency === "USD", "estimate currency must be USD");
+  assert(["480p", "720p", "1080p"].includes(estimate.resolution), "estimate resolution is invalid");
+  assert(/^[a-f0-9]{64}$/.test(estimateHash), "estimate hash must be a lowercase SHA-256 hash");
   assert(contentHash(core) === estimateHash, "estimate hash does not match its content");
   assert(id === `est_${estimateHash.slice(0, 16)}`, "estimate id does not match its hash");
+  const unitIds = new Set<string>();
+  for (const unit of estimate.units) {
+    assert(unit.unitId.length > 0, "estimate unit id is required");
+    assert(!unitIds.has(unit.unitId), `estimate contains duplicate unit ${unit.unitId}`);
+    unitIds.add(unit.unitId);
+    assert(["image_anchor", "video_motion", "deterministic_finishing"].includes(unit.providerClass), `estimate unit ${unit.unitId} has an invalid provider class`);
+    assert(Number.isSafeInteger(unit.billedDurationMs) && unit.billedDurationMs >= 0, `estimate unit ${unit.unitId} has an invalid billed duration`);
+    assert(Number.isSafeInteger(unit.costUsdMicros) && unit.costUsdMicros >= 0, `estimate unit ${unit.unitId} has an invalid cost`);
+    if (unit.reused) assert(unit.costUsdMicros === 0 && unit.billedDurationMs === 0, `reused estimate unit ${unit.unitId} must have zero duration and cost`);
+  }
+  assert(Number.isSafeInteger(estimate.subtotalUsdMicros) && estimate.subtotalUsdMicros >= 0, "estimate subtotal must be a non-negative integer");
+  assert(Number.isSafeInteger(estimate.contingencyUsdMicros) && estimate.contingencyUsdMicros >= 0, "estimate contingency must be a non-negative integer");
+  assert(Number.isSafeInteger(estimate.maxCostUsdMicros) && estimate.maxCostUsdMicros >= 0, "estimate ceiling must be a non-negative integer");
+  assert(estimate.subtotalUsdMicros === estimate.units.reduce((sum, unit) => sum + unit.costUsdMicros, 0), "estimate subtotal must equal its unit costs");
   assert(estimate.maxCostUsdMicros === estimate.subtotalUsdMicros + estimate.contingencyUsdMicros, "estimate ceiling must equal subtotal plus contingency");
-  assert(estimate.units.every((unit) => Number.isInteger(unit.costUsdMicros) && unit.costUsdMicros >= 0), "estimate unit costs must be non-negative integers");
   assert(estimate.expiresAtMs > estimate.createdAtMs, "estimate must expire after it was created");
 }
 

@@ -115,6 +115,12 @@ export interface QueueTask {
   deliveries: number;
 }
 
+export interface IdempotencyRecord {
+  jobId: string;
+  /** Hash of the immutable create-job request, excluding the idempotency key itself. */
+  requestHash: string;
+}
+
 export interface AuditEvent {
   id: string;
   actorId: string;
