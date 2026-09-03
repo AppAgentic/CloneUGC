@@ -1,0 +1,847 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "fm-phone-laugh-to-lock-in-gym-v1",
+  "recipeId": "phone-laugh-to-lock-in-gym",
+  "family": "single-take performance",
+  "materializedFrom": {
+    "analyzerOutput": "output/source-analysis/tiktok-7662235938470415629/gemini-static.json",
+    "sceneDetectLog": "output/source-analysis/tiktok-7662235938470415629/scene-detect.log",
+    "sourceProbe": {
+      "sha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "durationMs": 6139,
+      "fps": 29.97,
+      "frames": 184,
+      "width": 1080,
+      "height": 1920
+    },
+    "materializedAt": "2026-09-03",
+    "notes": [
+      "The delivered file is constant 29.97 fps, so the analysis copy is the source itself and normalizedContentSha256 equals sourceContentSha256.",
+      "The shared CLI output does not persist the prompt version; analysis-v10 is taken from the recipe provenance for this source.",
+      "FFmpeg select=scene showinfo produced zero frames, which is deterministic evidence of a single take with no hard cuts.",
+      "Rights remain unverified: the Phase 0 run used a Slack approval message, not a durable rights record, so this map is analysis-only until attestation."
+    ],
+    "historicalRun": {
+      "manifest": "output/source-analysis/tiktok-7662235938470415629/run-v1/manifest.json",
+      "spendCeilingUsd": 0.16,
+      "estimatedImageCostUsd": 0.09,
+      "estimatedVideoCostUsd": 0.06,
+      "providerRequestedDurationSeconds": 6,
+      "providerDeliveredDurationSeconds": 6.592,
+      "qaOverallReconstructionQuality": 67
+    }
+  },
+  "artifacts": [
+    {
+      "schemaVersion": "0.2.0",
+      "id": "tiktok-7662235938470415629:gemini-static",
+      "workspaceId": "phase-0-evidence",
+      "sourceAssetId": "tiktok-7662235938470415629",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "normalizedContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "durationMs": 6139,
+      "normalizedFps": 29.97,
+      "originalOffsetMs": 0,
+      "providerRun": {
+        "provider": "google-gemini",
+        "exactModel": "gemini-3.7-flash",
+        "mode": "static",
+        "runId": "mc-video-analyze-static-2026-09-03T14:23:50Z",
+        "promptVersion": "analysis-v10",
+        "latencyMs": 14639,
+        "inputTokens": 873,
+        "outputTokens": 867,
+        "thoughtTokens": 548,
+        "toolUseTokens": 0,
+        "processingCalls": 0
+      },
+      "structuredPayloadArtifactId": "output/source-analysis/tiktok-7662235938470415629/gemini-static.json",
+      "summaryTruncated": false
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "id": "tiktok-7662235938470415629:ffmpeg-scene-detect",
+      "workspaceId": "phase-0-evidence",
+      "sourceAssetId": "tiktok-7662235938470415629",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "normalizedContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "durationMs": 6139,
+      "normalizedFps": 29.97,
+      "originalOffsetMs": 0,
+      "providerRun": {
+        "provider": "ffmpeg",
+        "exactModel": "Lavf62.12.100",
+        "mode": "deterministic",
+        "runId": "ffmpeg-select-scene-showinfo-tiktok-7662235938470415629",
+        "promptVersion": "ffmpeg-select-scene-showinfo-v1",
+        "latencyMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "thoughtTokens": 0,
+        "toolUseTokens": 0,
+        "processingCalls": 0
+      },
+      "structuredPayloadArtifactId": "output/source-analysis/tiktok-7662235938470415629/scene-detect.log",
+      "summaryTruncated": false
+    }
+  ],
+  "evidence": [
+    {
+      "id": "shot-single-take",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "shot",
+      "statement": "Single continuous medium shot from a static phone at seated eye/chest level, vertical 9:16.",
+      "status": "accepted",
+      "confidence": 0.95,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 6139,
+        "originalStartMs": 0,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "probe-no-cuts",
+      "artifactId": "tiktok-7662235938470415629:ffmpeg-scene-detect",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "edit",
+      "statement": "FFmpeg select=scene showinfo emitted zero scene-change frames across 184 frames: no hard cuts.",
+      "status": "accepted",
+      "confidence": 0.98,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 6139,
+        "originalStartMs": 0,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "playback-real-time",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "playback_rate",
+      "statement": "Real-time playback anchored by natural walking speed of background patrons and realistic cable movement.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 6139,
+        "originalStartMs": 0,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "action-laugh",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "action",
+      "statement": "Subject sits sideways on the cable-row bench holding a phone with both hands, laughing uncontrollably.",
+      "status": "accepted",
+      "confidence": 0.95,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 2000,
+        "originalStartMs": 0,
+        "originalEndMs": 2000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 60
+      }
+    },
+    {
+      "id": "action-stop",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "action",
+      "statement": "Laughter stops abruptly; expression turns blank; phone is placed down to the right.",
+      "status": "accepted",
+      "confidence": 0.95,
+      "directObservation": true,
+      "range": {
+        "startMs": 2000,
+        "endMs": 3000,
+        "originalStartMs": 2000,
+        "originalEndMs": 3000,
+        "normalizedStartFrame": 60,
+        "normalizedEndFrame": 90
+      }
+    },
+    {
+      "id": "action-lock-in",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "action",
+      "statement": "Subject squares onto the bench, plants feet on footrests, grips the cable attachment with a stern gaze.",
+      "status": "accepted",
+      "confidence": 0.95,
+      "directObservation": true,
+      "range": {
+        "startMs": 3000,
+        "endMs": 5000,
+        "originalStartMs": 3000,
+        "originalEndMs": 5000,
+        "normalizedStartFrame": 90,
+        "normalizedEndFrame": 150
+      }
+    },
+    {
+      "id": "action-hold",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "action",
+      "statement": "Locked-in grip and gaze hold until the clip ends.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 5000,
+        "endMs": 6139,
+        "originalStartMs": 5000,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 150,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "continuity-wardrobe",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "continuity",
+      "statement": "Navy open-side sleeveless top, oversized light-grey sweatpants, white shoes, high ponytail, glasses, and a forearm tattoo persist for the whole take.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 6139,
+        "originalStartMs": 0,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "continuity-props",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "continuity",
+      "statement": "Smartphone and seated cable-row machine with a close-grip handle remain the only handled props.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 6139,
+        "originalStartMs": 0,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "camera-static",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "other",
+      "statement": "Camera is static and level; framing does not change.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 6139,
+        "originalStartMs": 0,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "lighting-gym",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "lighting",
+      "statement": "Even cool-toned overhead commercial gym fluorescent/LED lighting with ambient reflections in background mirrors.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 6139,
+        "originalStartMs": 0,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "motion-ponytail",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "secondary_motion",
+      "statement": "Ponytail bounces with the laughter.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 2000,
+        "originalStartMs": 0,
+        "originalEndMs": 2000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 60
+      }
+    },
+    {
+      "id": "motion-sweatpants",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "secondary_motion",
+      "statement": "Sweatpants shift as the body reorients onto the bench.",
+      "status": "accepted",
+      "confidence": 0.75,
+      "directObservation": true,
+      "range": {
+        "startMs": 2000,
+        "endMs": 5000,
+        "originalStartMs": 2000,
+        "originalEndMs": 5000,
+        "normalizedStartFrame": 60,
+        "normalizedEndFrame": 150
+      }
+    },
+    {
+      "id": "motion-background",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "secondary_motion",
+      "statement": "Background patrons move naturally: one stretches on a mat, one walks past, one does tricep pushdowns.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 6139,
+        "originalStartMs": 0,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "text-caption",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "text",
+      "statement": "Top-center white sans-serif caption with drop shadow: 'when you just saw the funniest video of your life on your fyp but it's time to lock in for your next set', fading out near 4s.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 4000,
+        "originalStartMs": 0,
+        "originalEndMs": 4000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 120
+      }
+    },
+    {
+      "id": "audio-laugh",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "audio",
+      "statement": "Viral wheezing laugh sound effect.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 2000,
+        "originalStartMs": 0,
+        "originalEndMs": 2000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 60
+      }
+    },
+    {
+      "id": "audio-exhale",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "audio",
+      "statement": "Audio cuts to a deep focus exhale as the handle is gripped.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 3000,
+        "endMs": 5000,
+        "originalStartMs": 3000,
+        "originalEndMs": 5000,
+        "normalizedStartFrame": 90,
+        "normalizedEndFrame": 150
+      }
+    },
+    {
+      "id": "risk-identity",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "risk",
+      "statement": "One identifiable adult performer appears throughout.",
+      "status": "accepted",
+      "confidence": 0.95,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 6139,
+        "originalStartMs": 0,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "risk-bystanders",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "risk",
+      "statement": "Background gym patrons are real, incidental people.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 6139,
+        "originalStartMs": 0,
+        "originalEndMs": 6139,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 184
+      }
+    },
+    {
+      "id": "risk-audio",
+      "artifactId": "tiktok-7662235938470415629:gemini-static",
+      "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+      "kind": "risk",
+      "statement": "The laugh sound effect is a recognizable, likely licensed audio asset.",
+      "status": "accepted",
+      "confidence": 0.7,
+      "directObservation": false,
+      "range": {
+        "startMs": 0,
+        "endMs": 2000,
+        "originalStartMs": 0,
+        "originalEndMs": 2000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 60
+      }
+    }
+  ],
+  "map": {
+    "schemaVersion": "0.2.0",
+    "id": "fm-phone-laugh-to-lock-in-gym-v1",
+    "revision": 1,
+    "sourceAssetId": "tiktok-7662235938470415629",
+    "sourceContentSha256": "109ef835243b09a4d3e5817ff870ad381cfee31c917842b738b5382ae2fc3171",
+    "durationMs": 6139,
+    "rightsStatus": "unverified",
+    "requestedChange": "Recreate the single-take laugh-to-lock-in structure with a new fictional subject, rights-safe deterministic caption text, and authorized audio.",
+    "playback": {
+      "classification": "real_time",
+      "estimatedMultiplier": 1,
+      "confidence": 0.8,
+      "cues": [
+        "Natural walking speed of background patrons",
+        "Realistic cable movement and handle settling"
+      ],
+      "evidenceIds": [
+        "playback-real-time"
+      ]
+    },
+    "lighting": {
+      "summary": "Even cool overhead commercial gym lighting with mirror reflections; no dynamic light events.",
+      "sources": [
+        "Overhead commercial gym fluorescent/LED panels"
+      ],
+      "direction": "Top-down, even",
+      "colorTemperature": "Cool-neutral",
+      "exposure": "Balanced phone auto-exposure",
+      "contrast": "Low-medium",
+      "captureArtifacts": [
+        "Phone auto-exposure",
+        "Mirror reflections in background"
+      ],
+      "events": [],
+      "evidenceIds": [
+        "lighting-gym"
+      ]
+    },
+    "secondaryMotion": {
+      "summary": "Laughter drives ponytail bounce; the body reorientation shifts loose sweatpants; background patrons move independently.",
+      "fields": [
+        {
+          "id": "ponytail",
+          "element": "High ponytail",
+          "driver": "inertia",
+          "range": {
+            "startMs": 0,
+            "endMs": 2000,
+            "originalStartMs": 0,
+            "originalEndMs": 2000,
+            "normalizedStartFrame": 0,
+            "normalizedEndFrame": 60
+          },
+          "direction": "Vertical bounce",
+          "amplitude": "Low-medium",
+          "cadence": "Follows laugh convulsions",
+          "coupling": "Coupled to head motion during laughter",
+          "confidence": 0.8,
+          "directObservation": true,
+          "evidenceIds": [
+            "motion-ponytail"
+          ]
+        },
+        {
+          "id": "sweatpants",
+          "element": "Oversized sweatpants",
+          "driver": "contact",
+          "range": {
+            "startMs": 2000,
+            "endMs": 5000,
+            "originalStartMs": 2000,
+            "originalEndMs": 5000,
+            "normalizedStartFrame": 60,
+            "normalizedEndFrame": 150
+          },
+          "direction": "Fabric slides with hip and leg reorientation",
+          "amplitude": "Low",
+          "cadence": "One shift during the turn onto the bench",
+          "coupling": "Coupled to primary body reorientation",
+          "confidence": 0.75,
+          "directObservation": true,
+          "evidenceIds": [
+            "motion-sweatpants"
+          ]
+        },
+        {
+          "id": "background-patrons",
+          "element": "Background gym patrons",
+          "driver": "unknown",
+          "range": {
+            "startMs": 0,
+            "endMs": 6139,
+            "originalStartMs": 0,
+            "originalEndMs": 6139,
+            "normalizedStartFrame": 0,
+            "normalizedEndFrame": 184
+          },
+          "direction": "Mixed: stretching, walking left to right, pushdown cadence",
+          "amplitude": "Low in frame",
+          "cadence": "Independent natural rhythm",
+          "coupling": "Independent of the primary action",
+          "confidence": 0.8,
+          "directObservation": true,
+          "evidenceIds": [
+            "motion-background"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "motion-ponytail",
+        "motion-sweatpants",
+        "motion-background"
+      ]
+    },
+    "editSegments": [
+      {
+        "id": "seg-1",
+        "sourceShotId": "laugh-to-lock-in",
+        "range": {
+          "startMs": 0,
+          "endMs": 6139,
+          "originalStartMs": 0,
+          "originalEndMs": 6139,
+          "normalizedStartFrame": 0,
+          "normalizedEndFrame": 184
+        },
+        "durationMs": 6139,
+        "transitionIn": "none",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "estimatedMultiplier": 1,
+          "confidence": 0.8,
+          "cues": [
+            "Background patron walking cadence",
+            "Cable handle settling"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "shot-single-take",
+          "probe-no-cuts"
+        ]
+      }
+    ],
+    "creatorWorkflow": {
+      "captureMode": "single_take",
+      "confidence": 0.95,
+      "rationale": [
+        "Deterministic scene detection found no cut",
+        "Camera, wardrobe, props, and background remain continuous"
+      ],
+      "subjectAnchor": "Generate one fictional rights-safe subject anchor in the same seated cable-row pose; never reuse the source likeness.",
+      "persistentElements": [
+        "Subject identity",
+        "Static phone framing",
+        "Cable-row bench and handle",
+        "Gym environment"
+      ],
+      "shotLocalElements": [
+        "Laugh expression",
+        "Phone handling",
+        "Grip and gaze"
+      ],
+      "deterministicLayers": [
+        "Top-center hook caption rendered deterministically through 3650ms",
+        "Authorized audio remuxed without transcoding"
+      ],
+      "setups": [
+        {
+          "id": "setup-cable-row",
+          "sourceShotIds": [
+            "laugh-to-lock-in"
+          ],
+          "cameraSignature": "Static phone at seated eye/chest level, medium shot, 9:16",
+          "environmentSignature": "Commercial gym with red brick accent wall, mirrors, cable-row station foreground",
+          "subjectState": "Seated on cable-row bench, laughing then locked in",
+          "wardrobeState": "Navy open-side tank, oversized light-grey sweatpants, white shoes",
+          "lightingState": "Even cool overhead gym lighting",
+          "evidenceIds": [
+            "shot-single-take",
+            "continuity-wardrobe",
+            "lighting-gym"
+          ]
+        }
+      ],
+      "generationUnits": [
+        {
+          "id": "unit-laugh-to-lock-in",
+          "sourceShotIds": [
+            "laugh-to-lock-in"
+          ],
+          "setupId": "setup-cable-row",
+          "range": {
+            "startMs": 0,
+            "endMs": 6139,
+            "originalStartMs": 0,
+            "originalEndMs": 6139,
+            "normalizedStartFrame": 0,
+            "normalizedEndFrame": 184
+          },
+          "targetDurationMs": 6139,
+          "providerDurationMs": 6600,
+          "anchorFrameStrategy": "generate",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "none",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Conform the generated take to the 6139ms source timeline by frame count before finishing.",
+          "preserve": [
+            "Static framing",
+            "Laugh to deadpan to grip action order",
+            "Real-time cadence",
+            "Gym setting"
+          ],
+          "change": [
+            "Subject identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "shot-single-take",
+            "action-laugh",
+            "action-stop",
+            "action-lock-in"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "shot-single-take",
+        "probe-no-cuts",
+        "camera-static"
+      ]
+    },
+    "beats": [
+      {
+        "id": "beat-hook",
+        "role": "hook",
+        "range": {
+          "startMs": 0,
+          "endMs": 2000,
+          "originalStartMs": 0,
+          "originalEndMs": 2000,
+          "normalizedStartFrame": 0,
+          "normalizedEndFrame": 60
+        },
+        "description": "Uncontrollable laughter at the phone",
+        "evidenceIds": [
+          "action-laugh"
+        ]
+      },
+      {
+        "id": "beat-turn",
+        "role": "escalation",
+        "range": {
+          "startMs": 2000,
+          "endMs": 3000,
+          "originalStartMs": 2000,
+          "originalEndMs": 3000,
+          "normalizedStartFrame": 60,
+          "normalizedEndFrame": 90
+        },
+        "description": "Abrupt deadpan and phone set down",
+        "evidenceIds": [
+          "action-stop"
+        ]
+      },
+      {
+        "id": "beat-payoff",
+        "role": "payoff",
+        "range": {
+          "startMs": 3000,
+          "endMs": 5000,
+          "originalStartMs": 3000,
+          "originalEndMs": 5000,
+          "normalizedStartFrame": 90,
+          "normalizedEndFrame": 150
+        },
+        "description": "Square up, plant feet, grip the handle, locked-in gaze",
+        "evidenceIds": [
+          "action-lock-in"
+        ]
+      },
+      {
+        "id": "beat-hold",
+        "role": "other",
+        "range": {
+          "startMs": 5000,
+          "endMs": 6139,
+          "originalStartMs": 5000,
+          "originalEndMs": 6139,
+          "normalizedStartFrame": 150,
+          "normalizedEndFrame": 184
+        },
+        "description": "Hold the locked-in grip",
+        "evidenceIds": [
+          "action-hold"
+        ]
+      }
+    ],
+    "directives": [
+      {
+        "id": "preserve-camera",
+        "kind": "preserve",
+        "description": "Static phone framing at seated eye level",
+        "evidenceIds": [
+          "camera-static"
+        ]
+      },
+      {
+        "id": "preserve-action-order",
+        "kind": "preserve",
+        "description": "Laugh, abrupt stop, phone down, square up, grip",
+        "evidenceIds": [
+          "action-laugh",
+          "action-stop",
+          "action-lock-in"
+        ]
+      },
+      {
+        "id": "preserve-playback",
+        "kind": "preserve",
+        "description": "Natural real-time cadence",
+        "evidenceIds": [
+          "playback-real-time"
+        ]
+      },
+      {
+        "id": "change-identity",
+        "kind": "change",
+        "description": "Replace the performer with a fictional subject",
+        "evidenceIds": [
+          "risk-identity"
+        ]
+      },
+      {
+        "id": "exclude-in-frame-text",
+        "kind": "exclude",
+        "description": "Do not generate the caption in frame; render it deterministically",
+        "evidenceIds": [
+          "text-caption"
+        ]
+      },
+      {
+        "id": "no-identity-transfer",
+        "kind": "must_not_transfer",
+        "description": "Source performer likeness",
+        "evidenceIds": [
+          "risk-identity"
+        ]
+      },
+      {
+        "id": "no-bystander-transfer",
+        "kind": "must_not_transfer",
+        "description": "Real background patrons",
+        "evidenceIds": [
+          "risk-bystanders"
+        ]
+      },
+      {
+        "id": "no-audio-transfer",
+        "kind": "must_not_transfer",
+        "description": "Licensed laugh sound effect without authorization",
+        "evidenceIds": [
+          "risk-audio"
+        ]
+      }
+    ],
+    "risks": [
+      {
+        "id": "risk-identity-1",
+        "kind": "identity",
+        "disposition": "exclude",
+        "evidenceIds": [
+          "risk-identity"
+        ]
+      },
+      {
+        "id": "risk-bystander-1",
+        "kind": "bystander",
+        "disposition": "exclude",
+        "evidenceIds": [
+          "risk-bystanders"
+        ]
+      },
+      {
+        "id": "risk-music-1",
+        "kind": "music",
+        "disposition": "exclude",
+        "evidenceIds": [
+          "risk-audio"
+        ]
+      }
+    ]
+  },
+  "fidelityMapHash": "d792607c67c22199c61c0275a014ca5e94db1a7746957051136a0123f98873ab"
+}

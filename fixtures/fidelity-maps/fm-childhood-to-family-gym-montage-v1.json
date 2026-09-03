@@ -1,0 +1,2060 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "fm-childhood-to-family-gym-montage-v1",
+  "recipeId": "childhood-to-family-gym-montage",
+  "family": "multi-take posing montage",
+  "materializedFrom": {
+    "analyzerOutput": "output/source-analysis/instagram-DcyIWPYtZkV/gemini-static.json",
+    "sceneDetectLog": "output/source-analysis/instagram-DcyIWPYtZkV/scene-detect.log",
+    "sourceProbe": {
+      "sha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "durationMs": 12933,
+      "fps": 30,
+      "frames": 388,
+      "width": 720,
+      "height": 1280
+    },
+    "materializedAt": "2026-09-03",
+    "notes": [
+      "The video stream holds 388 frames at 30 fps (12933ms); the container reports 13070ms because the audio track runs longer. The map covers the video timeline.",
+      "The shared CLI output does not persist the prompt version; analysis-v10-capture-workflow is taken from the recipe provenance for this source.",
+      "FFmpeg select=scene showinfo found 16 scene changes; those timestamps are the system of record for hard cuts and produce 17 segments matching the recipe's 17 shots.",
+      "The static analyzer reported nine coarse shots at whole-second resolution; deterministic probes split its first 'photo' shot into five reframes of the printed photograph.",
+      "The childhood photograph depicts minors; the minor risk is recorded as excluded and can never be authorized.",
+      "Rights remain unverified; analysis-only until a durable rights record exists."
+    ],
+    "historicalRun": {
+      "manifest": "output/source-analysis/instagram-DcyIWPYtZkV/run-v1/gymlevels-final-manifest.json",
+      "shotPlan": "output/source-analysis/instagram-DcyIWPYtZkV/run-v1/shot-plan.json",
+      "providerUnitsSubmitted": 12,
+      "providerRequestedDurationSecondsPerUnit": 5,
+      "finalDurationSeconds": 12.955011,
+      "finalFps": 30
+    }
+  },
+  "artifacts": [
+    {
+      "schemaVersion": "0.2.0",
+      "id": "instagram-DcyIWPYtZkV:gemini-static",
+      "workspaceId": "phase-0-evidence",
+      "sourceAssetId": "instagram-DcyIWPYtZkV",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "normalizedContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "durationMs": 12933,
+      "normalizedFps": 30,
+      "originalOffsetMs": 0,
+      "providerRun": {
+        "provider": "google-gemini",
+        "exactModel": "gemini-3.7-flash",
+        "mode": "static",
+        "runId": "mc-video-analyze-static-2026-09-03T14:42:18Z",
+        "promptVersion": "analysis-v10-capture-workflow",
+        "latencyMs": 14479,
+        "inputTokens": 1493,
+        "outputTokens": 981,
+        "thoughtTokens": 582,
+        "toolUseTokens": 0,
+        "processingCalls": 0
+      },
+      "structuredPayloadArtifactId": "output/source-analysis/instagram-DcyIWPYtZkV/gemini-static.json",
+      "summaryTruncated": false
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "id": "instagram-DcyIWPYtZkV:ffmpeg-scene-detect",
+      "workspaceId": "phase-0-evidence",
+      "sourceAssetId": "instagram-DcyIWPYtZkV",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "normalizedContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "durationMs": 12933,
+      "normalizedFps": 30,
+      "originalOffsetMs": 0,
+      "providerRun": {
+        "provider": "ffmpeg",
+        "exactModel": "Lavf62.12.100",
+        "mode": "deterministic",
+        "runId": "ffmpeg-select-scene-showinfo-instagram-DcyIWPYtZkV",
+        "promptVersion": "ffmpeg-select-scene-showinfo-v1",
+        "latencyMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "thoughtTokens": 0,
+        "toolUseTokens": 0,
+        "processingCalls": 0
+      },
+      "structuredPayloadArtifactId": "output/source-analysis/instagram-DcyIWPYtZkV/scene-detect.log",
+      "summaryTruncated": false
+    }
+  ],
+  "evidence": [
+    {
+      "id": "probe-cuts",
+      "artifactId": "instagram-DcyIWPYtZkV:ffmpeg-scene-detect",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "edit",
+      "statement": "FFmpeg select=scene showinfo detected scene changes at 1733ms, 2233ms, 2833ms, 3800ms, 5000ms, 5467ms, 5967ms, 6600ms, 7300ms, 7800ms, 8400ms, 8867ms, 9467ms, 10033ms, 11067ms, 11533ms: 16 hard cuts, 17 segments.",
+      "status": "accepted",
+      "confidence": 0.98,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 12933,
+        "originalStartMs": 0,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "shot-photo-section",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "shot",
+      "statement": "Close-up pans/zooms over a vintage printed photograph of five children lined up in front of a Christmas tree.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 5000,
+        "originalStartMs": 0,
+        "originalEndMs": 5000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 150
+      }
+    },
+    {
+      "id": "shot-montage",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "shot",
+      "statement": "Rapid synchronized gym posing clips of the five adult siblings, hard cuts on the audio downbeats.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 5000,
+        "endMs": 12933,
+        "originalStartMs": 5000,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 150,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "workflow-multi-take",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "shot",
+      "statement": "Multi-take montage: low-to-eye-level frontal and profile static shots, smartphone tripod-mounted in mirror shots.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 12933,
+        "originalStartMs": 0,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "playback-real-time",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "playback_rate",
+      "statement": "Real-time capture across all shots; pose snaps and arm flares land on the percussive downbeats.",
+      "status": "accepted",
+      "confidence": 0.7,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 12933,
+        "originalStartMs": 0,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "action-photo-pan",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "action",
+      "statement": "Camera pans and zooms over the physical photograph.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 5000,
+        "originalStartMs": 0,
+        "originalEndMs": 5000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 150
+      }
+    },
+    {
+      "id": "action-posing",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "action",
+      "statement": "Coordinated static flexes, sequential 'thousand-hand' arm flares, stacked bicep curls, and deadpan stares into the camera or mirror.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 5000,
+        "endMs": 12933,
+        "originalStartMs": 5000,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 150,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "action-final-lineup",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "action",
+      "statement": "Final neutral front-facing lineup in oversized hoodies and streetwear.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 11533,
+        "endMs": 12933,
+        "originalStartMs": 11533,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 346,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "continuity-identity",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "continuity",
+      "statement": "The five adults correspond to the five children in the opening photograph; one female and four male siblings persist across shots.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "directObservation": false,
+      "range": {
+        "startMs": 0,
+        "endMs": 12933,
+        "originalStartMs": 0,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "continuity-wardrobe",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "continuity",
+      "statement": "Black tank tops, compression shirts, oversized hoodies, and baggy cargo/track pants recur across the montage.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "directObservation": true,
+      "range": {
+        "startMs": 5000,
+        "endMs": 12933,
+        "originalStartMs": 5000,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 150,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "camera-static-per-shot",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "other",
+      "statement": "Each montage shot uses a static low-to-eye-level camera; the mirror shots show a phone on a tripod.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 5000,
+        "endMs": 12933,
+        "originalStartMs": 5000,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 150,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "lighting-gym",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "lighting",
+      "statement": "Overhead directional gym spotlighting creates dramatic physique shadows against dark ambient backgrounds.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 5000,
+        "endMs": 12933,
+        "originalStartMs": 5000,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 150,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "lighting-photo",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "lighting",
+      "statement": "The photograph section shows flat, scan-like illumination of a printed print rather than scene lighting.",
+      "status": "accepted",
+      "confidence": 0.7,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 5000,
+        "originalStartMs": 0,
+        "originalEndMs": 5000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 150
+      }
+    },
+    {
+      "id": "motion-none",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "secondary_motion",
+      "statement": "Beyond the primary choreography, no material secondary motion (hair, fabric swing, particles, background motion) was observed.",
+      "status": "accepted",
+      "confidence": 0.65,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 12933,
+        "originalStartMs": 0,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "text-caption",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "text",
+      "statement": "'pov: the whole family locked in' in white sans-serif with a dark stroke, centered upper frame.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 5000,
+        "originalStartMs": 0,
+        "originalEndMs": 5000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 150
+      }
+    },
+    {
+      "id": "text-signage",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "text",
+      "statement": "Gym wall signage 'UNGLA...' visible in mirror reflections.",
+      "status": "accepted",
+      "confidence": 0.7,
+      "directObservation": true,
+      "range": {
+        "startMs": 8400,
+        "endMs": 10033,
+        "originalStartMs": 8400,
+        "originalEndMs": 10033,
+        "normalizedStartFrame": 252,
+        "normalizedEndFrame": 301
+      }
+    },
+    {
+      "id": "audio-track",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "audio",
+      "statement": "No dialogue; fast rhythmic vocal-percussion track; cuts and choreography snap on its downbeats from 5s onward.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 12933,
+        "originalStartMs": 0,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "risk-identity",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "risk",
+      "statement": "Five identifiable real adults appear.",
+      "status": "accepted",
+      "confidence": 0.95,
+      "directObservation": true,
+      "range": {
+        "startMs": 5000,
+        "endMs": 12933,
+        "originalStartMs": 5000,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 150,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
+      "id": "risk-minor",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "risk",
+      "statement": "The opening photograph depicts minors.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 5000,
+        "originalStartMs": 0,
+        "originalEndMs": 5000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 150
+      }
+    },
+    {
+      "id": "risk-logo",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "risk",
+      "statement": "Gym signage is partially legible in reflections.",
+      "status": "accepted",
+      "confidence": 0.7,
+      "directObservation": true,
+      "range": {
+        "startMs": 8400,
+        "endMs": 10033,
+        "originalStartMs": 8400,
+        "originalEndMs": 10033,
+        "normalizedStartFrame": 252,
+        "normalizedEndFrame": 301
+      }
+    },
+    {
+      "id": "risk-music",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "risk",
+      "statement": "The rhythmic track is likely licensed music.",
+      "status": "accepted",
+      "confidence": 0.7,
+      "directObservation": false,
+      "range": {
+        "startMs": 0,
+        "endMs": 12933,
+        "originalStartMs": 0,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 388
+      }
+    }
+  ],
+  "map": {
+    "schemaVersion": "0.2.0",
+    "id": "fm-childhood-to-family-gym-montage-v1",
+    "revision": 1,
+    "sourceAssetId": "instagram-DcyIWPYtZkV",
+    "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+    "durationMs": 12933,
+    "rightsStatus": "unverified",
+    "requestedChange": "Recreate the childhood-photo-to-gym-montage structure with a fictional family, the same 17-shot cut grammar, and a deterministic caption.",
+    "playback": {
+      "classification": "real_time",
+      "estimatedMultiplier": 1,
+      "confidence": 0.7,
+      "cues": [
+        "Pose snaps and arm flares align to audio downbeats",
+        "Analyzer reported real-time capture across all shots"
+      ],
+      "evidenceIds": [
+        "playback-real-time"
+      ]
+    },
+    "lighting": {
+      "summary": "Overhead directional gym spotlighting with dark ambient backgrounds in the montage; the opening photograph section is flat print illumination.",
+      "sources": [
+        "Overhead directional gym spotlights",
+        "Mirror-reflected spill"
+      ],
+      "direction": "Top-down directional",
+      "colorTemperature": "Neutral-warm gym lighting; unknown for the print",
+      "exposure": "Exposed for the subjects; backgrounds fall to black",
+      "contrast": "High",
+      "captureArtifacts": [
+        "Phone tripod mirror reflections",
+        "Compression in dark backgrounds"
+      ],
+      "events": [
+        {
+          "range": {
+            "startMs": 0,
+            "endMs": 5000,
+            "originalStartMs": 0,
+            "originalEndMs": 5000,
+            "normalizedStartFrame": 0,
+            "normalizedEndFrame": 150
+          },
+          "description": "Photograph section: flat scan-like print illumination replaces scene lighting.",
+          "evidenceIds": [
+            "lighting-photo"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "lighting-gym",
+        "lighting-photo"
+      ]
+    },
+    "secondaryMotion": {
+      "summary": "The audit found no material secondary motion beyond the primary choreography; fabric and hair movement are negligible at this shot length.",
+      "fields": [],
+      "evidenceIds": [
+        "motion-none"
+      ]
+    },
+    "editSegments": [
+      {
+        "id": "seg-01",
+        "sourceShotId": "photo-wide",
+        "range": {
+          "startMs": 0,
+          "endMs": 1733,
+          "originalStartMs": 0,
+          "originalEndMs": 1733,
+          "normalizedStartFrame": 0,
+          "normalizedEndFrame": 52
+        },
+        "durationMs": 1733,
+        "transitionIn": "none",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-photo-section"
+        ]
+      },
+      {
+        "id": "seg-02",
+        "sourceShotId": "photo-left",
+        "range": {
+          "startMs": 1733,
+          "endMs": 2233,
+          "originalStartMs": 1733,
+          "originalEndMs": 2233,
+          "normalizedStartFrame": 52,
+          "normalizedEndFrame": 67
+        },
+        "durationMs": 500,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-photo-section"
+        ]
+      },
+      {
+        "id": "seg-03",
+        "sourceShotId": "photo-right",
+        "range": {
+          "startMs": 2233,
+          "endMs": 2833,
+          "originalStartMs": 2233,
+          "originalEndMs": 2833,
+          "normalizedStartFrame": 67,
+          "normalizedEndFrame": 85
+        },
+        "durationMs": 600,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-photo-section"
+        ]
+      },
+      {
+        "id": "seg-04",
+        "sourceShotId": "photo-medium",
+        "range": {
+          "startMs": 2833,
+          "endMs": 3800,
+          "originalStartMs": 2833,
+          "originalEndMs": 3800,
+          "normalizedStartFrame": 85,
+          "normalizedEndFrame": 114
+        },
+        "durationMs": 967,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-photo-section"
+        ]
+      },
+      {
+        "id": "seg-05",
+        "sourceShotId": "photo-return",
+        "range": {
+          "startMs": 3800,
+          "endMs": 5000,
+          "originalStartMs": 3800,
+          "originalEndMs": 5000,
+          "normalizedStartFrame": 114,
+          "normalizedEndFrame": 150
+        },
+        "durationMs": 1200,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-photo-section"
+        ]
+      },
+      {
+        "id": "seg-06",
+        "sourceShotId": "adult-frontal",
+        "range": {
+          "startMs": 5000,
+          "endMs": 5467,
+          "originalStartMs": 5000,
+          "originalEndMs": 5467,
+          "normalizedStartFrame": 150,
+          "normalizedEndFrame": 164
+        },
+        "durationMs": 467,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-07",
+        "sourceShotId": "adult-profile",
+        "range": {
+          "startMs": 5467,
+          "endMs": 5967,
+          "originalStartMs": 5467,
+          "originalEndMs": 5967,
+          "normalizedStartFrame": 164,
+          "normalizedEndFrame": 179
+        },
+        "durationMs": 500,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-08",
+        "sourceShotId": "stacked-arms",
+        "range": {
+          "startMs": 5967,
+          "endMs": 6600,
+          "originalStartMs": 5967,
+          "originalEndMs": 6600,
+          "normalizedStartFrame": 179,
+          "normalizedEndFrame": 198
+        },
+        "durationMs": 633,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-09",
+        "sourceShotId": "fan-arms-one",
+        "range": {
+          "startMs": 6600,
+          "endMs": 7300,
+          "originalStartMs": 6600,
+          "originalEndMs": 7300,
+          "normalizedStartFrame": 198,
+          "normalizedEndFrame": 219
+        },
+        "durationMs": 700,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-10",
+        "sourceShotId": "group-reset",
+        "range": {
+          "startMs": 7300,
+          "endMs": 7800,
+          "originalStartMs": 7300,
+          "originalEndMs": 7800,
+          "normalizedStartFrame": 219,
+          "normalizedEndFrame": 234
+        },
+        "durationMs": 500,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-11",
+        "sourceShotId": "seated-flex",
+        "range": {
+          "startMs": 7800,
+          "endMs": 8400,
+          "originalStartMs": 7800,
+          "originalEndMs": 8400,
+          "normalizedStartFrame": 234,
+          "normalizedEndFrame": 252
+        },
+        "durationMs": 600,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-12",
+        "sourceShotId": "fan-arms-two",
+        "range": {
+          "startMs": 8400,
+          "endMs": 8867,
+          "originalStartMs": 8400,
+          "originalEndMs": 8867,
+          "normalizedStartFrame": 252,
+          "normalizedEndFrame": 266
+        },
+        "durationMs": 467,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-13",
+        "sourceShotId": "seated-fan",
+        "range": {
+          "startMs": 8867,
+          "endMs": 9467,
+          "originalStartMs": 8867,
+          "originalEndMs": 9467,
+          "normalizedStartFrame": 266,
+          "normalizedEndFrame": 284
+        },
+        "durationMs": 600,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-14",
+        "sourceShotId": "vertical-stack",
+        "range": {
+          "startMs": 9467,
+          "endMs": 10033,
+          "originalStartMs": 9467,
+          "originalEndMs": 10033,
+          "normalizedStartFrame": 284,
+          "normalizedEndFrame": 301
+        },
+        "durationMs": 566,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-15",
+        "sourceShotId": "dumbbell-cluster",
+        "range": {
+          "startMs": 10033,
+          "endMs": 11067,
+          "originalStartMs": 10033,
+          "originalEndMs": 11067,
+          "normalizedStartFrame": 301,
+          "normalizedEndFrame": 332
+        },
+        "durationMs": 1034,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-16",
+        "sourceShotId": "low-symmetry",
+        "range": {
+          "startMs": 11067,
+          "endMs": 11533,
+          "originalStartMs": 11067,
+          "originalEndMs": 11533,
+          "normalizedStartFrame": 332,
+          "normalizedEndFrame": 346
+        },
+        "durationMs": 466,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      },
+      {
+        "id": "seg-17",
+        "sourceShotId": "hoodie-final",
+        "range": {
+          "startMs": 11533,
+          "endMs": 12933,
+          "originalStartMs": 11533,
+          "originalEndMs": 12933,
+          "normalizedStartFrame": 346,
+          "normalizedEndFrame": 388
+        },
+        "durationMs": 1400,
+        "transitionIn": "hard_cut",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "real_time",
+          "confidence": 0.7,
+          "cues": [
+            "Pose snaps align to audio downbeats",
+            "No visible frame duplication or ramp reported"
+          ],
+          "evidenceIds": [
+            "playback-real-time"
+          ]
+        },
+        "evidenceIds": [
+          "probe-cuts",
+          "shot-montage"
+        ]
+      }
+    ],
+    "creatorWorkflow": {
+      "captureMode": "multi_take",
+      "confidence": 0.95,
+      "rationale": [
+        "Sixteen deterministic hard cuts",
+        "Each montage shot resets camera position and group blocking",
+        "Photograph section is a separate capture of a printed image"
+      ],
+      "subjectAnchor": "Generate one fictional family identity set (five fictional siblings with stable distinct faces); never reuse the source family or the children in the photograph.",
+      "persistentElements": [
+        "Five-sibling group composition",
+        "Dark gym environment",
+        "Beat-aligned cut cadence"
+      ],
+      "shotLocalElements": [
+        "Pose",
+        "Camera height",
+        "Wardrobe variation",
+        "Mirror versus direct framing"
+      ],
+      "deterministicLayers": [
+        "Upper-center caption over the photograph section",
+        "Hard cuts at deterministic timestamps",
+        "Authorized audio stream copy"
+      ],
+      "setups": [
+        {
+          "id": "setup-photo",
+          "sourceShotIds": [
+            "photo-wide",
+            "photo-left",
+            "photo-right",
+            "photo-medium",
+            "photo-return"
+          ],
+          "cameraSignature": "Handheld close-up pans and zooms over a printed photograph",
+          "environmentSignature": "Printed childhood photograph, Christmas tree backdrop in the print",
+          "subjectState": "Five children in the photograph",
+          "wardrobeState": "Childhood clothing in the print",
+          "lightingState": "Flat scan-like print illumination",
+          "evidenceIds": [
+            "shot-photo-section",
+            "action-photo-pan",
+            "lighting-photo"
+          ]
+        },
+        {
+          "id": "setup-adult-frontal",
+          "sourceShotIds": [
+            "adult-frontal"
+          ],
+          "cameraSignature": "Static frontal phone, eye level, five-sibling lineup",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-adult-profile",
+          "sourceShotIds": [
+            "adult-profile"
+          ],
+          "cameraSignature": "Static low-angle profile lineup",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-stacked-arms",
+          "sourceShotIds": [
+            "stacked-arms"
+          ],
+          "cameraSignature": "Static frontal phone on tripod, siblings stacked behind the center subject",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-fan-arms-one",
+          "sourceShotIds": [
+            "fan-arms-one"
+          ],
+          "cameraSignature": "Static frontal mirror shot, arms fanning sequentially",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-group-reset",
+          "sourceShotIds": [
+            "group-reset"
+          ],
+          "cameraSignature": "Static wide frontal, half-circle lineup",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-seated-flex",
+          "sourceShotIds": [
+            "seated-flex"
+          ],
+          "cameraSignature": "Static frontal, seated center subject with standing siblings",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-fan-arms-two",
+          "sourceShotIds": [
+            "fan-arms-two"
+          ],
+          "cameraSignature": "Static frontal mirror shot, second arm-fan variation",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-seated-fan",
+          "sourceShotIds": [
+            "seated-fan"
+          ],
+          "cameraSignature": "Static frontal, seated fan-out pose",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-vertical-stack",
+          "sourceShotIds": [
+            "vertical-stack"
+          ],
+          "cameraSignature": "Static frontal, vertical stacked flex",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-dumbbell-cluster",
+          "sourceShotIds": [
+            "dumbbell-cluster"
+          ],
+          "cameraSignature": "Static frontal, cluster holding dumbbells",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-low-symmetry",
+          "sourceShotIds": [
+            "low-symmetry"
+          ],
+          "cameraSignature": "Static low-angle symmetrical lineup",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        },
+        {
+          "id": "setup-hoodie-final",
+          "sourceShotIds": [
+            "hoodie-final"
+          ],
+          "cameraSignature": "Static frontal, neutral lineup in hoodies",
+          "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
+          "subjectState": "Five adult siblings, neutral stance",
+          "wardrobeState": "Oversized hoodies and streetwear",
+          "lightingState": "Overhead directional spotlighting, dark ambient background",
+          "evidenceIds": [
+            "shot-montage",
+            "camera-static-per-shot",
+            "lighting-gym"
+          ]
+        }
+      ],
+      "generationUnits": [
+        {
+          "id": "unit-photo-wide",
+          "sourceShotIds": [
+            "photo-wide"
+          ],
+          "setupId": "setup-photo",
+          "range": {
+            "startMs": 0,
+            "endMs": 1733,
+            "originalStartMs": 0,
+            "originalEndMs": 1733,
+            "normalizedStartFrame": 0,
+            "normalizedEndFrame": 52
+          },
+          "targetDurationMs": 1733,
+          "providerDurationMs": 1733,
+          "anchorFrameStrategy": "generate",
+          "motionStrategy": "deterministic_source",
+          "transitionIn": "none",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Deterministic reframe of the generated family photograph over 1733ms.",
+          "preserve": [
+            "Photograph pan/zoom rhythm",
+            "Caption timing"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-photo-section",
+            "action-photo-pan"
+          ]
+        },
+        {
+          "id": "unit-photo-left",
+          "sourceShotIds": [
+            "photo-left"
+          ],
+          "setupId": "setup-photo",
+          "range": {
+            "startMs": 1733,
+            "endMs": 2233,
+            "originalStartMs": 1733,
+            "originalEndMs": 2233,
+            "normalizedStartFrame": 52,
+            "normalizedEndFrame": 67
+          },
+          "targetDurationMs": 500,
+          "providerDurationMs": 500,
+          "anchorFrameStrategy": "generate",
+          "motionStrategy": "deterministic_source",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Deterministic reframe of the generated family photograph over 500ms.",
+          "preserve": [
+            "Photograph pan/zoom rhythm",
+            "Caption timing"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-photo-section",
+            "action-photo-pan"
+          ]
+        },
+        {
+          "id": "unit-photo-right",
+          "sourceShotIds": [
+            "photo-right"
+          ],
+          "setupId": "setup-photo",
+          "range": {
+            "startMs": 2233,
+            "endMs": 2833,
+            "originalStartMs": 2233,
+            "originalEndMs": 2833,
+            "normalizedStartFrame": 67,
+            "normalizedEndFrame": 85
+          },
+          "targetDurationMs": 600,
+          "providerDurationMs": 600,
+          "anchorFrameStrategy": "generate",
+          "motionStrategy": "deterministic_source",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Deterministic reframe of the generated family photograph over 600ms.",
+          "preserve": [
+            "Photograph pan/zoom rhythm",
+            "Caption timing"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-photo-section",
+            "action-photo-pan"
+          ]
+        },
+        {
+          "id": "unit-photo-medium",
+          "sourceShotIds": [
+            "photo-medium"
+          ],
+          "setupId": "setup-photo",
+          "range": {
+            "startMs": 2833,
+            "endMs": 3800,
+            "originalStartMs": 2833,
+            "originalEndMs": 3800,
+            "normalizedStartFrame": 85,
+            "normalizedEndFrame": 114
+          },
+          "targetDurationMs": 967,
+          "providerDurationMs": 967,
+          "anchorFrameStrategy": "generate",
+          "motionStrategy": "deterministic_source",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Deterministic reframe of the generated family photograph over 967ms.",
+          "preserve": [
+            "Photograph pan/zoom rhythm",
+            "Caption timing"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-photo-section",
+            "action-photo-pan"
+          ]
+        },
+        {
+          "id": "unit-photo-return",
+          "sourceShotIds": [
+            "photo-return"
+          ],
+          "setupId": "setup-photo",
+          "range": {
+            "startMs": 3800,
+            "endMs": 5000,
+            "originalStartMs": 3800,
+            "originalEndMs": 5000,
+            "normalizedStartFrame": 114,
+            "normalizedEndFrame": 150
+          },
+          "targetDurationMs": 1200,
+          "providerDurationMs": 1200,
+          "anchorFrameStrategy": "generate",
+          "motionStrategy": "deterministic_source",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Deterministic reframe of the generated family photograph over 1200ms.",
+          "preserve": [
+            "Photograph pan/zoom rhythm",
+            "Caption timing"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-photo-section",
+            "action-photo-pan"
+          ]
+        },
+        {
+          "id": "unit-adult-frontal",
+          "sourceShotIds": [
+            "adult-frontal"
+          ],
+          "setupId": "setup-adult-frontal",
+          "range": {
+            "startMs": 5000,
+            "endMs": 5467,
+            "originalStartMs": 5000,
+            "originalEndMs": 5467,
+            "normalizedStartFrame": 150,
+            "normalizedEndFrame": 164
+          },
+          "targetDurationMs": 467,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "generate",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 467ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-adult-profile",
+          "sourceShotIds": [
+            "adult-profile"
+          ],
+          "setupId": "setup-adult-profile",
+          "range": {
+            "startMs": 5467,
+            "endMs": 5967,
+            "originalStartMs": 5467,
+            "originalEndMs": 5967,
+            "normalizedStartFrame": 164,
+            "normalizedEndFrame": 179
+          },
+          "targetDurationMs": 500,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 500ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-stacked-arms",
+          "sourceShotIds": [
+            "stacked-arms"
+          ],
+          "setupId": "setup-stacked-arms",
+          "range": {
+            "startMs": 5967,
+            "endMs": 6600,
+            "originalStartMs": 5967,
+            "originalEndMs": 6600,
+            "normalizedStartFrame": 179,
+            "normalizedEndFrame": 198
+          },
+          "targetDurationMs": 633,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 633ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-fan-arms-one",
+          "sourceShotIds": [
+            "fan-arms-one"
+          ],
+          "setupId": "setup-fan-arms-one",
+          "range": {
+            "startMs": 6600,
+            "endMs": 7300,
+            "originalStartMs": 6600,
+            "originalEndMs": 7300,
+            "normalizedStartFrame": 198,
+            "normalizedEndFrame": 219
+          },
+          "targetDurationMs": 700,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 700ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-group-reset",
+          "sourceShotIds": [
+            "group-reset"
+          ],
+          "setupId": "setup-group-reset",
+          "range": {
+            "startMs": 7300,
+            "endMs": 7800,
+            "originalStartMs": 7300,
+            "originalEndMs": 7800,
+            "normalizedStartFrame": 219,
+            "normalizedEndFrame": 234
+          },
+          "targetDurationMs": 500,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 500ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-seated-flex",
+          "sourceShotIds": [
+            "seated-flex"
+          ],
+          "setupId": "setup-seated-flex",
+          "range": {
+            "startMs": 7800,
+            "endMs": 8400,
+            "originalStartMs": 7800,
+            "originalEndMs": 8400,
+            "normalizedStartFrame": 234,
+            "normalizedEndFrame": 252
+          },
+          "targetDurationMs": 600,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 600ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-fan-arms-two",
+          "sourceShotIds": [
+            "fan-arms-two"
+          ],
+          "setupId": "setup-fan-arms-two",
+          "range": {
+            "startMs": 8400,
+            "endMs": 8867,
+            "originalStartMs": 8400,
+            "originalEndMs": 8867,
+            "normalizedStartFrame": 252,
+            "normalizedEndFrame": 266
+          },
+          "targetDurationMs": 467,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 467ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-seated-fan",
+          "sourceShotIds": [
+            "seated-fan"
+          ],
+          "setupId": "setup-seated-fan",
+          "range": {
+            "startMs": 8867,
+            "endMs": 9467,
+            "originalStartMs": 8867,
+            "originalEndMs": 9467,
+            "normalizedStartFrame": 266,
+            "normalizedEndFrame": 284
+          },
+          "targetDurationMs": 600,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 600ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-vertical-stack",
+          "sourceShotIds": [
+            "vertical-stack"
+          ],
+          "setupId": "setup-vertical-stack",
+          "range": {
+            "startMs": 9467,
+            "endMs": 10033,
+            "originalStartMs": 9467,
+            "originalEndMs": 10033,
+            "normalizedStartFrame": 284,
+            "normalizedEndFrame": 301
+          },
+          "targetDurationMs": 566,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 566ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-dumbbell-cluster",
+          "sourceShotIds": [
+            "dumbbell-cluster"
+          ],
+          "setupId": "setup-dumbbell-cluster",
+          "range": {
+            "startMs": 10033,
+            "endMs": 11067,
+            "originalStartMs": 10033,
+            "originalEndMs": 11067,
+            "normalizedStartFrame": 301,
+            "normalizedEndFrame": 332
+          },
+          "targetDurationMs": 1034,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 1034ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-low-symmetry",
+          "sourceShotIds": [
+            "low-symmetry"
+          ],
+          "setupId": "setup-low-symmetry",
+          "range": {
+            "startMs": 11067,
+            "endMs": 11533,
+            "originalStartMs": 11067,
+            "originalEndMs": 11533,
+            "normalizedStartFrame": 332,
+            "normalizedEndFrame": 346
+          },
+          "targetDurationMs": 466,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 466ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        },
+        {
+          "id": "unit-hoodie-final",
+          "sourceShotIds": [
+            "hoodie-final"
+          ],
+          "setupId": "setup-hoodie-final",
+          "range": {
+            "startMs": 11533,
+            "endMs": 12933,
+            "originalStartMs": 11533,
+            "originalEndMs": 12933,
+            "normalizedStartFrame": 346,
+            "normalizedEndFrame": 388
+          },
+          "targetDurationMs": 1400,
+          "providerDurationMs": 5000,
+          "anchorFrameStrategy": "edit_subject_anchor",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "hard_cut",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 5000ms generated take to the 1400ms source segment.",
+          "preserve": [
+            "Static camera",
+            "Coordinated pose timing on the beat",
+            "Group composition"
+          ],
+          "change": [
+            "Family identity",
+            "Caption text"
+          ],
+          "evidenceIds": [
+            "probe-cuts",
+            "shot-montage",
+            "action-posing"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "probe-cuts",
+        "workflow-multi-take",
+        "camera-static-per-shot"
+      ]
+    },
+    "beats": [
+      {
+        "id": "beat-hook",
+        "role": "hook",
+        "range": {
+          "startMs": 0,
+          "endMs": 5000,
+          "originalStartMs": 0,
+          "originalEndMs": 5000,
+          "normalizedStartFrame": 0,
+          "normalizedEndFrame": 150
+        },
+        "description": "Childhood photograph with the 'locked in' caption",
+        "evidenceIds": [
+          "shot-photo-section",
+          "text-caption"
+        ]
+      },
+      {
+        "id": "beat-escalation",
+        "role": "escalation",
+        "range": {
+          "startMs": 5000,
+          "endMs": 11533,
+          "originalStartMs": 5000,
+          "originalEndMs": 11533,
+          "normalizedStartFrame": 150,
+          "normalizedEndFrame": 346
+        },
+        "description": "Beat-synced posing montage",
+        "evidenceIds": [
+          "action-posing"
+        ]
+      },
+      {
+        "id": "beat-payoff",
+        "role": "payoff",
+        "range": {
+          "startMs": 11533,
+          "endMs": 12933,
+          "originalStartMs": 11533,
+          "originalEndMs": 12933,
+          "normalizedStartFrame": 346,
+          "normalizedEndFrame": 388
+        },
+        "description": "Neutral hoodie lineup",
+        "evidenceIds": [
+          "action-final-lineup"
+        ]
+      }
+    ],
+    "directives": [
+      {
+        "id": "preserve-cut-grammar",
+        "kind": "preserve",
+        "description": "Sixteen hard cuts at the deterministic timestamps",
+        "evidenceIds": [
+          "probe-cuts"
+        ]
+      },
+      {
+        "id": "preserve-camera",
+        "kind": "preserve",
+        "description": "Static per-shot camera and group blocking",
+        "evidenceIds": [
+          "camera-static-per-shot"
+        ]
+      },
+      {
+        "id": "preserve-playback",
+        "kind": "preserve",
+        "description": "Real-time pose snaps on the beat",
+        "evidenceIds": [
+          "playback-real-time"
+        ]
+      },
+      {
+        "id": "change-family",
+        "kind": "change",
+        "description": "Fictional family identities",
+        "evidenceIds": [
+          "risk-identity"
+        ]
+      },
+      {
+        "id": "exclude-in-frame-text",
+        "kind": "exclude",
+        "description": "Do not generate the caption or signage in frame",
+        "evidenceIds": [
+          "text-caption",
+          "text-signage"
+        ]
+      },
+      {
+        "id": "no-identity-transfer",
+        "kind": "must_not_transfer",
+        "description": "Source siblings' likenesses",
+        "evidenceIds": [
+          "risk-identity"
+        ]
+      },
+      {
+        "id": "no-minor-transfer",
+        "kind": "must_not_transfer",
+        "description": "Children in the photograph",
+        "evidenceIds": [
+          "risk-minor"
+        ]
+      },
+      {
+        "id": "no-logo-transfer",
+        "kind": "must_not_transfer",
+        "description": "Gym signage",
+        "evidenceIds": [
+          "risk-logo"
+        ]
+      },
+      {
+        "id": "no-music-transfer",
+        "kind": "must_not_transfer",
+        "description": "Licensed rhythmic track",
+        "evidenceIds": [
+          "risk-music"
+        ]
+      }
+    ],
+    "risks": [
+      {
+        "id": "risk-identity-1",
+        "kind": "identity",
+        "disposition": "exclude",
+        "evidenceIds": [
+          "risk-identity"
+        ]
+      },
+      {
+        "id": "risk-minor-1",
+        "kind": "minor",
+        "disposition": "exclude",
+        "evidenceIds": [
+          "risk-minor"
+        ]
+      },
+      {
+        "id": "risk-logo-1",
+        "kind": "logo",
+        "disposition": "exclude",
+        "evidenceIds": [
+          "risk-logo"
+        ]
+      },
+      {
+        "id": "risk-music-1",
+        "kind": "music",
+        "disposition": "exclude",
+        "evidenceIds": [
+          "risk-music"
+        ]
+      }
+    ]
+  },
+  "fidelityMapHash": "e003a259a09975d209f22d633a0933375e202ce196f06b2864310b4a8cf505d3"
+}

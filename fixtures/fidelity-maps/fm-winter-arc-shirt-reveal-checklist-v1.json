@@ -1,0 +1,777 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "fm-winter-arc-shirt-reveal-checklist-v1",
+  "recipeId": "winter-arc-shirt-reveal-checklist",
+  "family": "single-take product/checklist integration",
+  "materializedFrom": {
+    "analyzerOutput": "output/source-analysis/instagram-DcqCAe_Jl9o/gemini-static.json",
+    "sceneDetectLog": "output/source-analysis/instagram-DcqCAe_Jl9o/scene-detect.log",
+    "sourceProbe": {
+      "sha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "durationMs": 9517,
+      "fps": 30,
+      "frames": 282,
+      "width": 720,
+      "height": 1280
+    },
+    "materializedAt": "2026-09-03",
+    "notes": [
+      "The delivered file is constant 30 fps; the analysis copy is the source itself.",
+      "The shared CLI output does not persist the prompt version; analysis-v10-capture-workflow is taken from the recipe provenance for this source.",
+      "FFmpeg select=scene showinfo produced zero frames: single take, no hard cuts.",
+      "The analyzer could not rule out a slight speed ramp during shirt removal (1.0x-1.1x) and no independent temporal anchor was verified, so playback is recorded as unknown rather than forced to real time.",
+      "Rights remain unverified; analysis-only until a durable rights record exists."
+    ],
+    "historicalRun": {
+      "manifest": "output/source-analysis/instagram-DcyIWPYtZkV/run-v1/gymlevels-final-manifest.json",
+      "finalDurationSeconds": 9.402993,
+      "finalFps": 30,
+      "deterministicFinishing": [
+        "source frame-count timing",
+        "caption overlays",
+        "original AAC stream copy"
+      ]
+    }
+  },
+  "artifacts": [
+    {
+      "schemaVersion": "0.2.0",
+      "id": "instagram-DcqCAe_Jl9o:gemini-static",
+      "workspaceId": "phase-0-evidence",
+      "sourceAssetId": "instagram-DcqCAe_Jl9o",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "normalizedContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "durationMs": 9517,
+      "normalizedFps": 30,
+      "originalOffsetMs": 0,
+      "providerRun": {
+        "provider": "google-gemini",
+        "exactModel": "gemini-3.7-flash",
+        "mode": "static",
+        "runId": "mc-video-analyze-static-2026-09-03T14:42:15Z",
+        "promptVersion": "analysis-v10-capture-workflow",
+        "latencyMs": 11666,
+        "inputTokens": 1118,
+        "outputTokens": 709,
+        "thoughtTokens": 116,
+        "toolUseTokens": 0,
+        "processingCalls": 0
+      },
+      "structuredPayloadArtifactId": "output/source-analysis/instagram-DcqCAe_Jl9o/gemini-static.json",
+      "summaryTruncated": false
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "id": "instagram-DcqCAe_Jl9o:ffmpeg-scene-detect",
+      "workspaceId": "phase-0-evidence",
+      "sourceAssetId": "instagram-DcqCAe_Jl9o",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "normalizedContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "durationMs": 9517,
+      "normalizedFps": 30,
+      "originalOffsetMs": 0,
+      "providerRun": {
+        "provider": "ffmpeg",
+        "exactModel": "Lavf62.12.100",
+        "mode": "deterministic",
+        "runId": "ffmpeg-select-scene-showinfo-instagram-DcqCAe_Jl9o",
+        "promptVersion": "ffmpeg-select-scene-showinfo-v1",
+        "latencyMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "thoughtTokens": 0,
+        "toolUseTokens": 0,
+        "processingCalls": 0
+      },
+      "structuredPayloadArtifactId": "output/source-analysis/instagram-DcqCAe_Jl9o/scene-detect.log",
+      "summaryTruncated": false
+    }
+  ],
+  "evidence": [
+    {
+      "id": "shot-single-take",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "shot",
+      "statement": "Single take from a locked-off camera at waist/chest height, rear framing, 9:16, high-contrast monochrome.",
+      "status": "accepted",
+      "confidence": 0.95,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "probe-no-cuts",
+      "artifactId": "instagram-DcqCAe_Jl9o:ffmpeg-scene-detect",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "edit",
+      "statement": "FFmpeg select=scene showinfo emitted zero scene-change frames across 282 frames: no hard cuts.",
+      "status": "accepted",
+      "confidence": 0.98,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "playback-ambiguous",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "playback_rate",
+      "statement": "Appears real-time or a slight speed ramp during shirt removal (~1.0x-1.1x); exact ramp cannot be verified without independent anchors.",
+      "status": "accepted",
+      "confidence": 0.5,
+      "directObservation": false,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "action-reach",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "action",
+      "statement": "Subject faces away wearing a T-shirt and backwards cap, reaches up to grab the collar and sleeves.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 2000,
+        "originalStartMs": 0,
+        "originalEndMs": 2000,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 60
+      }
+    },
+    {
+      "id": "action-remove",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "action",
+      "statement": "Subject pulls the shirt over the head and removes it.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 2000,
+        "endMs": 5000,
+        "originalStartMs": 2000,
+        "originalEndMs": 5000,
+        "normalizedStartFrame": 60,
+        "normalizedEndFrame": 150
+      }
+    },
+    {
+      "id": "action-flex",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "action",
+      "statement": "Subject flexes back and lats into a back double-biceps / lat-spread pose.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 5000,
+        "endMs": 7000,
+        "originalStartMs": 5000,
+        "originalEndMs": 7000,
+        "normalizedStartFrame": 150,
+        "normalizedEndFrame": 210
+      }
+    },
+    {
+      "id": "action-hold",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "action",
+      "statement": "Arms drop slightly, head turns slightly, posture holds as the clip ends or loops.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 7000,
+        "endMs": 9517,
+        "originalStartMs": 7000,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 210,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "continuity-wardrobe",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "continuity",
+      "statement": "Dark shorts and backwards cap persist; the dark T-shirt is removed mid-take.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "camera-locked",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "other",
+      "statement": "Locked-off static tripod or surface-mounted camera; framing never changes.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "lighting-backlit",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "lighting",
+      "statement": "Subject is heavily silhouetted against a bright backlit gym entrance / glass partition; monochrome high-contrast grade with crushed shadows.",
+      "status": "accepted",
+      "confidence": 0.9,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "motion-shirt",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "secondary_motion",
+      "statement": "Shirt fabric deforms and swings as it is pulled over the head.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "directObservation": true,
+      "range": {
+        "startMs": 2000,
+        "endMs": 5000,
+        "originalStartMs": 2000,
+        "originalEndMs": 5000,
+        "normalizedStartFrame": 60,
+        "normalizedEndFrame": 150
+      }
+    },
+    {
+      "id": "motion-none-else",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "secondary_motion",
+      "statement": "No other independently moving elements observed: no hair, foliage, particles, or background motion.",
+      "status": "accepted",
+      "confidence": 0.7,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "text-checklist",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "text",
+      "statement": "Persistent centered yellow display-font overlay: 'Winter Arc challenge' plus ten numbered rules.",
+      "status": "accepted",
+      "confidence": 0.95,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "text-signage",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "text",
+      "statement": "Background gym signage 'HOUDA FITNESS' on the glass door and partially legible notices.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "audio-music",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "audio",
+      "statement": "No dialogue; upbeat phonk/electronic instrumental with heavy bass hits.",
+      "status": "accepted",
+      "confidence": 0.85,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "risk-identity",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "risk",
+      "statement": "An athletic adult appears; identity is obscured by the backlit silhouette but still a real person.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "risk-logo",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "risk",
+      "statement": "Gym branding 'HOUDA FITNESS' is visible on the glass door.",
+      "status": "accepted",
+      "confidence": 0.8,
+      "directObservation": true,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    },
+    {
+      "id": "risk-music",
+      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+      "kind": "risk",
+      "statement": "The instrumental track is likely licensed music.",
+      "status": "accepted",
+      "confidence": 0.7,
+      "directObservation": false,
+      "range": {
+        "startMs": 0,
+        "endMs": 9517,
+        "originalStartMs": 0,
+        "originalEndMs": 9517,
+        "normalizedStartFrame": 0,
+        "normalizedEndFrame": 286
+      }
+    }
+  ],
+  "map": {
+    "schemaVersion": "0.2.0",
+    "id": "fm-winter-arc-shirt-reveal-checklist-v1",
+    "revision": 1,
+    "sourceAssetId": "instagram-DcqCAe_Jl9o",
+    "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
+    "durationMs": 9517,
+    "rightsStatus": "unverified",
+    "requestedChange": "Recreate the backlit single-take shirt-removal reveal with a fictional subject and a deterministic checklist overlay carrying the requested product wording.",
+    "playback": {
+      "classification": "unknown",
+      "confidence": 0.5,
+      "cues": [
+        "Analyzer flagged a possible 1.0x-1.1x ramp during shirt removal",
+        "No independent temporal anchor (gait, blink, settling) was verifiable in the silhouette"
+      ],
+      "evidenceIds": [
+        "playback-ambiguous"
+      ]
+    },
+    "lighting": {
+      "summary": "Strong rear backlight through a glass partition renders the subject as a silhouette; monochrome grade with crushed shadows.",
+      "sources": [
+        "Bright backlight through the gym entrance glass partition",
+        "Minimal front fill: unknown"
+      ],
+      "direction": "Rear, slightly above the subject",
+      "colorTemperature": "Monochrome grade; native temperature unknown",
+      "exposure": "Exposed for the backlight; subject crushed toward black",
+      "contrast": "Very high",
+      "captureArtifacts": [
+        "Monochrome grade",
+        "Crushed shadows",
+        "Clipped highlights in the backlight"
+      ],
+      "events": [],
+      "evidenceIds": [
+        "lighting-backlit"
+      ]
+    },
+    "secondaryMotion": {
+      "summary": "The removed shirt is the only material secondary-motion field; the audit found no other independently moving elements.",
+      "fields": [
+        {
+          "id": "shirt",
+          "element": "Removed T-shirt fabric",
+          "driver": "contact",
+          "range": {
+            "startMs": 2000,
+            "endMs": 5000,
+            "originalStartMs": 2000,
+            "originalEndMs": 5000,
+            "normalizedStartFrame": 60,
+            "normalizedEndFrame": 150
+          },
+          "direction": "Upward over the head then to the side",
+          "amplitude": "High while in hand",
+          "cadence": "One continuous pull",
+          "coupling": "Driven by the arms; alters the silhouette edge against the backlight",
+          "confidence": 0.8,
+          "directObservation": true,
+          "evidenceIds": [
+            "motion-shirt"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "motion-shirt",
+        "motion-none-else"
+      ]
+    },
+    "editSegments": [
+      {
+        "id": "seg-1",
+        "sourceShotId": "shirt-removal-back-reveal",
+        "range": {
+          "startMs": 0,
+          "endMs": 9517,
+          "originalStartMs": 0,
+          "originalEndMs": 9517,
+          "normalizedStartFrame": 0,
+          "normalizedEndFrame": 286
+        },
+        "durationMs": 9517,
+        "transitionIn": "none",
+        "transitionDurationMs": 0,
+        "playback": {
+          "classification": "unknown",
+          "confidence": 0.5,
+          "cues": [
+            "Possible slight ramp during removal",
+            "No verifiable anchor"
+          ],
+          "evidenceIds": [
+            "playback-ambiguous"
+          ]
+        },
+        "evidenceIds": [
+          "shot-single-take",
+          "probe-no-cuts"
+        ]
+      }
+    ],
+    "creatorWorkflow": {
+      "captureMode": "single_take",
+      "confidence": 0.95,
+      "rationale": [
+        "Deterministic scene detection found no cut",
+        "Locked camera, environment, and lighting are continuous"
+      ],
+      "subjectAnchor": "Generate one fictional rights-safe rear-view subject anchor; the silhouette must not reproduce the source person.",
+      "persistentElements": [
+        "Locked rear framing",
+        "Backlit monochrome lighting",
+        "Gym glass partition environment"
+      ],
+      "shotLocalElements": [
+        "Shirt in hand",
+        "Flex pose"
+      ],
+      "deterministicLayers": [
+        "Centered checklist text rendered deterministically for the full duration",
+        "Authorized audio"
+      ],
+      "setups": [
+        {
+          "id": "setup-backlit-rear",
+          "sourceShotIds": [
+            "shirt-removal-back-reveal"
+          ],
+          "cameraSignature": "Locked-off static camera at waist/chest height, rear framing, 9:16",
+          "environmentSignature": "Gym entrance with bright glass partition and signage behind the subject",
+          "subjectState": "Standing facing away, removes shirt then flexes",
+          "wardrobeState": "Dark T-shirt (removed), dark shorts, backwards cap",
+          "lightingState": "Rear backlight, monochrome, crushed shadows",
+          "evidenceIds": [
+            "shot-single-take",
+            "lighting-backlit",
+            "continuity-wardrobe"
+          ]
+        }
+      ],
+      "generationUnits": [
+        {
+          "id": "unit-shirt-removal-back-reveal",
+          "sourceShotIds": [
+            "shirt-removal-back-reveal"
+          ],
+          "setupId": "setup-backlit-rear",
+          "range": {
+            "startMs": 0,
+            "endMs": 9517,
+            "originalStartMs": 0,
+            "originalEndMs": 9517,
+            "normalizedStartFrame": 0,
+            "normalizedEndFrame": 286
+          },
+          "targetDurationMs": 9517,
+          "providerDurationMs": 10000,
+          "anchorFrameStrategy": "generate",
+          "motionStrategy": "image_to_video",
+          "transitionIn": "none",
+          "transitionDurationMs": 0,
+          "trimInstruction": "Trim the 10000ms generated take to the 9517ms source timeline.",
+          "preserve": [
+            "Locked rear framing",
+            "Backlit silhouette",
+            "Reach, remove, flex, hold action order",
+            "Monochrome grade"
+          ],
+          "change": [
+            "Subject identity",
+            "Checklist wording"
+          ],
+          "evidenceIds": [
+            "shot-single-take",
+            "action-reach",
+            "action-remove",
+            "action-flex",
+            "action-hold"
+          ]
+        }
+      ],
+      "evidenceIds": [
+        "shot-single-take",
+        "probe-no-cuts",
+        "camera-locked"
+      ]
+    },
+    "beats": [
+      {
+        "id": "beat-hook",
+        "role": "hook",
+        "range": {
+          "startMs": 0,
+          "endMs": 2000,
+          "originalStartMs": 0,
+          "originalEndMs": 2000,
+          "normalizedStartFrame": 0,
+          "normalizedEndFrame": 60
+        },
+        "description": "Rear view, reach for the collar",
+        "evidenceIds": [
+          "action-reach"
+        ]
+      },
+      {
+        "id": "beat-escalation",
+        "role": "escalation",
+        "range": {
+          "startMs": 2000,
+          "endMs": 5000,
+          "originalStartMs": 2000,
+          "originalEndMs": 5000,
+          "normalizedStartFrame": 60,
+          "normalizedEndFrame": 150
+        },
+        "description": "Shirt pulled over the head",
+        "evidenceIds": [
+          "action-remove"
+        ]
+      },
+      {
+        "id": "beat-payoff",
+        "role": "payoff",
+        "range": {
+          "startMs": 5000,
+          "endMs": 7000,
+          "originalStartMs": 5000,
+          "originalEndMs": 7000,
+          "normalizedStartFrame": 150,
+          "normalizedEndFrame": 210
+        },
+        "description": "Back flex against the backlight",
+        "evidenceIds": [
+          "action-flex"
+        ]
+      },
+      {
+        "id": "beat-hold",
+        "role": "other",
+        "range": {
+          "startMs": 7000,
+          "endMs": 9517,
+          "originalStartMs": 7000,
+          "originalEndMs": 9517,
+          "normalizedStartFrame": 210,
+          "normalizedEndFrame": 286
+        },
+        "description": "Relaxed hold to the end",
+        "evidenceIds": [
+          "action-hold"
+        ]
+      }
+    ],
+    "directives": [
+      {
+        "id": "preserve-camera",
+        "kind": "preserve",
+        "description": "Locked rear framing",
+        "evidenceIds": [
+          "camera-locked"
+        ]
+      },
+      {
+        "id": "preserve-lighting",
+        "kind": "preserve",
+        "description": "Backlit monochrome silhouette",
+        "evidenceIds": [
+          "lighting-backlit"
+        ]
+      },
+      {
+        "id": "preserve-action-order",
+        "kind": "preserve",
+        "description": "Reach, remove, flex, hold",
+        "evidenceIds": [
+          "action-reach",
+          "action-remove",
+          "action-flex",
+          "action-hold"
+        ]
+      },
+      {
+        "id": "change-identity",
+        "kind": "change",
+        "description": "Fictional subject",
+        "evidenceIds": [
+          "risk-identity"
+        ]
+      },
+      {
+        "id": "change-checklist",
+        "kind": "change",
+        "description": "Requested checklist and product wording",
+        "evidenceIds": [
+          "text-checklist"
+        ]
+      },
+      {
+        "id": "exclude-in-frame-text",
+        "kind": "exclude",
+        "description": "Do not generate the checklist or signage in frame",
+        "evidenceIds": [
+          "text-checklist",
+          "text-signage"
+        ]
+      },
+      {
+        "id": "no-identity-transfer",
+        "kind": "must_not_transfer",
+        "description": "Source subject likeness",
+        "evidenceIds": [
+          "risk-identity"
+        ]
+      },
+      {
+        "id": "no-logo-transfer",
+        "kind": "must_not_transfer",
+        "description": "Gym branding",
+        "evidenceIds": [
+          "risk-logo"
+        ]
+      },
+      {
+        "id": "no-music-transfer",
+        "kind": "must_not_transfer",
+        "description": "Licensed instrumental",
+        "evidenceIds": [
+          "risk-music"
+        ]
+      }
+    ],
+    "risks": [
+      {
+        "id": "risk-identity-1",
+        "kind": "identity",
+        "disposition": "exclude",
+        "evidenceIds": [
+          "risk-identity"
+        ]
+      },
+      {
+        "id": "risk-logo-1",
+        "kind": "logo",
+        "disposition": "exclude",
+        "evidenceIds": [
+          "risk-logo"
+        ]
+      },
+      {
+        "id": "risk-music-1",
+        "kind": "music",
+        "disposition": "exclude",
+        "evidenceIds": [
+          "risk-music"
+        ]
+      }
+    ]
+  },
+  "fidelityMapHash": "0e312cab94bcde687aa7b00dfaf853b35a5cb22b7665287f072f52857bb52c5a"
+}
