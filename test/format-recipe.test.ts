@@ -6,7 +6,7 @@ import { assertFormatRecipe, compileFormatRecipe, formatRecipeHash, type FormatR
 const fixtureUrl = new URL("../fixtures/formats/hand-wipe-fitness-transformation-v1.json", import.meta.url);
 const recipe = JSON.parse(readFileSync(fixtureUrl, "utf8")) as FormatRecipe;
 const familyRecipe = JSON.parse(readFileSync(new URL("../fixtures/formats/childhood-to-family-gym-montage-v1.json", import.meta.url), "utf8")) as FormatRecipe;
-const alternatingRecipe = JSON.parse(readFileSync(new URL("../fixtures/formats/alternating-gym-transformation-montage-v1.json", import.meta.url), "utf8")) as FormatRecipe;
+const checklistLoopRecipe = JSON.parse(readFileSync(new URL("../fixtures/formats/incline-press-checklist-loop-v1.json", import.meta.url), "utf8")) as FormatRecipe;
 const winterRecipe = JSON.parse(readFileSync(new URL("../fixtures/formats/winter-arc-shirt-reveal-checklist-v1.json", import.meta.url), "utf8")) as FormatRecipe;
 
 test("the discovered Harrison format is a valid content-addressed recipe", () => {
@@ -20,7 +20,7 @@ test("every processed format is stored and valid, with quality status preserved"
   const recipes = readdirSync(directory)
     .filter((name) => name.endsWith(".json"))
     .map((name) => JSON.parse(readFileSync(new URL(name, directory), "utf8")) as FormatRecipe);
-  assert.equal(recipes.length, 9);
+  assert.equal(recipes.length, 10);
   recipes.forEach((item) => assert.doesNotThrow(() => assertFormatRecipe(item), item.id));
   assert.deepEqual(
     recipes.filter((item) => item.validation.status === "validated").map((item) => item.id).sort(),
@@ -28,7 +28,7 @@ test("every processed format is stored and valid, with quality status preserved"
   );
   assert.deepEqual(
     recipes.filter((item) => item.validation.status === "draft").map((item) => item.id).sort(),
-    ["kitchen-finger-count-palm-wipe", "night-car-list-reaction"],
+    ["incline-press-checklist-loop", "kitchen-finger-count-palm-wipe", "night-car-list-reaction"],
   );
 });
 
@@ -78,20 +78,18 @@ test("the Winter Arc recipe compiles a natural product-tracking checklist insert
   assert.match(plan.deterministicLayers[0]!.instruction, /Track workouts in GymLevels/);
 });
 
-test("the originating TikTok transformation format preserves exercise and walking without undressing", () => {
-  assert.equal(alternatingRecipe.provenance.sourceAssetId, "tiktok-7669463719331630349");
-  assert.equal(alternatingRecipe.shots.length, 8);
-  assert.deepEqual(alternatingRecipe.shots.map((shot) => shot.id), [
-    "adduction-before", "adduction-after", "press-before", "press-after",
-    "treadmill-before", "treadmill-after", "low-angle-before", "low-angle-after",
-  ]);
-  const grammar = JSON.stringify({
-    description: alternatingRecipe.description,
-    lockedGrammar: alternatingRecipe.lockedGrammar,
-    shots: alternatingRecipe.shots,
-  }).toLowerCase();
-  assert.match(grammar, /walk/);
-  assert.doesNotMatch(grammar, /undress|shirt removal|removes? (?:a |the )?shirt|pull(?:s)? (?:a |the )?shirt/);
+test("the original TikTok checklist format preserves the sped-up press and walking background action", () => {
+  assert.equal(checklistLoopRecipe.provenance.sourceAssetId, "tiktok-7665182154300624142");
+  assert.equal(checklistLoopRecipe.shots.length, 1);
+  const plan = compileFormatRecipe(checklistLoopRecipe, {
+    userPrompt: "Use the original checklist format with a fictional woman and GymLevels.",
+    values: { gender_presentation: "female", product_promo: "Track every workout in GymLevels." },
+  });
+  assert.match(plan.shots[0]!.motionPrompt, /five to six cycles/i);
+  assert.match(plan.shots[0]!.motionPrompt, /walks about four strides/i);
+  assert.match(plan.shots[0]!.motionPrompt, /2\.0x to 2\.5x accelerated/i);
+  assert.doesNotMatch(plan.shots[0]!.motionPrompt, /remove (?:a |the )?shirt|pull (?:a |the )?shirt/);
+  assert.match(plan.deterministicLayers[0]!.instruction, /GymLevels/);
 });
 
 test("recipe compilation rejects undeclared or unresolved prompt variables", () => {

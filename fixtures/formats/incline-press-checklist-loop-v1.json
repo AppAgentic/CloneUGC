@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "incline-press-checklist-loop",
+  "revision": 1,
+  "name": "Sped-up gym checklist loop",
+  "description": "One fixed low-angle gym take combines a fast repeated exercise, visible background activity including a person walking, and a persistent advice checklist; the clip ends mid-action to encourage replay.",
+  "provenance": {
+    "sourceAssetId": "tiktok-7665182154300624142",
+    "sourceEvidenceHash": "dc32ed98a738b82becdaf5ee9a637c86db5c238588a7adbaf5d12f2a658d7581",
+    "extractionPromptVersion": "analysis-v5-speed-corrected",
+    "rightsTransferPolicy": "structure_only"
+  },
+  "durationMs": 5117,
+  "aspectRatio": "9:16",
+  "lockedGrammar": [
+    "One uninterrupted fixed low and wide vertical gym take",
+    "Foreground subject performs repeated incline dumbbell presses",
+    "Background person bends, picks up a bottle, turns, and walks several strides",
+    "Whole clip is visibly accelerated at approximately 2.0x to 2.5x",
+    "Persistent centered headline and short checklist remain readable throughout",
+    "Clip ends during the repeated action so the checklist encourages replay",
+    "No shirt removal, reveal, flex transition, cut, or camera move"
+  ],
+  "variables": [
+    {"key":"subject_identity","kind":"subject_identity","description":"One fictional or authorized foreground exerciser.","required":false,"defaultValue":"a clearly new fictional adult exerciser with a consistent face and body","examples":["a fictional athletic woman","a fictional muscular man"]},
+    {"key":"gender_presentation","kind":"gender_presentation","description":"Gender presentation of the foreground exerciser.","required":false,"defaultValue":"male","examples":["male","female","androgynous"]},
+    {"key":"wardrobe","kind":"wardrobe","description":"Unbranded foreground training clothes.","required":false,"defaultValue":"a charcoal T-shirt, pale loose training trousers and black shoes","examples":["black gymwear","green training clothes"]},
+    {"key":"exercise","kind":"other","description":"Fast repeated exercise used as the foreground retention anchor.","required":false,"defaultValue":"heavy incline dumbbell press","examples":["incline dumbbell press","seated shoulder press"]},
+    {"key":"setting","kind":"setting","description":"Ordinary commercial-gym composition with depth for background activity.","required":false,"defaultValue":"a black-and-orange commercial gym with a blue incline bench, stairs and equipment behind","examples":["a compact local gym","a bright hotel gym"]},
+    {"key":"background_activity","kind":"other","description":"A short independent background action that makes the accelerated playback legible.","required":false,"defaultValue":"one background adult bends to pick up a bottle, turns and walks about four strides","examples":["a person walks behind the bench","a patron reracks a weight and exits frame"]},
+    {"key":"checklist_title","kind":"caption_text","description":"Exact persistent headline.","required":false,"defaultValue":"Getting lean is EASY.","examples":["Consistency is simple.","My non-negotiables"]},
+    {"key":"checklist_items","kind":"caption_text","description":"Exact concise checklist lines.","required":false,"defaultValue":"Fast till noon.; Last meal at 8.; Whole foods only.; Water only.; 10-12k steps.; Gym 4 times a week.; 7-9 hrs sleep.","examples":["seven fitness habits","five training rules"]},
+    {"key":"product_promo","kind":"product_promo","description":"Optional natural replacement for one tracking-oriented checklist item.","required":false,"defaultValue":"Track every workout in GymLevels.","examples":["Plan sessions in GymLevels.","Log workouts in GymLevels."]},
+    {"key":"audio_policy","kind":"audio","description":"Authorized source audio or rights-safe replacement.","required":false,"defaultValue":"new royalty-cleared rhythmic gym audio","examples":["reuse authorized source audio","no music"]}
+  ],
+  "shots": [
+    {
+      "id": "sped-up-exercise-checklist-take",
+      "startMs": 0,
+      "endMs": 5117,
+      "transitionIn": "none",
+      "transitionDurationMs": 0,
+      "generationStrategy": "image_to_video",
+      "providerDurationMs": 10000,
+      "anchorPromptTemplate": "Show {{subject_identity}} with {{gender_presentation}} presentation on a blue incline bench in {{setting}}, wearing {{wardrobe}}, holding two large dumbbells at the lower press position. Use a fixed low and wide vertical phone camera with clear background depth.",
+      "motionPromptTemplate": "In one continuous capture, perform about five to six cycles of {{exercise}} over 5.117 seconds while {{background_activity}}. Animate both layers at a coherent approximately 2.0x to 2.5x accelerated playback cadence. Keep the subject, dumbbells, bench, background geometry and camera stable. End during the ongoing press motion. No shirt removal, clothing change, reveal, flex transition, cut, zoom or camera movement.",
+      "lockedTraits": ["single fixed take","accelerated foreground and background cadence","walking background action","looping mid-action ending","no shirt removal"]
+    }
+  ],
+  "deterministicLayers": [
+    {"id":"checklist","kind":"caption","startMs":0,"endMs":5117,"template":"Render the exact persistent centered headline ‘{{checklist_title}}’ and checklist ‘{{checklist_items}}’. If product integration is requested, naturally replace one tracking-oriented line with ‘{{product_promo}}’."},
+    {"id":"soundtrack","kind":"audio","startMs":0,"endMs":5117,"template":"Apply {{audio_policy}} without changing the accelerated visual timeline."}
+  ],
+  "promptExamples": [
+    "Use the sped-up gym checklist loop with a fictional woman, keep a person walking in the background, and make one line ‘Track every workout in GymLevels’."
+  ],
+  "validation": {
+    "status": "draft",
+    "qaMode": "hybrid",
+    "sourceOutputId": "seedance-7665182154300624142-speed-mismatch",
+    "notes": [
+      "Corrected from the original TikTok and archived comparison evidence: the source is an incline dumbbell press with a walking background person, not a shirt-removal reveal.",
+      "The earlier reconstruction preserved composition and text but rendered natural-speed motion; direct comparison found approximately 2.0x to 2.5x source acceleration, so this recipe remains draft until the corrected H3 workflow validates both foreground and background cadence.",
+      "The recipe transfers structure only; source identity, bystander, gym branding, checklist wording and audio remain separately gated."
+    ]
+  }
+}

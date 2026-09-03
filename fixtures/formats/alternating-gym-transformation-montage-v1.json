@@ -3,7 +3,7 @@
   "id": "alternating-gym-transformation-montage",
   "revision": 1,
   "name": "Alternating gym transformation montage",
-  "description": "Eight source-timed gym shots alternate the same identity between before and after states across matched exercise setups: hip adduction, shoulder press, side-profile treadmill walking, and low-angle treadmill walking.",
+  "description": "Eight source-timed gym shots alternate the same identity between before and after states across matched exercise setups.",
   "provenance": {"sourceAssetId":"tiktok-7669463719331630349","sourceRunManifestSha256":"df11d4d386d090b4a8219ca8a1dfc4c5f2b091b54a17ed88e8c7779454dc60d4","extractionPromptVersion":"analysis-v9","rightsTransferPolicy":"structure_only"},
   "durationMs": 10300,
   "aspectRatio": "9:16",
@@ -35,5 +35,5 @@
     {"id":"soundtrack","kind":"audio","startMs":0,"endMs":10300,"template":"Apply {{audio_policy}} across all exact hard cuts."}
   ],
   "promptExamples": ["Use the alternating transformation montage with a blonde woman, black before outfits, green after outfits, and GymLevels reaction captions."],
-  "validation": {"status":"validated","fidelityScore":90,"qaMode":"hybrid","sourceOutputId":"max-turbo-7669463719331630349-v4-final","notes":["Analysis-v9 repair raised before-state facial fidelity from 3/10 to 9/10 and body-state fidelity from 4/10 to 9/10.","Identity continuity scored 9/10; all seven hard-cut timestamps were preserved.","The originating TikTok contains exercise and treadmill-walking takes only; shirt removal or undressing is not part of this format grammar."]}
+  "validation": {"status":"validated","fidelityScore":90,"qaMode":"hybrid","sourceOutputId":"max-turbo-7669463719331630349-v4-final","notes":["Analysis-v9 repair raised before-state facial fidelity from 3/10 to 9/10 and body-state fidelity from 4/10 to 9/10.","Identity continuity scored 9/10; all seven hard-cut timestamps were preserved."]}
 }

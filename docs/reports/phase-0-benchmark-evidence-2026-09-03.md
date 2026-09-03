@@ -57,8 +57,8 @@ The replayed plan then compiles to a kernel plan and runs through the fake kerne
 
 | Suite | Base commit e20ed3b | This branch |
 |---|---:|---:|
-| Tests passing | 26 | 80 |
-| Format recipes valid | 9 | 9 |
+| Tests passing | 26 | 86 |
+| Format recipes valid | 9 | 10 |
 | Recipes marked validated | 7 | 7 |
 
 The original coverage remains green and the new evidence-gate tests run alongside it. `pnpm check` also runs the benchmark sample, the Fidelity Map validator, and the historical replay.
@@ -128,7 +128,7 @@ The exact evidence assembly sequence is documented in `docs/phase-0-evidence-wor
 
 ### 2.5 Not run in this session
 
-Correction recorded 2026-09-03: the first live H3 control/compiler pair used the later Instagram `DcqCAe_Jl9o` shirt-reveal recipe, but the operator intended the earlier TikTok `7669463719331630349` alternating transformation format. Candidate A was the compiler lane, but that pair is excluded from the Phase 0 gate because it tested the wrong originating format. The intended TikTok contains four before/after setup families—hip adduction, shoulder press, side-profile treadmill walking, and low-angle treadmill walking—and no undressing. The separate Instagram Winter Arc recipe remains valid for its own source. A corrected TikTok pair requires a materialized Fidelity Map and separately approved eight-take generation plan.
+Correction recorded 2026-09-03: the first live H3 control/compiler pair used the later Instagram `DcqCAe_Jl9o` shirt-reveal recipe, but the intended original product/checklist source was TikTok `7665182154300624142`. Candidate A was the compiler lane, but that pair is excluded from the Phase 0 gate because it tested the wrong action grammar. The TikTok is one fixed 5.117-second take: the foreground subject performs accelerated incline dumbbell presses while a background person bends, picks up a bottle, turns and walks several strides; a persistent `Getting lean is EASY.` checklist overlays the action. It contains no undressing. The corrected recipe is `incline-press-checklist-loop` and remains draft until an H3 reconstruction validates the approximately 2.0x-2.5x foreground and background cadence. The separate Instagram shirt-reveal recipe remains valid only for its own source.
 
 - blind human annotations for the three clips;
 - one raw-request versus compiler generation pair per family;

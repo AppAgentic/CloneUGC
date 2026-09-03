@@ -44,7 +44,7 @@ test("three validated recipes cite a real Fidelity Map hash and re-derive their 
     assert.doesNotThrow(() => assertRecipeDerivesFromFidelityMap(recipe, fixture));
   }
   const manifestOnly = recipes.filter((recipe) => recipeLineage(recipe) !== "fidelity_map").map((recipe) => recipe.id).sort();
-  assert.deepEqual(manifestOnly, ["alternating-gym-transformation-montage", "continuous-pec-fly-advice", "hand-wipe-fitness-transformation", "kitchen-finger-count-palm-wipe", "night-car-list-reaction", "rapid-gym-exercise-montage"]);
+  assert.deepEqual(manifestOnly, ["alternating-gym-transformation-montage", "continuous-pec-fly-advice", "hand-wipe-fitness-transformation", "incline-press-checklist-loop", "kitchen-finger-count-palm-wipe", "night-car-list-reaction", "rapid-gym-exercise-montage"]);
 });
 
 test("the multi-take montage map enforces one unit per deterministic cut and prohibits single generation", () => {
