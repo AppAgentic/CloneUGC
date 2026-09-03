@@ -9,7 +9,7 @@ Scope: the Phase 0A evidence close-out and the Phase 0B / Phase 1 headless kerne
 | Gate | Status | Basis |
 |---|---|---|
 | Phase 0B / Phase 1 headless kernel | **PASS (local)** | All four gate items below are covered by committed tests that run in `pnpm check`. |
-| Phase 0A evidence close-out | **PARTIAL** | Three validator-accepted Fidelity Maps are linked to validated recipes. The corrected Winter Arc walk-in/stretch pair now has blind operator evidence: A was the slight preference, then the operator judged the difference negligible and accepted compiler B for production. This establishes one-family compiler non-inferiority; additional blind scoring and representative pairs remain in `PARKED_ACTIONS.md`. |
+| Phase 0A evidence close-out | **PARTIAL** | Four validator-accepted Fidelity Maps are linked to validated recipes. The corrected Winter Arc walk-in/stretch pair now has blind operator evidence: A was the slight preference, then the operator judged the difference negligible and accepted compiler B for production. This establishes one-family compiler non-inferiority; additional blind scoring and representative pairs remain in `PARKED_ACTIONS.md`. |
 | Private live route (Phase 2) | **NO-GO for now** | The kernel is ready to host one analyzer, one image, and one video adapter, but the Phase 0A fidelity gate has not passed and no rights records exist for the benchmark sources. |
 
 ## 1. Headless kernel gate
@@ -57,7 +57,7 @@ The replayed plan then compiles to a kernel plan and runs through the fake kerne
 
 | Suite | Base commit e20ed3b | This branch |
 |---|---:|---:|
-| Tests passing | 26 | 86 |
+| Tests passing | 26 | 87 |
 | Format recipes valid | 9 | 10 |
 | Recipes marked validated | 7 | 7 |
 
@@ -69,13 +69,14 @@ An owner review added a final fail-closed hardening pass: idempotency keys are n
 
 ### 2.1 Materialized Fidelity Maps
 
-Three maps were materialized from evidence already persisted under `output/` (read-only): the Gemini `gemini-3.7-flash` static analysis JSON and the FFmpeg `select=scene` `showinfo` log for each source. Deterministic cut timestamps are the system of record. The Dcq Reel additionally carries a persisted full-timeline human correction because the model's action label was visually wrong.
+Four maps were materialized from evidence already persisted under `output/` (read-only): Gemini analysis artifacts, deterministic FFmpeg evidence, and human review where required. Deterministic cut timestamps are the system of record. The Dcq Reel carries a persisted full-timeline human correction because the model's action label was visually wrong; the hand-wipe map uses its persisted Agentic Video analysis and a full-timeline human review.
 
 | Map | Family | Source duration | Segments / units | Static analyzer latency | Static tokens (in / out / thought) |
 |---|---|---:|---:|---:|---|
 | `fm-phone-laugh-to-lock-in-gym-v1` | single-take performance | 6139 ms | 1 / 1 | 14.6 s | 873 / 867 / 548 |
 | `fm-winter-arc-walk-in-stretch-checklist-v3` | single-take product/checklist | 9517 ms | 1 / 1 | 11.7 s | 1118 / 709 / 116 |
 | `fm-childhood-to-family-gym-montage-v1` | multi-take posing montage | 12933 ms | 17 / 17 | 14.5 s | 1493 / 981 / 582 |
+| `fm-hand-wipe-fitness-transformation-v1` | two-take matched transition | 10031 ms | 2 / 2 | persisted Agentic run | persisted with artifact |
 
 Hashes:
 
@@ -84,13 +85,15 @@ Hashes:
 | phone-laugh | `d792607c67c22199c61c0275a014ca5e94db1a7746957051136a0123f98873ab` |
 | winter-arc walk-in/stretch | `ea97d9bc49dabe2c5e3a08c5063ae894c3ea7d61036e76cfc2654ea09887ef9e` |
 | family montage | `e003a259a09975d209f22d633a0933375e202ce196f06b2864310b4a8cf505d3` |
+| hand-wipe transformation | `1a661fc7f3212451854c6e46daadf8d613a91b3b290ca88056ade500aa259212` |
 
 Notable honesty choices baked into the fixtures:
 
-- rights status is `unverified` on all three, so `generationEligibility` reports "rights attestation is required"; the historical runs used Slack approvals, which are not durable rights records;
+- rights status is `unverified` on all four, so `generationEligibility` reports "rights attestation is required"; the historical runs used Slack approvals, which are not durable rights records;
 - the corrected Winter Arc map records real-time playback from observable gait, clothing and carried-item swing; the original model's shirt-removal label is superseded by the persisted human full-timeline review;
 - the family montage map records a `minor` risk with `exclude` disposition for the childhood photograph; the rights contract refuses to ever authorize it;
 - the family montage covers the 388-frame video timeline (12933 ms) rather than the longer container duration.
+- the hand-wipe map preserves two independently recorded takes, one identity lineage, the hand-occlusion join, and deterministic caption/audio finishing.
 
 ### 2.2 Recipes re-derived from Fidelity Map hashes
 
@@ -99,8 +102,9 @@ Notable honesty choices baked into the fixtures:
 | `phone-laugh-to-lock-in-gym` | run manifest | Fidelity Map | 1 shot equals 1 segment, same strategy |
 | `winter-arc-walk-in-stretch-checklist` | run manifest | Fidelity Map + human correction + blind H3 pair | 1 shot equals 1 segment; recipe ends 117 ms inside the final segment; A was the slight preference and compiler B was subsequently accepted as negligibly different and production-usable |
 | `childhood-to-family-gym-montage` | run manifest | Fidelity Map | 17 shots equal 17 deterministic segments; 5 deterministic-source photo units plus 12 image-to-video units |
+| `hand-wipe-fitness-transformation` | run manifest | Fidelity Map + Agentic analysis + human review | 2 shots equal 2 independently recorded takes; the second unit uses a 10-second provider duration to cover its 5241 ms target |
 
-The remaining four validated recipes and three manifest/evidence-only drafts still cite run manifests or evidence hashes. Their analyzer outputs are not persisted in the repository's evidence set, so re-deriving them requires a paid analyzer run and is parked.
+The remaining three validated recipes and three manifest/evidence-only drafts still cite run manifests or evidence hashes. Their analyzer outputs are not persisted in the repository's evidence set, so re-deriving them requires a paid analyzer run and is parked.
 
 ### 2.3 Historical paid-unit cost and latency
 
@@ -145,7 +149,7 @@ Each is a paid or human gate and is listed with its unblocking condition in `PAR
 | Remove named model/provider guidance from public schemas | Compiled plans, estimates, jobs, and outputs use provider classes only; tests assert prompts and estimates contain no provider or adapter names. |
 | Typed target dimensions and generation-unit impact | `TypedDirective` carries dimension, target scope, intent, and value; the invalidation graph maps dimensions to units and finishing steps. |
 | Machine-readable QA | `QAReport` scores per dimension and attaches typed repair directives to timestamped findings. |
-| Recipes cite a real Fidelity Map hash | Three recipes do and all three are validated. The Winter Arc compiler is operator-accepted as negligibly different from the slight control preference; cross-format evidence remains open. Four other validated recipes are parked on analyzer re-runs. |
+| Recipes cite a real Fidelity Map hash | Four recipes do and all four are validated. The Winter Arc compiler is operator-accepted as negligibly different from the slight control preference; cross-format evidence remains open. Three other validated recipes are parked on analyzer re-runs. |
 | Cost, rights scope, and approval binding in eligibility | `checkGenerationAuthority` binds source, revision, plan, estimate, expiry, rights coverage, and single-use approval ceilings, and the kernel consumes approvals inside the creation transaction. |
 
 ## 4. Risks

@@ -73,7 +73,7 @@ test("repair reuse returns accepted artifacts byte-for-byte for untouched units 
 });
 
 test("an instantiated Format Recipe compiles into the same plan shape with recipe lineage", () => {
-  const recipe = JSON.parse(readFileSync(new URL("../fixtures/formats/hand-wipe-fitness-transformation-v1.json", import.meta.url), "utf8")) as FormatRecipe;
+  const recipe = JSON.parse(readFileSync(new URL("../fixtures/formats/hand-wipe-fitness-transformation-v2.json", import.meta.url), "utf8")) as FormatRecipe;
   const formatPlan = compileFormatRecipe(recipe, { userPrompt: "Blonde woman with a GymLevels caption", values: { caption_text: "90 days with GymLevels" } });
   const revision = sampleRevision({ fidelityMapHash: undefined, formatRecipeHash: formatRecipeHash(recipe), directives: [] });
   const plan = compilePlanFromFormat({ formatPlan, revision, sourceContentSha256: SOURCE_HASH });

@@ -19,7 +19,7 @@ test("at least three materialized Fidelity Maps across distinct families pass th
   assert.equal(new Set(fixtures.map((fixture) => fixture.map.sourceContentSha256)).size, fixtures.length, "sources are distinct");
   for (const fixture of fixtures) {
     assert.match(fixture.fidelityMapHash, /^[a-f0-9]{64}$/);
-    assert.ok(fixture.artifacts.some((artifact) => artifact.providerRun.mode === "static" && artifact.providerRun.exactModel === "gemini-3.7-flash"));
+    assert.ok(fixture.artifacts.some((artifact) => ["static", "agentic"].includes(artifact.providerRun.mode) && artifact.providerRun.exactModel === "gemini-3.7-flash"));
     assert.ok(fixture.artifacts.some((artifact) => artifact.providerRun.mode === "deterministic"));
     assert.ok(fixture.evidence.every((claim) => claim.status === "accepted"));
   }
@@ -33,9 +33,9 @@ test("materialized maps stay analysis-only until a rights attestation exists", (
   }
 });
 
-test("three recipes cite a real Fidelity Map hash and re-derive their structure from it", () => {
+test("four recipes cite a real Fidelity Map hash and re-derive their structure from it", () => {
   const linked = recipes.filter((recipe) => recipeLineage(recipe) === "fidelity_map");
-  assert.deepEqual(linked.map((recipe) => recipe.id).sort(), ["childhood-to-family-gym-montage", "phone-laugh-to-lock-in-gym", "winter-arc-walk-in-stretch-checklist"]);
+  assert.deepEqual(linked.map((recipe) => recipe.id).sort(), ["childhood-to-family-gym-montage", "hand-wipe-fitness-transformation", "phone-laugh-to-lock-in-gym", "winter-arc-walk-in-stretch-checklist"]);
   for (const recipe of linked) {
     const fixture = fixtures.find((candidate) => candidate.fidelityMapHash === recipe.provenance.sourceFidelityMapHash);
     assert.ok(fixture !== undefined, `${recipe.id} cites an unknown Fidelity Map hash`);
@@ -44,7 +44,16 @@ test("three recipes cite a real Fidelity Map hash and re-derive their structure 
     assert.doesNotThrow(() => assertRecipeDerivesFromFidelityMap(recipe, fixture));
   }
   const manifestOnly = recipes.filter((recipe) => recipeLineage(recipe) !== "fidelity_map").map((recipe) => recipe.id).sort();
-  assert.deepEqual(manifestOnly, ["alternating-gym-transformation-montage", "continuous-pec-fly-advice", "hand-wipe-fitness-transformation", "incline-press-checklist-loop", "kitchen-finger-count-palm-wipe", "night-car-list-reaction", "rapid-gym-exercise-montage"]);
+  assert.deepEqual(manifestOnly, ["alternating-gym-transformation-montage", "continuous-pec-fly-advice", "incline-press-checklist-loop", "kitchen-finger-count-palm-wipe", "night-car-list-reaction", "rapid-gym-exercise-montage"]);
+});
+
+test("the hand-wipe map preserves two independent takes and one identity lineage", () => {
+  const handWipe = fixtures.find((fixture) => fixture.id === "fm-hand-wipe-fitness-transformation-v1")!;
+  assert.equal(handWipe.map.creatorWorkflow.captureMode, "multi_take");
+  assert.equal(handWipe.map.creatorWorkflow.generationUnits.length, 2);
+  assert.deepEqual(handWipe.map.editSegments.map((segment) => segment.transitionIn), ["none", "match_cut"]);
+  assert.ok(handWipe.map.directives.some((directive) => directive.description.includes("One identity")));
+  assert.ok(handWipe.map.risks.every((risk) => risk.disposition === "exclude"));
 });
 
 test("the multi-take montage map enforces one unit per deterministic cut and prohibits single generation", () => {

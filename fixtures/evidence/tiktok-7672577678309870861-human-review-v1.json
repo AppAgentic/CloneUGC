@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "0.1.0",
+  "sourceAssetId": "tiktok-7672577678309870861",
+  "sourceContentSha256": "0db4e5c295d0a8d7046a71e27605a8a6bf6bee8cd16f2219a2e88878f1862ec8",
+  "reviewedAt": "2026-09-03T21:10:00Z",
+  "reviewBasis": [
+    "Full 305-frame source timeline",
+    "Twenty-frame source contact sheet",
+    "Persisted Gemini 3.7 Flash Agentic Video analysis",
+    "Previously accepted two-take GPT Image 2 and H3 Max Turbo reconstruction"
+  ],
+  "timeline": [
+    {"startMs":0,"endMs":1500,"observation":"Same subject faces the fixed low phone, relaxed and unflexed, then turns toward profile."},
+    {"startMs":1500,"endMs":3600,"observation":"Subject continues to rear view, briefly raises a back double-biceps pose, and rotates back toward profile."},
+    {"startMs":3600,"endMs":4790,"observation":"Subject reaches a hand toward the phone until the lens is fully occluded."},
+    {"startMs":4790,"endMs":5340,"observation":"A separately recorded after take begins under the hand occlusion; the hand withdraws as brighter cooler lighting reveals the same identity in a leaner flexed state."},
+    {"startMs":5340,"endMs":10031,"observation":"Subject steps back, flexes with hands behind the back, briefly adjusts the waistband, turns to a quarter-side pose, and holds."}
+  ],
+  "captureWorkflow": "Two separately recorded static-phone takes joined through a full-frame hand occlusion. Room and phone geometry match; body state, wardrobe details and lighting change at the join.",
+  "identity": "One person appears across both takes; the format must use one new fictional or authorized identity with separate before and after state anchors.",
+  "playback": "Both takes appear natural real-time from turn speed, hand reach, breathing and waistband movement.",
+  "deterministicLayers": "The opening caption, exact hand-occlusion join timing, and authorized or replacement audio are finishing layers rather than generated pixels.",
+  "rights": "Source likeness, waistband logos, beverage branding, dialogue and music do not transfer into a reusable instantiation."
+}

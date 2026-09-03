@@ -8,7 +8,7 @@ import { createHarness, runToSettled } from "./helpers/kernel.ts";
 import { sampleCapabilities, samplePolicy } from "./helpers/sample.ts";
 
 const replay = JSON.parse(readFileSync(new URL("../fixtures/replays/hand-wipe-blonde-r3ta-pepmod-v1.json", import.meta.url), "utf8")) as CompiledFormatPlan;
-const recipe = JSON.parse(readFileSync(new URL("../fixtures/formats/hand-wipe-fitness-transformation-v1.json", import.meta.url), "utf8")) as FormatRecipe;
+const recipe = JSON.parse(readFileSync(new URL("../fixtures/replays/formats/hand-wipe-fitness-transformation-v1.json", import.meta.url), "utf8")) as FormatRecipe;
 const SOURCE_AUDIO_HASH = "0db4e5c295d0a8d7046a71e27605a8a6bf6bee8cd16f2219a2e88878f1862ec8";
 
 test("replaying the accepted r3ta/pepmod instantiation reproduces its historical recipe and plan hashes", () => {

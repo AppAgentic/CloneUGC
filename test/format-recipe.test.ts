@@ -3,7 +3,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import test from "node:test";
 import { assertFormatRecipe, compileFormatRecipe, formatRecipeHash, type FormatRecipe } from "../src/format-recipe.ts";
 
-const fixtureUrl = new URL("../fixtures/formats/hand-wipe-fitness-transformation-v1.json", import.meta.url);
+const fixtureUrl = new URL("../fixtures/formats/hand-wipe-fitness-transformation-v2.json", import.meta.url);
 const recipe = JSON.parse(readFileSync(fixtureUrl, "utf8")) as FormatRecipe;
 const familyRecipe = JSON.parse(readFileSync(new URL("../fixtures/formats/childhood-to-family-gym-montage-v1.json", import.meta.url), "utf8")) as FormatRecipe;
 const checklistLoopRecipe = JSON.parse(readFileSync(new URL("../fixtures/formats/incline-press-checklist-loop-v1.json", import.meta.url), "utf8")) as FormatRecipe;
