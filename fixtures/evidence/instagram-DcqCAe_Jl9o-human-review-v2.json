@@ -1,5 +1,7 @@
 {
   "schemaVersion": "0.1.0",
+  "revision": 2,
+  "parentReviewSha256": "9cfea8a0fe155c9ea5c7cb6092a45eb6c45f1c4eb46631ef6456b471bcd2ba5e",
   "sourceAssetId": "instagram-DcqCAe_Jl9o",
   "sourceUrl": "https://www.instagram.com/reel/DcqCAe_Jl9o/",
   "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
@@ -16,7 +18,7 @@
     {"startMs": 6800, "endMs": 9517, "observation": "Subject continues walking deeper into the gym with arms relaxed and gradually recedes in the fixed frame."}
   ],
   "continuity": "The dark T-shirt and lower-body clothing remain on throughout; no undressing, back reveal or bodybuilding flex occurs.",
-  "camera": "Locked rear-facing vertical camera; the subject's decreasing size is caused by walking away, not a zoom.",
+  "camera": "Rear-facing handheld operator follows the subject into the gym. Forward camera translation, background parallax, small lateral drift and gait-synchronized vertical bob keep the subject broadly centered while both move forward; this is not a locked camera or a digital zoom.",
   "playback": "Natural real-time gait is visually supported by step cadence, clothing motion and carried-item swing.",
-  "supersedes": "The action interpretation in output/source-analysis/instagram-DcqCAe_Jl9o/gemini-static.json."
+  "supersedes": "The action and locked-camera interpretations in output/source-analysis/instagram-DcqCAe_Jl9o/gemini-static.json and the incomplete v1 human review."
 }

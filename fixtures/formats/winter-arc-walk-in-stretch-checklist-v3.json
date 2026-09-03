@@ -1,12 +1,12 @@
 {
   "schemaVersion": "0.1.0",
   "id": "winter-arc-walk-in-stretch-checklist",
-  "revision": 2,
+  "revision": 3,
   "name": "Winter Arc walk-in stretch checklist",
-  "description": "One locked-camera monochrome rear-view take in which a fully clothed subject walks into the gym, stretches both arms overhead, lowers them, and continues deeper into the room beneath a persistent challenge checklist.",
+  "description": "One monochrome rear-view handheld-follow take in which a fully clothed subject walks into the gym, stretches both arms overhead, lowers them, and continues deeper into the room beneath a persistent challenge checklist.",
   "provenance": {
     "sourceAssetId": "instagram-DcqCAe_Jl9o",
-    "sourceFidelityMapHash": "484f5fe4d7a681a99b226d12d07ec5276fe3dc825bec449694b6fc7ecd1fc586",
+    "sourceFidelityMapHash": "ea97d9bc49dabe2c5e3a08c5063ae894c3ea7d61036e76cfc2654ea09887ef9e",
     "sourceRunManifestSha256": "a65edb59ce637f68a8156f82722c2bb563cb29fe3c4c92e9dc24040650c1170b",
     "extractionPromptVersion": "analysis-v11-human-action-correction",
     "rightsTransferPolicy": "structure_only"
@@ -14,13 +14,14 @@
   "durationMs": 9400,
   "aspectRatio": "9:16",
   "lockedGrammar": [
-    "One uninterrupted natural-real-time take from a locked rear-view vertical camera",
+    "One uninterrupted natural-real-time take from a rear-view vertical handheld camera following the subject into the gym",
     "High-contrast monochrome silhouette against a bright gym entrance",
     "Fully clothed subject walks away from the camera into the gym while raising both arms into an overhead shoulder and triceps stretch",
-    "Subject lowers both arms and keeps walking deeper into the gym; the shrinking silhouette supplies the visual progression",
+    "Subject lowers both arms and keeps walking deeper into the gym while the operator follows at a slightly slower pace",
+    "Forward camera translation, background parallax, small lateral drift and gait-synchronized vertical bob make the follow visibly handheld while keeping the subject broadly centered",
     "Shirt, trousers and carried gym bag remain present and move causally with the walk",
     "A centered yellow serif challenge checklist remains deterministic and persistent",
-    "No shirt removal, undressing, back reveal, bodybuilding flex, body morph, cut or camera move",
+    "No shirt removal, undressing, back reveal, bodybuilding flex, body morph, cut, locked-off camera, digital zoom or artificial stabilization",
     "Audio is added during finishing and is independent of generated motion"
   ],
   "variables": [
@@ -43,9 +44,9 @@
       "transitionDurationMs": 0,
       "generationStrategy": "image_to_video",
       "providerDurationMs": 10000,
-      "anchorPromptTemplate": "Show {{subject_identity}} with {{gender_presentation}} presentation from behind at the near edge of {{setting}}, fully clothed in {{wardrobe}} and carrying {{carried_item}}, as a high-contrast monochrome silhouette from a locked vertical phone camera.",
-      "motionPromptTemplate": "In one uninterrupted natural-real-time take, walk steadily away from the locked camera and deeper into the gym. While continuing to walk, raise both arms overhead, bend the elbows into a loose shoulder and triceps stretch, make a small natural side-to-side adjustment, then release and lower both arms before continuing forward. The subject gradually becomes smaller in frame. Keep every item of clothing on throughout; preserve natural gait, fabric drape and carried-item swing. No shirt removal, undressing, back reveal, bodybuilding flex, body morph, cut, zoom, pan or camera movement.",
-      "lockedTraits": ["locked rear camera","monochrome backlight","continuous walking away","overhead stretch while walking","fully clothed throughout","natural gait and bag swing","continuous real-time take"]
+      "anchorPromptTemplate": "Show {{subject_identity}} with {{gender_presentation}} presentation from behind at the near edge of {{setting}}, fully clothed in {{wardrobe}} and carrying {{carried_item}}, as a high-contrast monochrome silhouette framed by a vertical handheld phone camera positioned a few steps behind.",
+      "motionPromptTemplate": "In one uninterrupted natural-real-time take, walk steadily forward into the gym while a handheld operator follows a few steps behind. While continuing to walk, raise both arms overhead, bend the elbows into a loose shoulder and triceps stretch, make a small natural side-to-side adjustment, then release and lower both arms before continuing forward. The camera translates forward with visible background parallax, small lateral drift, and restrained gait-synchronized vertical bob; it keeps the subject broadly centered but follows slightly slower so the subject gradually recedes. Keep every item of clothing on throughout; preserve natural gait, fabric drape and carried-item swing. No shirt removal, undressing, back reveal, bodybuilding flex, body morph, cut, locked-off shot, digital zoom, orbit, pan-away or artificial stabilization.",
+      "lockedTraits": ["rear handheld follow camera","forward camera translation and background parallax","subtle gait-synchronized bob and lateral drift","monochrome backlight","continuous walking away","overhead stretch while walking","fully clothed throughout","natural gait and bag swing","continuous real-time take"]
     }
   ],
   "deterministicLayers": [
@@ -61,10 +62,11 @@
     "qaMode": "hybrid",
     "sourceOutputId": "instagram-DcqCAe_Jl9o-action-correction-pending",
     "notes": [
-      "Corrected on 2026-09-03 after direct full-timeline source review and operator confirmation: the subject stays fully clothed, stretches overhead while walking into the gym, lowers the arms and continues forward.",
+      "Corrected on 2026-09-03 after direct full-timeline source review and operator confirmation: the subject stays fully clothed, stretches overhead while walking into the gym, lowers the arms and continues forward while a handheld operator follows from behind.",
       "The earlier analyzer and generated output incorrectly interpreted the overhead stretch as shirt removal and a flex; that output is excluded as validation evidence.",
       "The checklist remains deterministic so product wording stays exact while photographic motion remains independently repairable.",
-      "This corrected recipe remains draft until the GPT Image 2 setup-frame plus H3 Max Turbo workflow reproduces the walk, stretch, camera and timing faithfully.",
+      "The first corrected action A/B pair also failed because both prompts froze the camera; those outputs are excluded from validation evidence.",
+      "This corrected recipe remains draft until the GPT Image 2 setup-frame plus H3 Max Turbo workflow reproduces the walk, stretch, handheld follow, and timing faithfully.",
       "The recipe transfers structure only; source identity, setting, audio, overlay rights and permissions remain separately gated."
     ]
   }

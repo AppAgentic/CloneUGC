@@ -1,12 +1,12 @@
 {
   "schemaVersion": "0.1.0",
-  "id": "fm-winter-arc-walk-in-stretch-checklist-v2",
+  "id": "fm-winter-arc-walk-in-stretch-checklist-v3",
   "recipeId": "winter-arc-walk-in-stretch-checklist",
   "family": "single-take product/checklist integration",
   "materializedFrom": {
     "analyzerOutput": "output/source-analysis/instagram-DcqCAe_Jl9o/gemini-static.json",
     "sceneDetectLog": "output/source-analysis/instagram-DcqCAe_Jl9o/scene-detect.log",
-    "humanReview": "fixtures/evidence/instagram-DcqCAe_Jl9o-human-review-v1.json",
+    "humanReview": "fixtures/evidence/instagram-DcqCAe_Jl9o-human-review-v2.json",
     "sourceProbe": {
       "sha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "durationMs": 9517,
@@ -20,7 +20,7 @@
       "The delivered file is constant 30 fps; the analysis copy is the source itself.",
       "The shared CLI output does not persist the prompt version; its initial action interpretation is retained as fallible model evidence rather than treated as ground truth.",
       "FFmpeg select=scene showinfo produced zero frames: single take, no hard cuts.",
-      "A full-timeline human review plus operator correction found that the subject remains clothed, stretches overhead while walking into the gym, lowers the arms, and continues walking; the earlier shirt-removal interpretation was rejected.",
+      "A full-timeline human review plus operator correction found that the subject remains clothed, stretches overhead while walking into the gym, lowers the arms, and continues walking while a handheld operator follows from behind; the earlier shirt-removal and locked-camera interpretations were rejected.",
       "Gait, clothing motion, carried-item swing and steady recession support natural real-time playback.",
       "Rights remain unverified; analysis-only until a durable rights record exists."
     ],
@@ -111,17 +111,17 @@
         "toolUseTokens": 0,
         "processingCalls": 0
       },
-      "structuredPayloadArtifactId": "fixtures/evidence/instagram-DcqCAe_Jl9o-human-review-v1.json",
+      "structuredPayloadArtifactId": "fixtures/evidence/instagram-DcqCAe_Jl9o-human-review-v2.json",
       "summaryTruncated": false
     }
   ],
   "evidence": [
     {
       "id": "shot-single-take",
-      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "artifactId": "instagram-DcqCAe_Jl9o:human-action-review",
       "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "kind": "shot",
-      "statement": "Single take from a locked-off camera at waist/chest height, rear framing, 9:16, high-contrast monochrome.",
+      "statement": "Single continuous 9:16 rear-view take from a handheld phone camera following the subject into the gym, with forward translation, background parallax, subtle lateral drift and gait-synchronized vertical bob.",
       "status": "accepted",
       "confidence": 0.95,
       "directObservation": true,
@@ -261,11 +261,11 @@
       }
     },
     {
-      "id": "camera-locked",
-      "artifactId": "instagram-DcqCAe_Jl9o:gemini-static",
+      "id": "camera-handheld-follow",
+      "artifactId": "instagram-DcqCAe_Jl9o:human-action-review",
       "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
       "kind": "other",
-      "statement": "Locked-off static tripod or surface-mounted camera; framing never changes.",
+      "statement": "A handheld operator follows behind at walking pace; the camera translates forward with background parallax, restrained vertical bob and small lateral drift while keeping the subject broadly centered.",
       "status": "accepted",
       "confidence": 0.9,
       "directObservation": true,
@@ -443,9 +443,9 @@
   ],
   "map": {
     "schemaVersion": "0.2.0",
-    "id": "fm-winter-arc-walk-in-stretch-checklist-v2",
-    "revision": 2,
-    "parentRevisionHash": "0e312cab94bcde687aa7b00dfaf853b35a5cb22b7665287f072f52857bb52c5a",
+    "id": "fm-winter-arc-walk-in-stretch-checklist-v3",
+    "revision": 3,
+    "parentRevisionHash": "484f5fe4d7a681a99b226d12d07ec5276fe3dc825bec449694b6fc7ecd1fc586",
     "sourceAssetId": "instagram-DcqCAe_Jl9o",
     "sourceContentSha256": "719d4d3f9fb1118cb54a13127cc5a5f41c4bd2561a6a33d81161448c82bafdc7",
     "durationMs": 9517,
@@ -554,11 +554,11 @@
       "confidence": 0.95,
       "rationale": [
         "Deterministic scene detection found no cut",
-        "Locked camera, environment, and lighting are continuous"
+        "Handheld forward tracking, environment, and lighting are continuous"
       ],
       "subjectAnchor": "Generate one fictional rights-safe rear-view subject anchor; the silhouette must not reproduce the source person.",
       "persistentElements": [
-        "Locked rear framing",
+        "Rear handheld follow framing with forward translation, background parallax and subtle gait-synchronized bob",
         "Backlit monochrome lighting",
         "Gym glass partition environment"
       ],
@@ -577,7 +577,7 @@
           "sourceShotIds": [
             "walk-in-overhead-stretch"
           ],
-          "cameraSignature": "Locked-off static camera at waist/chest height, rear framing, 9:16",
+          "cameraSignature": "Handheld vertical phone camera follows a few steps behind at waist/chest height; forward tracking with subtle lateral drift and gait-synchronized bob, rear framing, 9:16",
           "environmentSignature": "Gym entrance with bright glass partition and signage behind the subject",
           "subjectState": "Fully clothed, facing away near the entrance, beginning to walk into the gym",
           "wardrobeState": "Dark T-shirt and loose dark lower-body clothing remain on; dark gym bag carried at one side",
@@ -612,7 +612,7 @@
           "transitionDurationMs": 0,
           "trimInstruction": "Trim the 10000ms generated take to the 9517ms source timeline.",
           "preserve": [
-            "Locked rear framing",
+            "Rear handheld follow camera with forward translation, background parallax and restrained walking bob",
             "Backlit silhouette",
             "Walk, raise arms, stretch overhead, lower arms, continue walking action order",
             "Fully clothed wardrobe continuity",
@@ -637,7 +637,7 @@
       "evidenceIds": [
         "shot-single-take",
         "probe-no-cuts",
-        "camera-locked"
+        "camera-handheld-follow"
       ]
     },
     "beats": [
@@ -708,11 +708,11 @@
     ],
     "directives": [
       {
-        "id": "preserve-camera",
+        "id": "preserve-handheld-follow-camera",
         "kind": "preserve",
-        "description": "Locked rear framing",
+        "description": "Rear handheld follow with forward translation, background parallax, small lateral drift and gait-synchronized bob",
         "evidenceIds": [
-          "camera-locked"
+          "camera-handheld-follow"
         ]
       },
       {
@@ -812,5 +812,5 @@
       }
     ]
   },
-  "fidelityMapHash": "484f5fe4d7a681a99b226d12d07ec5276fe3dc825bec449694b6fc7ecd1fc586"
+  "fidelityMapHash": "ea97d9bc49dabe2c5e3a08c5063ae894c3ea7d61036e76cfc2654ea09887ef9e"
 }

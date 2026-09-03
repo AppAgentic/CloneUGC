@@ -64,13 +64,17 @@ test("the multi-take montage map enforces one unit per deterministic cut and pro
 });
 
 test("the corrected Winter Arc map preserves the real-time walk and overhead stretch", () => {
-  const winter = fixtures.find((fixture) => fixture.id === "fm-winter-arc-walk-in-stretch-checklist-v2")!;
+  const winter = fixtures.find((fixture) => fixture.id === "fm-winter-arc-walk-in-stretch-checklist-v3")!;
   assert.equal(winter.map.playback.classification, "real_time");
   assert.equal(winter.map.playback.estimatedMultiplier, 1);
   assert.ok(winter.artifacts.some((artifact) => artifact.providerRun.mode === "human"));
   const grammar = JSON.stringify(winter.map).toLowerCase();
   assert.match(grammar, /walk/);
   assert.match(grammar, /stretch/);
+  assert.match(grammar, /handheld/);
+  assert.match(grammar, /parallax/);
+  assert.match(grammar, /gait-synchronized/);
+  assert.doesNotMatch(grammar, /locked-off static camera|framing never changes/);
   assert.doesNotMatch(grammar, /pull the shirt|shirt removal|removes shirt|back double-biceps/);
 });
 

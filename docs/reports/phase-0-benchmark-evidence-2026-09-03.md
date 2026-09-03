@@ -74,7 +74,7 @@ Three maps were materialized from evidence already persisted under `output/` (re
 | Map | Family | Source duration | Segments / units | Static analyzer latency | Static tokens (in / out / thought) |
 |---|---|---:|---:|---:|---|
 | `fm-phone-laugh-to-lock-in-gym-v1` | single-take performance | 6139 ms | 1 / 1 | 14.6 s | 873 / 867 / 548 |
-| `fm-winter-arc-walk-in-stretch-checklist-v2` | single-take product/checklist | 9517 ms | 1 / 1 | 11.7 s | 1118 / 709 / 116 |
+| `fm-winter-arc-walk-in-stretch-checklist-v3` | single-take product/checklist | 9517 ms | 1 / 1 | 11.7 s | 1118 / 709 / 116 |
 | `fm-childhood-to-family-gym-montage-v1` | multi-take posing montage | 12933 ms | 17 / 17 | 14.5 s | 1493 / 981 / 582 |
 
 Hashes:
@@ -82,7 +82,7 @@ Hashes:
 | Map | Fidelity Map hash |
 |---|---|
 | phone-laugh | `d792607c67c22199c61c0275a014ca5e94db1a7746957051136a0123f98873ab` |
-| winter-arc walk-in/stretch | `484f5fe4d7a681a99b226d12d07ec5276fe3dc825bec449694b6fc7ecd1fc586` |
+| winter-arc walk-in/stretch | `ea97d9bc49dabe2c5e3a08c5063ae894c3ea7d61036e76cfc2654ea09887ef9e` |
 | family montage | `e003a259a09975d209f22d633a0933375e202ce196f06b2864310b4a8cf505d3` |
 
 Notable honesty choices baked into the fixtures:
@@ -128,7 +128,7 @@ The exact evidence assembly sequence is documented in `docs/phase-0-evidence-wor
 
 ### 2.5 Not run in this session
 
-Correction recorded 2026-09-03: the operator confirmed the intended source was Instagram `DcqCAe_Jl9o`. Direct full-timeline review shows a fully clothed subject walking away into the gym, raising both arms into an overhead shoulder/triceps stretch, lowering the arms, and continuing forward. No shirt is removed and no bodybuilding flex occurs. The static analyzer, saved recipe, Fidelity Map, historical generated output, and control/compiler pair had all inherited the same visual misinterpretation. The corrected recipe is `winter-arc-walk-in-stretch-checklist`; its v2 Fidelity Map is chained to the rejected v1 hash and backed by a persisted human review. The recipe is draft, and Candidate A plus the historical H3 output are excluded from gate evidence until a corrected generation validates the walking/stretching action. TikTok `7665182154300624142` remains a separate incline-press checklist draft and was not the requested correction.
+Correction recorded 2026-09-03: the operator confirmed the intended source was Instagram `DcqCAe_Jl9o`. Direct full-timeline review shows a fully clothed subject walking away into the gym, raising both arms into an overhead shoulder/triceps stretch, lowering the arms, and continuing forward. No shirt is removed and no bodybuilding flex occurs. A first corrected-action H3 A/B pair then exposed a second miss: both prompts froze the camera, while the source is a handheld rear-follow shot with forward translation, background parallax, small lateral drift, and gait-synchronized vertical bob. Both pairs are excluded from gate evidence. The corrected recipe is `winter-arc-walk-in-stretch-checklist`; its v3 Fidelity Map is chained to the action-corrected v2 hash and backed by a revised human review. The recipe remains draft until a generation validates both the action and handheld-follow camera. TikTok `7665182154300624142` remains a separate incline-press checklist draft and was not the requested correction.
 
 - blind human annotations for the three clips;
 - one raw-request versus compiler generation pair per family;
