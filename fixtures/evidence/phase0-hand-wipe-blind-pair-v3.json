@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "phase0-hand-wipe-blind-pair-v3",
+  "supersedes": "phase0-hand-wipe-blind-pair-v2",
+  "sourceAssetId": "tiktok-7672577678309870861",
+  "sourceContentSha256": "0db4e5c295d0a8d7046a71e27605a8a6bf6bee8cd16f2219a2e88878f1862ec8",
+  "fidelityMapHash": "1a661fc7f3212451854c6e46daadf8d613a91b3b290ca88056ade500aa259212",
+  "compilerPlanSha256": "54ac5cdd7e5c0308dbae01e9ae532545b096ebd4884fb8d9200d399041140744",
+  "sealedPlanSha256": "df7816ed9886eb1a9ab21f18a0d43bfdc1a243b635c85548c677ed9eb9937225",
+  "spendApprovalMessageTs": "1788474736.597029",
+  "operatorSelectionMessageTs": "1788475100.222919",
+  "estimatedCostUsdMicros": 200000,
+  "automaticPaidRetries": 0,
+  "laneMapping": {"A": "compiler", "B": "control"},
+  "operatorSelection": "B",
+  "selectedLane": "control",
+  "selectionInterpretation": "The operator selected the concise control, matching the sealed Gemini 3.8 Agentic preflight. Both lanes used the same accepted setup frame, seed, duration, resolution and deterministic finishing for each take. The compiler before-take prompt leaked a cross-boundary transition instruction, causing an early palm cover and withdrawal before the cut; the compiler lane also broke identity continuity across the cut.",
+  "providerRequests": [
+    {"unitId":"unit-before","lane":"compiler","slot":"A","providerRequestId":"01a06967-3f2e-72a2-a2fa-67d06b23ca87","seed":423523829,"promptSha256":"3d1ca7053a4d5116b966834f400054f6ceb1151149765074515769b0e24be792","setupImageSha256":"f349b6df002f4e5776d500d0639d3d8baa466b6227a6d0870b67632641320449","outputSha256":"2fded7f3f1ad0116ecfbd5c1dd2726015fbaeaa148edb0b3fb9b0ca81d86dc01","elapsedSeconds":8.224},
+    {"unitId":"unit-before","lane":"control","slot":"B","providerRequestId":"01a06967-609c-7112-9f82-add4c25affe7","seed":423523829,"promptSha256":"26a71db8498106bb56f3c26d0eb33a5da6474c932f9dca637631878c26151b0e","setupImageSha256":"f349b6df002f4e5776d500d0639d3d8baa466b6227a6d0870b67632641320449","outputSha256":"10bc853754c7ee70522f8f3d437091da3805b796905bed3cd9e7c9ab950a9d6a","elapsedSeconds":7.771},
+    {"unitId":"unit-after","lane":"compiler","slot":"A","providerRequestId":"01a06967-86ae-7483-8e07-58cb7965ceed","seed":366642371,"promptSha256":"e12aa3e4aeeef568ae2aa90eed99a97bf28f5a993349d448ce445fcb334d7db6","setupImageSha256":"e1232a30ea6418327eeb7c1308debf533f53630ed2380cab30366cb9632b3d95","outputSha256":"7bf3d364456d93e5ff192a73b24164fd65f7128373aabfa85e0aa2e9ea5c31b5","elapsedSeconds":15.173},
+    {"unitId":"unit-after","lane":"control","slot":"B","providerRequestId":"01a06967-c348-70e2-824a-cc6a121c834c","seed":366642371,"promptSha256":"35663adc70ed8850e20287e08fbc974ea838106e6e5e51583591b703e1e1fc80","setupImageSha256":"e1232a30ea6418327eeb7c1308debf533f53630ed2380cab30366cb9632b3d95","outputSha256":"1b902332cef2bef7dbc1917a183f840315e6b897b192cc534b67157a0cdd54ba","elapsedSeconds":8.505}
+  ],
+  "finishedOutputs": {
+    "A": {"outputSha256":"e0c5f902e03bb3fde1d4a156151459723bfaa8f7d5ddbff3f80cf58b12aca7dd","comparisonSha256":"9b544f75a2d0789715b6bb13e8661018bc5523e9a3ad5145137760e09e9f5380"},
+    "B": {"outputSha256":"dab4033bd0b397c5c9dffda9d66050aa70593433d1841de69c2ce870f2d56db3","comparisonSha256":"3cef5230060bf595b5e648e26648b4539bebf9ea7dac8816fecb4a3446de06a0"}
+  },
+  "finishing": {"beforeRetimeFactor":0.958,"afterRetimeFactor":1.011,"sourceAudioCopied":true,"sourceAacElementarySha256":"e420458e573982d90bd4faf15e0d9acc9b4ee73bdfb131b6971914dd59e58124"},
+  "blindPreflight": {"model":"gemini-3.8-flash","mode":"agentic","completedAt":"2026-09-03T22:35:37Z","totalTokens":23850,"processingCalls":6,"contentSha256":"cfc9bd610e4ff90817546d398da7a9179b9c01b0cf04080be7e40a29a92b1cea","selection":"B"},
+  "outcome": "control_preferred_compiler_failed_local_action_timing",
+  "typedFindings": [
+    {"dimension":"primary_motion","targetUnitId":"unit-before","severity":"material","finding":"The compiler included the cross-cut withdraw/reveal beat in the before take, so the palm covered the lens early, withdrew, and left an idle interval before the deterministic cut."},
+    {"dimension":"timing","targetUnitId":"unit-before","severity":"material","finding":"The compiler palm occlusion occurred around 3.2 seconds instead of remaining at the 4.8-second take endpoint."},
+    {"dimension":"transition","targetUnitId":"unit-after","severity":"material","finding":"The compiler pair did not produce one continuous cover-at-cut then uncover-after-cut transition."},
+    {"dimension":"identity","targetUnitId":"unit-after","severity":"material","finding":"The compiler lane revealed a visibly different blonde woman after the cut despite the shared identity directive."}
+  ],
+  "compilerRepair": {
+    "status": "locally_validated_paid_retest_pending",
+    "strategy": "Emit only unit-contained action beats plus an explicit start or endpoint; omit global timestamps, cross-boundary beats, rights prose and deterministic-finishing instructions from provider prompts.",
+    "repairedCompilerPlanSha256": "44edfc3c91c50eb3c3d359b39756c366bbd3462f8fe590604ec4eef58e0ee365",
+    "acceptedControlReuse": "Candidate B raw control takes and deterministic final remain immutable; only two compiler units require regeneration."
+  }
+}

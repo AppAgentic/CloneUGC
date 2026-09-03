@@ -61,6 +61,17 @@ export function assertIdentityAnchor(prompt: string, visibility: UnitInput["iden
   }
 }
 
+export function providerPromptExclusions(constraints: readonly string[]): string {
+  const joined = constraints.join(" ").toLocaleLowerCase();
+  const exclusions = [
+    joined.includes("identity") ? "do not copy the source identity or change identity mid-take" : "",
+    joined.includes("logo") ? "no logos or watermarks" : "",
+    joined.includes("dialogue") || joined.includes("music") ? "no generated dialogue or music" : "",
+    joined.includes("caption") || joined.includes("text") ? "no generated text" : "",
+  ].filter((value) => value.length > 0);
+  return exclusions.length === 0 ? "" : `Exclusions: ${exclusions.join("; ")}.`;
+}
+
 function fail(message: string): never {
   throw new Error(message);
 }
@@ -103,10 +114,8 @@ function main(): void {
     if (!control) fail(`control prompt ${input.controlStateKey} is missing`);
     const compiler = [
       motion.prompt,
-      `Preserve: ${motion.preserve.join(", ")}.`,
-      `Change: ${motion.change.join(", ")}.`,
-      `Constraints: ${motion.constraints.join("; ")}.`,
-    ].join(" ");
+      providerPromptExclusions(motion.constraints),
+    ].filter((part) => part.length > 0).join(" ");
     assertIdentityAnchor(control, input.identityVisibility, input.identityAnchor);
     assertIdentityAnchor(compiler, input.identityVisibility, input.identityAnchor);
     const unitDir = resolve(outputDir, input.id);

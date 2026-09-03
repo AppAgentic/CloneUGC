@@ -100,6 +100,18 @@ function overlaps(aStart: number, aEnd: number, bStart: number, bEnd: number): b
   return aStart < bEnd && bStart < aEnd;
 }
 
+function withoutTerminalPunctuation(value: string): string {
+  return value.trim().replace(/[.!?]+$/, "");
+}
+
+function endpointDirection(instruction: string): string {
+  const ending = instruction.match(/ending (?:on|with) (.+?)[.]?$/i);
+  if (ending?.[1]) return `End with ${withoutTerminalPunctuation(ending[1])}.`;
+  const beginning = instruction.match(/beginning (?:on|with) (.+?)(?: and .+)?[.]?$/i);
+  if (beginning?.[1]) return `Begin with ${withoutTerminalPunctuation(beginning[1])}.`;
+  return "";
+}
+
 function directiveApplies(directive: TypedDirective, unit: { id: string; startMs: number; endMs: number }, anchorId?: string): boolean {
   const target = directive.target;
   if (target.scope === "global") return true;
@@ -110,6 +122,17 @@ function directiveApplies(directive: TypedDirective, unit: { id: string; startMs
 
 function directiveText(directive: TypedDirective): string {
   return directive.value !== undefined ? `${directive.intent} [${directive.value}]` : directive.intent;
+}
+
+function promptDirectiveSuffix(directives: readonly TypedDirective[]): string {
+  const preserve = directives.filter((directive) => directive.kind === "preserve")
+    .map((directive) => `${directive.dimension}: ${directive.value ?? directive.intent}`);
+  const change = directives.filter((directive) => directive.kind === "change")
+    .map((directive) => `${directive.dimension}: ${directive.value ?? directive.intent}`);
+  return [
+    preserve.length === 0 ? "" : ` Preserve exactly: ${preserve.join("; ")}.`,
+    change.length === 0 ? "" : ` Resolved changes: ${change.join("; ")}.`,
+  ].join("");
 }
 
 function finishUnit(unit: Omit<PlanUnit, "unitHash">): PlanUnit {
@@ -230,7 +253,7 @@ function buildPlan(input: {
       .filter((directive) => DIMENSION_IMPACT[directive.dimension] !== "finishing");
     const preserve = [...seed.preserve, ...applicable.filter((directive) => directive.kind === "preserve").map(directiveText)];
     const change = [...seed.change, ...applicable.filter((directive) => directive.kind === "change").map(directiveText)];
-    const directiveSuffix = applicable.length === 0 ? "" : ` Directives: ${applicable.map((directive) => `${directive.kind} ${directive.dimension} — ${directiveText(directive)}`).join("; ")}.`;
+    const directiveSuffix = promptDirectiveSuffix(applicable);
     const dependsOn: string[] = [];
     if (seed.motionStrategy !== "deterministic_source") {
       units.push(finishUnit({
@@ -353,10 +376,11 @@ function describeUnitFromMap(map: FidelityMap, unit: GenerationUnit): { anchorPr
   const setup = map.creatorWorkflow.setups.find((candidate) => candidate.id === unit.setupId);
   assert(setup !== undefined, `generation unit ${unit.id} references unknown setup ${unit.setupId}`);
   const segments = map.editSegments.filter((segment) => unit.sourceShotIds.includes(segment.sourceShotId));
-  const beats = map.beats.filter((beat) => overlaps(beat.range.startMs, beat.range.endMs, unit.range.startMs, unit.range.endMs));
+  const beats = map.beats.filter((beat) => beat.range.startMs >= unit.range.startMs && beat.range.endMs <= unit.range.endMs);
   const motionFields = map.secondaryMotion.fields.filter((field) => overlaps(field.range.startMs, field.range.endMs, unit.range.startMs, unit.range.endMs));
   const lightingEvents = map.lighting.events.filter((event) => overlaps(event.range.startMs, event.range.endMs, unit.range.startMs, unit.range.endMs));
-  const playback = segments.map((segment) => `${segment.sourceShotId}: ${segment.playback.classification}${segment.playback.estimatedMultiplier === undefined ? "" : ` (${segment.playback.estimatedMultiplier}x)`}`).join(", ");
+  const nonRealtimePlayback = segments.filter((segment) => segment.playback.classification !== "real_time")
+    .map((segment) => `${segment.playback.classification}${segment.playback.estimatedMultiplier === undefined ? "" : ` at ${segment.playback.estimatedMultiplier}x`}`).join(", ");
   const anchorPrompt = [
     `Subject anchor policy: ${map.creatorWorkflow.subjectAnchor}.`,
     `Camera: ${setup.cameraSignature}.`,
@@ -367,15 +391,15 @@ function describeUnitFromMap(map: FidelityMap, unit: GenerationUnit): { anchorPr
     `Persistent elements: ${map.creatorWorkflow.persistentElements.join(", ") || "none"}.`,
   ].join(" ");
   const motionPrompt = [
-    `Requested outcome: ${map.requestedChange}.`,
-    `Subject anchor policy: ${map.creatorWorkflow.subjectAnchor}.`,
-    `Starting setup: camera ${setup.cameraSignature}; environment ${setup.environmentSignature}; subject ${setup.subjectState}; wardrobe ${setup.wardrobeState}; lighting ${setup.lightingState}.`,
-    `Source shots ${unit.sourceShotIds.join(", ")} covering ${unit.range.startMs}-${unit.range.endMs}ms (${unit.targetDurationMs}ms).`,
-    beats.length === 0 ? "" : `Beats: ${beats.map((beat) => `${beat.role} ${beat.range.startMs}-${beat.range.endMs}ms — ${beat.description}`).join("; ")}.`,
-    `Playback: ${playback}.`,
-    motionFields.length === 0 ? `Secondary motion: ${map.secondaryMotion.summary}` : `Secondary motion: ${motionFields.map((field) => `${field.element} driven by ${field.driver} (${field.direction}, ${field.amplitude}, ${field.cadence}; ${field.coupling})`).join("; ")}.`,
-    lightingEvents.length === 0 ? "" : `Lighting events: ${lightingEvents.map((event) => `${event.range.startMs}-${event.range.endMs}ms ${event.description}`).join("; ")}.`,
-    `Capture artifacts to keep: ${map.lighting.captureArtifacts.join(", ") || "none"}.`,
+    "Create only one continuous take at natural real-time speed, starting exactly from the supplied setup frame.",
+    `Camera: ${setup.cameraSignature}. Environment: ${setup.environmentSignature}. Subject: ${setup.subjectState}. Wardrobe: ${setup.wardrobeState}. Lighting: ${setup.lightingState}.`,
+    `Required action order and continuity: ${unit.preserve.join("; ")}.`,
+    beats.length === 0 ? "" : `Action: ${beats.map((beat) => withoutTerminalPunctuation(beat.description)).join(" Then ")}.`,
+    endpointDirection(unit.trimInstruction),
+    nonRealtimePlayback.length === 0 ? "" : `Playback treatment: ${nonRealtimePlayback}.`,
+    motionFields.length === 0 ? `Secondary motion: ${map.secondaryMotion.summary}` : `Secondary motion: ${motionFields.map((field) => `${field.element} follows ${field.driver} naturally`).join("; ")}.`,
+    lightingEvents.length === 0 ? "" : `Lighting change: ${lightingEvents.map((event) => withoutTerminalPunctuation(event.description)).join("; ")}.`,
+    "Do not invent, repeat, or continue actions beyond this take's required sequence and endpoint.",
   ].filter((part) => part.length > 0).join(" ");
   return { anchorPrompt, motionPrompt };
 }
