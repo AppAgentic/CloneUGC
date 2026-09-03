@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "phase0-hand-wipe-endpoint-pair-v5",
+  "sourceAssetId": "tiktok-7672577678309870861",
+  "sourceContentSha256": "0db4e5c295d0a8d7046a71e27605a8a6bf6bee8cd16f2219a2e88878f1862ec8",
+  "fidelityMapHash": "264c503ea3b8f0c0925a96561b33b2e113335cf9668c8905ccd56fd89a245474",
+  "compilerPlanSha256": "beeb7fa1d1bd7701b175c0b93b747c1a1a46d3fa83b2e6d500eadf6bdb614584",
+  "sealedPlanSha256": "f676a24942aebee00d38ccaa7c10546d31048b1241754943b733d62dd3296aba",
+  "spendApprovalMessageTs": "1788476392.304709",
+  "approvedCapUsdMicros": 200000,
+  "automaticPaidRetries": 0,
+  "outcome": "incomplete_provider_content_policy_terminal",
+  "completedRequests": [
+    {"unitId":"unit-before","lane":"control","providerRequestId":"01a06980-7603-7293-a652-c06e36ad9048","outputSha256":"78a5e1ecb1bf4539da14a36542d58be37fa7366057d43c2e4c30b391ed7b4146"},
+    {"unitId":"unit-before","lane":"compiler","providerRequestId":"01a06980-9918-7d73-865a-de64f76bdcdc","outputSha256":"be64f3108ae9aaef89ca9f26dd7910e3f2bcbd0d4b3f0d2579939918e09f7e93"}
+  ],
+  "terminalRequest": {
+    "unitId": "unit-after",
+    "lane": "control",
+    "providerRequestId": "01a06980-c551-7ff3-a2f5-9ba8208616a8",
+    "providerStatus": "CONTENT_POLICY_VIOLATION",
+    "requestWasAccepted": true,
+    "resultArtifactPublished": false
+  },
+  "notSubmitted": [{"unitId":"unit-after","lane":"compiler"}],
+  "billingDisposition": "Treat both completed requests and the accepted terminal request as potentially billable; do not reuse the unspent planned call without fresh authority.",
+  "nextAttempt": "Use the same endpoint-bound contract with concise, fully clothed workout-state wording in both lanes; create a new sealed plan and require fresh approval."
+}

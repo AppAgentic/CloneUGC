@@ -346,17 +346,28 @@ def submit(args: argparse.Namespace, sealed: dict, unit: dict, lane: str, client
     atomic_json(receipt_path, record)
     print(json.dumps({"unit": unit["id"], "slot": slot, "status": "submitted", "requestId": request_id}), flush=True)
     started = time.monotonic()
-    while True:
-        status = client.status(ROUTE, request_id, with_logs=False)
-        status_name = type(status).__name__.upper()
-        if status_name == "COMPLETED":
-            break
-        if status_name not in {"QUEUED", "INQUEUE", "INPROGRESS"}:
-            record.update({"status": "provider_terminal", "providerStatus": status_name})
+    try:
+        while True:
+            status = client.status(ROUTE, request_id, with_logs=False)
+            status_name = type(status).__name__.upper()
+            if status_name == "COMPLETED":
+                break
+            if status_name not in {"QUEUED", "INQUEUE", "INPROGRESS"}:
+                record.update({"status": "provider_terminal", "providerStatus": status_name})
+                atomic_json(receipt_path, record)
+                raise RuntimeError(f"provider returned terminal status {status_name}")
+            time.sleep(3)
+        result = client.result(ROUTE, request_id)
+    except Exception as error:
+        detail = str(error).lower()
+        if "content_policy_violation" in detail:
+            record.update({"status": "provider_terminal", "providerStatus": "CONTENT_POLICY_VIOLATION", "errorType": type(error).__name__})
             atomic_json(receipt_path, record)
-            raise RuntimeError(f"provider returned terminal status {status_name}")
-        time.sleep(3)
-    result = client.result(ROUTE, request_id)
+            raise RuntimeError("provider accepted the request but returned a terminal content-policy result; retry forbidden") from None
+        if record.get("status") != "provider_terminal":
+            record.update({"status": "reconciliation_required", "errorType": type(error).__name__})
+            atomic_json(receipt_path, record)
+        raise RuntimeError("provider request requires reconciliation by persisted request id; automatic retry forbidden") from None
     video_url = (result.get("video") or {}).get("url")
     if not video_url:
         record.update({"status": "completed_without_video"})
