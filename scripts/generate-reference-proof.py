@@ -119,6 +119,8 @@ def is_content_policy_rejection(error: Exception) -> bool:
 
 
 def generation_prompt(args: argparse.Namespace) -> str:
+    if args.prompt_file is not None:
+        return args.prompt_file.read_text().strip()
     if args.generation_mode == "reference":
         return REFERENCE_PROMPT
     return TEXT_PROMPT_SEEDANCE_CAPTIONS if args.caption_mode == "seedance" else TEXT_PROMPT
@@ -131,6 +133,8 @@ def build_spec(args: argparse.Namespace, source_hash: str) -> dict[str, Any]:
         "schemaVersion": "0.2.0",
         "sourceContentSha256": source_hash,
         "rightsAttestationMessageTs": args.rights_attestation_ts,
+        "spendApprovalMessageTs": args.spend_approval_ts,
+        "maxApprovedCostUsd": args.max_cost_usd,
         "requestedChange": "none_exact_reconstruction",
         "analysisPromptVersion": "analysis-v2",
         "internalRoute": model,
@@ -177,6 +181,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("output_dir", type=Path)
     parser.add_argument("--expected-source-hash", required=True)
     parser.add_argument("--rights-attestation-ts", required=True)
+    parser.add_argument("--spend-approval-ts", required=True)
     parser.add_argument("--expected-spec-hash", required=True)
     parser.add_argument("--max-cost-usd", type=float, required=True)
     parser.add_argument("--provider-duration", type=int, default=6)
@@ -184,6 +189,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--resolution", choices=sorted(DIMENSIONS), default="480p")
     parser.add_argument("--generation-mode", choices=("reference", "text"), default="reference")
     parser.add_argument("--caption-mode", choices=("deterministic", "seedance"), default="deterministic")
+    parser.add_argument("--prompt-file", type=Path)
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args()
 
@@ -192,6 +198,10 @@ def main() -> int:
     args = parse_args()
     args.source = args.source.resolve()
     args.output_dir = args.output_dir.resolve()
+    if args.prompt_file is not None:
+        args.prompt_file = args.prompt_file.resolve()
+        if not args.prompt_file.is_file():
+            raise RuntimeError("prompt file is missing")
     if not args.source.is_file():
         raise RuntimeError("source video is missing")
     source_hash = sha256(args.source)
