@@ -13,7 +13,7 @@
   "automaticPaidRetries": 0,
   "laneMapping": {"A": "control", "B": "compiler"},
   "operatorSelection": "B",
-  "selectionInterpretation": "A was rejected for changing from a woman to a man; B was preferred with a slight palm-transition error.",
+  "selectionInterpretation": "B was preferred. A changed from a woman to a man because the benchmark preparer paired the approved woman setup frame with a stale male control-state prompt; this was an input-provenance bug, not evidence that H3 ignored a female prompt. B preserved the requested woman but contained an extra palm occlusion in the after take.",
   "selectedLane": "compiler",
   "providerRequestIds": [
     "01a06923-928b-7890-9aac-3c660496b6d7",
@@ -25,13 +25,31 @@
     "A": "778b1514f822a0578c17109ba22e40e079e9199965886749e73bff76a99ae1d5",
     "B": "aa84f5970352606fa7128465477b90d5f70f0be323adf11e2af3c5a298a866cf"
   },
-  "outcome": "compiler_preferred_transition_failed_pending_deterministic_repair_review",
+  "outcome": "compiler_preferred_zero_generation_repair_pending_operator_review",
+  "deterministicRepair": {
+    "paidGenerationCalls": 0,
+    "beforeTakeSha256": "586758a22cefce816e2f40fcc1df45944f21bc1775d0622a87bfae0233840d65",
+    "afterTakeSha256": "2e60612a24d6975075fd74bc3ee0324fc0ac7cecab102d39a8c754c786999dbe",
+    "outputSha256": "43bc7b1823168d6a39a8413bc73cd276f7e9e135dff12c886e44d0caf043252d",
+    "comparisonSha256": "9e00f4fbbe28eb21b92e1943cdf2b005c763b3e1ec433437cbb0937c0a90c49b",
+    "beforeRetimeFactor": 1.053,
+    "afterRetimeFactor": 1.096,
+    "removedAfterIntervalMs": [500, 900],
+    "qa": {
+      "model": "gemini-3.8-flash",
+      "mode": "agentic",
+      "completedAt": "2026-09-03T22:15:59Z",
+      "totalTokens": 21813,
+      "processingCalls": 4,
+      "verdict": "commercially viable; identity and wardrobe continuity preserved; no second palm occlusion; near-real-time cadence"
+    }
+  },
   "typedFindings": [
     {
       "dimension": "transition",
       "targetUnitId": "unit-after",
       "severity": "material",
-      "finding": "The compiler candidate preserved the requested woman and green after-state, but the assembled palm transition was wrong. The before generation contained a valid full-occlusion interval followed by an invalid withdrawal; the finisher compressed the full take and cut after the withdrawal instead of trimming on the valid palm interval."
+      "finding": "The compiler candidate preserved the requested woman and green after-state, but its 10-second after take invented a second palm occlusion. Compressing that take to the 5241 ms source interval exposed the invented action. Reuse the previously accepted 5-second after take and keep retiming within 10 percent."
     }
   ]
 }

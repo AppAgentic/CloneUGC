@@ -1,5 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { dirname, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import { contentHash } from "../src/canonical.ts";
 import { compilePlanFromFidelityMap } from "../src/compiler.ts";
 import { fidelityMapHash, type EvidenceClaim, type FidelityMap } from "../src/contracts.ts";
@@ -21,12 +23,42 @@ interface UnitInput {
   imageSha256: string;
   controlStateKey: string;
   imageProvenance: string;
+  identityVisibility?: "visible" | "fully_occluded";
+  identityAnchor?: string;
 }
 
 interface InputConfig {
   schemaVersion: "0.1.0";
+  controlStateSha256: string;
   units: UnitInput[];
   directives?: TypedDirective[];
+}
+
+export function providerDurationSeconds(targetDurationMs: number): 5 | 10 {
+  if (!Number.isInteger(targetDurationMs) || targetDurationMs <= 0) fail("target duration must be a positive integer");
+  if (targetDurationMs <= 5_500) return 5;
+  if (targetDurationMs <= 11_000) return 10;
+  fail("target duration exceeds the supported near-real-time H3 window");
+}
+
+function fileSha256(path: string): string {
+  return createHash("sha256").update(readFileSync(path)).digest("hex");
+}
+
+export function assertControlStateHash(expected: string, actual: string): void {
+  if (!/^[a-f0-9]{64}$/.test(expected) || expected !== actual) {
+    fail("control state hash does not match the approved creative state");
+  }
+}
+
+export function assertIdentityAnchor(prompt: string, visibility: UnitInput["identityVisibility"], anchor?: string): void {
+  if (visibility !== "fully_occluded") return;
+  if (!anchor?.trim()) fail("fully occluded setup frames require an explicit identity anchor");
+  const promptTerms = new Set(prompt.toLocaleLowerCase().match(/[a-z0-9]+/g) ?? []);
+  const anchorTerms = anchor.toLocaleLowerCase().match(/[a-z0-9]+/g) ?? [];
+  if (anchorTerms.some((term) => !promptTerms.has(term))) {
+    fail(`fully occluded setup frame prompt is missing identity anchor: ${anchor}`);
+  }
 }
 
 function fail(message: string): never {
@@ -46,6 +78,8 @@ function main(): void {
   const state = JSON.parse(readFileSync(statePath, "utf8")) as ControlState;
   const config = JSON.parse(readFileSync(configPath, "utf8")) as InputConfig;
   if (config.schemaVersion !== "0.1.0") fail("unsupported input config schema");
+  const controlStateSha256 = fileSha256(statePath);
+  assertControlStateHash(config.controlStateSha256, controlStateSha256);
   const mapHash = fidelityMapHash(fixture.map);
   if (mapHash !== fixture.fidelityMapHash) fail("fixture Fidelity Map hash mismatch");
   const revision = {
@@ -73,6 +107,8 @@ function main(): void {
       `Change: ${motion.change.join(", ")}.`,
       `Constraints: ${motion.constraints.join("; ")}.`,
     ].join(" ");
+    assertIdentityAnchor(control, input.identityVisibility, input.identityAnchor);
+    assertIdentityAnchor(compiler, input.identityVisibility, input.identityAnchor);
     const unitDir = resolve(outputDir, input.id);
     mkdirSync(unitDir, { recursive: true });
     const controlPath = resolve(unitDir, "control.txt");
@@ -84,12 +120,21 @@ function main(): void {
       imagePath: resolve(dirname(configPath), input.imagePath),
       imageSha256: input.imageSha256,
       imageProvenance: input.imageProvenance,
+      identityVisibility: input.identityVisibility ?? "visible",
+      identityAnchor: input.identityAnchor,
       controlPromptPath: controlPath,
       compilerPromptPath: compilerPath,
-      durationSeconds: motion.targetDurationMs <= 5_000 ? 5 : 10,
+      targetDurationMs: motion.targetDurationMs,
+      durationSeconds: providerDurationSeconds(motion.targetDurationMs),
+      maxAbsoluteRetimePercent: 10,
     };
   });
-  const manifest = { schemaVersion: "0.1.0", units: manifestUnits };
+  const manifest = {
+    schemaVersion: "0.1.0",
+    controlStatePath: statePath,
+    controlStateSha256,
+    units: manifestUnits,
+  };
   writeFileSync(resolve(outputDir, "unit-manifest.json"), `${JSON.stringify(manifest, null, 2)}\n`);
   const publicSummary = {
     schemaVersion: "0.1.0",
@@ -100,9 +145,11 @@ function main(): void {
     unitCount: manifestUnits.length,
     billedSecondsPerLane: manifestUnits.reduce((sum, unit) => sum + unit.durationSeconds, 0),
     configSha256: contentHash(config),
+    controlStatePath: statePath,
+    controlStateSha256,
   };
   writeFileSync(resolve(outputDir, "preparation-summary.json"), `${JSON.stringify(publicSummary, null, 2)}\n`);
   process.stdout.write(`${JSON.stringify(publicSummary, null, 2)}\n`);
 }
 
-main();
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) main();
