@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "0.1.0",
+  "recipeId": "hand-wipe-fitness-transformation",
+  "recipeRevision": 1,
+  "recipeHash": "0d841fb7e2af81fbd76e6e698b5e4fbfaf2fe84ea8a158134cb11686d31613fa",
+  "userPrompt": "Use the hand-wipe transformation format with a blonde woman, black gymwear before, green gymwear after, and caption it \"2 month using r3ta and pepmod app\".",
+  "resolvedValues": {
+    "subject_identity": "a clearly new fictional blonde young adult woman with a distinct oval face, blue eyes, and long blonde hair tied in a loose ponytail",
+    "gender_presentation": "female",
+    "before_state": "relaxed posture, softer cheek and jaw contours, relaxed chest and abdomen, no flexing",
+    "after_state": "leaner facial contours and visibly flexed chest, shoulders, arms and abdomen",
+    "before_wardrobe": "plain black gymwear",
+    "after_wardrobe": "plain green gymwear",
+    "setting": "a small ordinary beige bathroom with a ceiling vent, framed wall art and toilet",
+    "caption_text": "2 month using r3ta and pepmod app",
+    "audio_policy": "reuse the previously rights-approved spoken setup and beat-drop audio only after fresh instantiation approval"
+  },
+  "durationMs": 10031,
+  "aspectRatio": "9:16",
+  "lockedGrammar": [
+    "Two independently generated takes with one identity lineage",
+    "Locked low vertical phone camera and matched room geometry",
+    "Before-state turn from front to side/side profile to back double-biceps",
+    "Hand approaches and covers the lens at the end of shot one",
+    "Shot two begins fully occluded, then reveals the changed state",
+    "The audio payoff lands on the hand-wipe reveal",
+    "Caption is deterministic and appears only over the before take",
+    "Motion remains natural real-time"
+  ],
+  "shots": [
+    {
+      "id": "before-take",
+      "startMs": 0,
+      "endMs": 4790,
+      "transitionIn": "none",
+      "transitionDurationMs": 0,
+      "generationStrategy": "image_to_video",
+      "providerDurationMs": 5000,
+      "anchorPrompt": "Create a clearly new fictional blonde young adult woman with a distinct oval face, blue eyes, and long blonde hair tied in a loose ponytail with female presentation in a small ordinary beige bathroom with a ceiling vent, framed wall art and toilet, wearing plain black gymwear and showing relaxed posture, softer cheek and jaw contours, relaxed chest and abdomen, no flexing. Preserve the locked low phone framing and warm ordinary indoor light.",
+      "motionPrompt": "At natural real-time speed, turn from front to side, rotate to a back double-biceps pose, return toward side profile, then reach one hand forward until it covers the lens. Keep a clearly new fictional blonde young adult woman with a distinct oval face, blue eyes, and long blonde hair tied in a loose ponytail and relaxed posture, softer cheek and jaw contours, relaxed chest and abdomen, no flexing stable throughout.",
+      "lockedTraits": [
+        "fixed low phone camera",
+        "front-side-back-side action order",
+        "hand reaches lens",
+        "warm opening light"
+      ]
+    },
+    {
+      "id": "after-take",
+      "startMs": 4790,
+      "endMs": 10031,
+      "transitionIn": "match_cut",
+      "transitionDurationMs": 550,
+      "generationStrategy": "image_to_video",
+      "providerDurationMs": 5250,
+      "anchorPrompt": "Begin fully hand-occluded in the same a small ordinary beige bathroom with a ceiling vent, framed wall art and toilet, then reveal a clearly new fictional blonde young adult woman with a distinct oval face, blue eyes, and long blonde hair tied in a loose ponytail with female presentation, wearing plain green gymwear and showing leaner facial contours and visibly flexed chest, shoulders, arms and abdomen under brighter cooler light. Preserve the exact identity established in the opening take.",
+      "motionPrompt": "Pull the hand away in the first half-second, step back, flex with hands behind the back, adjust the waistband briefly, then turn to a quarter-side pose. Keep the exact same a clearly new fictional blonde young adult woman with a distinct oval face, blue eyes, and long blonde hair tied in a loose ponytail while expressing leaner facial contours and visibly flexed chest, shoulders, arms and abdomen at natural real-time speed.",
+      "lockedTraits": [
+        "same identity as opening",
+        "hand starts over lens",
+        "matched camera and room",
+        "brighter cooler reveal light",
+        "flex-and-turn action order"
+      ]
+    }
+  ],
+  "deterministicLayers": [
+    {
+      "id": "hook-caption",
+      "kind": "caption",
+      "startMs": 0,
+      "endMs": 4690,
+      "instruction": "Render exact text ‘2 month using r3ta and pepmod app’ in bold white centered sans-serif with a subtle dark shadow."
+    },
+    {
+      "id": "soundtrack",
+      "kind": "audio",
+      "startMs": 0,
+      "endMs": 10031,
+      "instruction": "Use this audio policy: reuse the previously rights-approved spoken setup and beat-drop audio only after fresh instantiation approval. Align the payoff beat to 4790ms."
+    },
+    {
+      "id": "hand-wipe-join",
+      "kind": "transition",
+      "startMs": 4240,
+      "endMs": 5340,
+      "instruction": "Join the independently generated takes through their hand-occluded frames; do not use a dissolve or generated morph."
+    }
+  ],
+  "planHash": "b0c7e2809328584b91b0f0ccaa56fe1a73c4460031024e3ec753d8ce6599d93b"
+}
