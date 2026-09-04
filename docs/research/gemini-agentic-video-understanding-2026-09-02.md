@@ -2,7 +2,9 @@
 
 Date: 2026-09-02
 
-Status: initial live probe and Phase 0 routing decision
+Status: historical initial probe; routing recommendation superseded on 2026-09-04
+
+Decision update: after later CloneUGC evidence showed Gemini 3.8 Agentic Video recovering exact choreography lost by the static-derived map, Joe approved Gemini 3.8 Agentic as the production default in Slack message `1788481441.757059`. Static processing remains a benchmark control and degraded fallback. The initial static-first recommendation below is retained as historical evidence, not current policy.
 
 ## Primary-source capability
 

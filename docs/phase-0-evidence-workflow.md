@@ -15,6 +15,8 @@ Create one `BenchmarkCorpus` JSON document containing exactly three distinct fam
 - `static_10fps`
 - `hybrid_agentic`
 
+`hybrid_agentic` is the backward-compatible benchmark schema name for the production lane: deterministic probes merged with a complete Gemini 3.8 Agentic Video analysis. The three static lanes are controls/fallback measurements only; they are not candidates for the normal production default.
+
 Every lane needs at least three repeats. All twelve lanes across the corpus must pin the same exact model identifier; moving `-latest` aliases are rejected. Each run must retain provider and artifact provenance plus latency, token, cost, and follow-up counts.
 
 Evaluate it with:

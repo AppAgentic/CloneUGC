@@ -224,7 +224,7 @@ The durable intelligence layer has four parts:
 3. Reconstruction compiler: turns the map and user changes into independent generation units, prompts, anchors, deterministic finishing, and invalidation rules.
 4. Comparative QA: evaluates source and result on matched timestamps/dimensions and proposes the smallest repair.
 
-Analysis should default to one pinned economical multimodal configuration plus deterministic FFmpeg evidence. Agentic follow-up is invoked only for ambiguity or failed evidence coverage. Avoid hard-coded content-specific heuristics such as exercise rep counts; represent general signals such as periodic motion, optical-flow cadence, audio/visual tempo disagreement, and edit boundaries.
+Analysis defaults to Gemini 3.8 Agentic Video plus deterministic FFmpeg evidence. Static analysis remains a benchmark control and explicitly degraded fallback, not the normal product route. Avoid hard-coded content-specific heuristics such as exercise rep counts; represent general signals such as periodic motion, optical-flow cadence, audio/visual tempo disagreement, and edit boundaries.
 
 Sensitive morphology and identity instructions require policy review and neutral, observable language before customer launch. Do not infer medical diagnoses or hidden attributes.
 
