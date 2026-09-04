@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "0.1.0",
+  "id": "phase0-family-montage-blind-pair-v3",
+  "supersedes": "phase0-family-montage-blind-pair-v2",
+  "sourceAssetId": "instagram-DcyIWPYtZkV",
+  "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+  "fidelityMapHash": "6317c4c350d015162e006d4ed9e5a36d69fb107498284620ecacf733e53085d0",
+  "compilerPlanSha256": "053dc99406ead10a347ec0a8fcf4a33fb9831fdbb089e5c64dd88e367afc5a4b",
+  "sealedPlanSha256": "2a4b0c11fa901f3b01e30dc85c663b651d32e994ee3a71ae1947556e8705aa72",
+  "spendApprovalMessageTs": "1788476680.107709",
+  "operatorSelectionMessageTs": "1788480654.050329",
+  "estimatedCostUsdMicros": 1200000,
+  "automaticPaidRetries": 0,
+  "laneMapping": {
+    "A": "control",
+    "B": "compiler"
+  },
+  "operatorSelection": "B",
+  "selectedLane": "compiler",
+  "providerRequestIds": [
+    "01a069b2-cb58-7093-b93d-5b19ed78abad",
+    "01a069b2-edfa-7f23-ac63-17a3b0527b23",
+    "01a069b3-136f-7152-9c74-55010752bde3",
+    "01a069b3-3419-7492-bd3d-5a6e64cbcac2",
+    "01a069b3-5a67-79d1-b372-2897a9e10343",
+    "01a069b3-7a5f-74f1-a434-32a6f2619de1",
+    "01a069b3-a5d2-7293-aeeb-74f655d40574",
+    "01a069b3-c6c2-7130-921e-8edb64768ef3",
+    "01a069b3-f871-7931-bab3-b08bdb568c75",
+    "01a069b4-1abc-75d2-8970-78e180ce49d7",
+    "01a069b4-44e7-7651-b8cc-db7aee38e755",
+    "01a069b4-7118-7d52-b7f9-516c0851ebf9",
+    "01a069b4-95a6-7d71-87f0-dca6dbd4f420",
+    "01a069b4-b70a-7d22-b880-4f83ca4f6fd7",
+    "01a069b4-e02f-7aa2-b8f2-c49996aa517f",
+    "01a069b5-012e-7853-93ff-ce97b2216ec5",
+    "01a069b5-26bb-73f1-b457-779e28cbf401",
+    "01a069b5-4711-7610-bdeb-9fd2ee6a2957",
+    "01a069b5-7aa2-7082-96da-327c15ee6b4e",
+    "01a069b5-9c5b-72e1-ab12-7444a4dd314d",
+    "01a069b5-c262-76d2-b6c5-61b05f3b37b3",
+    "01a069b5-e427-7dc3-af58-c8e49560d48b",
+    "01a069b6-0a93-78e3-9b62-8326458147ae",
+    "01a069b6-2cfa-7323-ad17-0727b9d1e8ed"
+  ],
+  "finishedOutputs": {
+    "A": "9202246d0fa95c89874f2b89bd395d77d5a771b1c1629df7c3ba515f68e368b5",
+    "B": "1e70f62b27523b24f29a1edda19d035b4e6e17adc4c25161f2e4b5800cdf785c"
+  },
+  "deterministicFinishing": {
+    "frameCount": 388,
+    "fps": 30,
+    "resolution": "720x1280",
+    "sourceAacElementaryStreamSha256": "dcd2bfed6bbcde03510b87689331009d380ac01f595d0e9bdf3a31cdeb95c33e",
+    "retimePolicy": "Each complete five-second H3 take was retimed into its exact source-local frame interval before trimming."
+  },
+  "qa": {
+    "model": "gemini-3.8-flash",
+    "mode": "agentic",
+    "candidateAArtifactSha256": "18bd6ca5d77497b9d704574023ac54b777544b47db685b2892bc4741dc84e622",
+    "candidateBArtifactSha256": "bdc04d0ecb5d51976daab23b1dd91bc3c95b216282ac98605397907707d59408",
+    "candidateAScore": 9,
+    "candidateBFinding": "Completed the fan, mirror wave, ripple snaps, and back-center double-biceps while preserving the fictional five-person family."
+  },
+  "outcome": "compiler_preferred_by_operator",
+  "conclusion": "With setup frames, seeds, provider settings, exact cut grammar, and finishing held constant, the operator preferred the Fidelity Map compiler lane over the concise control lane. This closes the family-montage compiler comparison but does not by itself close the three-family Phase 0 gate."
+}
