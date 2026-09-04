@@ -124,6 +124,7 @@ Per-unit latency was never captured. The kernel now records `createdAtMs`, `upda
 
 The repository now rejects incomplete Phase 0A evidence before it can be mistaken for a passing gate:
 
+- `AnalysisRunner` pins Gemini 3.8 Agentic as the production lane, counterbalances the four benchmark lanes, binds every run to source/prompt/deterministic-evidence hashes and an idempotency key, persists the unabridged raw interaction before its summary, includes tool-use tokens in telemetry, and refuses to resubmit failed/ambiguous units;
 - `scoreBenchmarkCorpus` requires exactly three distinct reference families, all four analyzer lanes, at least three repeated runs per lane, one pinned exact model across the corpus, immutable source hashes, and run-level provider/artifact/cost/latency provenance;
 - `scorePhase0Comparisons` requires three sealed A/B families, paid-unit request/seed/hash/cost/latency provenance, three unique lane-blind ballots per pair, complete ten-dimension scoring, majority preference plus higher median score, no rights regression, typed repair attribution for material failures, a cost ceiling, and at least one commercially usable compiler output;
 - `pnpm phase0:evaluate analysis <file>` and `pnpm phase0:evaluate comparisons <file>` produce machine-readable reports. The comparison report also hashes its complete input bundle.

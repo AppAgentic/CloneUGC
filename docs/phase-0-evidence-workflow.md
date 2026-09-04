@@ -19,6 +19,8 @@ Create one `BenchmarkCorpus` JSON document containing exactly three distinct fam
 
 Every lane needs at least three repeats. All twelve lanes across the corpus must pin the same exact model identifier; moving `-latest` aliases are rejected. Each run must retain provider and artifact provenance plus latency, token, cost, and follow-up counts.
 
+`src/analyzer-runner.ts` prepares the counterbalanced lane order and enforces the execution contract: pinned model/mode/sampling, deterministic-probe hash, idempotency key, full raw interaction persistence before summaries, structured-payload persistence, complete token/cost telemetry, and no resubmission of an ambiguous or failed unit. A static result is never eligible to materialize the production Fidelity Map. Even an Agentic result remains ineligible for paid generation until the resulting map, rights, and spend authority pass their separate validators.
+
 Evaluate it with:
 
 ```bash
