@@ -64,7 +64,7 @@ The first validated recipe is `hand-wipe-fitness-transformation`: two independen
 
 ### Gemini video-understanding strategy
 
-Use Gemini Agentic Video through the Files and Interactions APIs as the first forensic-analysis provider. The shared adapter is currently live on the exact model `gemini-3.7-flash`; Google's current guide also lists `gemini-3.8-flash`, and a same-day analysis-only canary verified that it supports the required Agentic Video contract. Before the corpus analysis bake-off, compare 3.7 and 3.8 on one permission-safe calibration clip using identical prompts and a blind annotation, then pin one exact model identifier across every lane and repeat. Never use a moving model alias or mix models inside the corpus benchmark. Keep processing mode explicit and persist the model, mode, latency, token breakdown, file provenance, interaction lineage, prompt version, and evidence timestamps with every candidate Fidelity Map.
+Use Gemini Agentic Video through the Files and Interactions APIs as the first forensic-analysis provider. The shared adapter and CloneUGC benchmark default are pinned to the exact model `gemini-3.8-flash` by operator decision `1788473005.698529`; do not run a 3.7-versus-3.8 selection stage or use a moving model alias. Keep processing mode explicit and persist the model, mode, latency, token breakdown, file provenance, interaction lineage, prompt version, and evidence timestamps with every candidate Fidelity Map.
 
 For CloneUGC's short references, agentic processing is a targeted semantic precision pass rather than a blanket replacement for static inspection:
 
@@ -102,7 +102,7 @@ Before seeing any model output or spending on generation, create a blind human a
 
 Run each model lane at least three times per clip and report claim stability. Measure shot-boundary precision/recall at ±100, ±250, and ±500 ms; boundary and segment-duration mean absolute error; segment-count error; global and per-segment playback-rate accuracy plus answer coverage; transition-type accuracy; action-event timing error; Preserve/Change/Exclude schema completeness; continuity-fact precision/recall; lighting-fact recall; secondary-motion-fact recall; rights-risk recall; unsupported-claim rate; latency; input/output/thought/tool-use tokens; and estimated analysis cost. Pair segments by maximum chronological time overlap so one missed early cut does not shift every later score. `unknown` is an abstention: exclude it from accuracy and report the resulting coverage separately, so uncertainty is visible without rewarding guesses. Treat `variable` as a committed class that must match the annotation. Treat gradual transitions as annotated intervals rather than point events. An unsupported claim is one lacking a valid evidence interval/frame or contradicted by the blind annotation after adjudication.
 
-Retain the exact model identifier, prompts, raw provider interactions, deterministic-probe outputs, hashes, and run IDs so disagreements can be audited. Provisional interactive budgets are no more than two agentic follow-ups, $0.05 total analysis cost per reference, and 45 seconds p95 end-to-end analysis latency; Phase 0 replaces these with measured ceilings before product scaffolding.
+Retain the exact model identifier, prompts, raw provider interactions, deterministic-probe outputs, hashes, and run IDs so disagreements can be audited. By operator decision `1788472597.889369`, CloneUGC does not impose a fixed analysis-call, token, follow-up, cost, or latency quota during this evidence run. Concurrency limits, request timeouts, persisted usage/cost telemetry, and runaway-job cancellation remain operational safeguards. Phase 0 must report measured distributions before product scaffolding; later product pricing or service-level limits are a separate decision based on that evidence.
 
 Select the hybrid lane only if its sub-second motion, causality, counting, occlusion, or continuity evidence improves against the human annotation without increasing unsupported claims or breaching the budgets. If it does not, keep the winning static configuration for that reference family and route Agentic Video only when a user's question requires it. Three reference clips remain a deliberately thin thesis test, not a production-quality claim.
 
@@ -233,7 +233,7 @@ An optional MCP Apps UI can show inline job/approval cards and a fullscreen sour
 ## Existing Infrastructure To Reuse Deliberately
 
 - Mobile Ad Agent: paid generation adapter patterns, cost estimation, Gemini video QA, and deterministic proof/caption finishing.
-- Mission Control: the shared `mc video-analyze` Gemini 3.7 Flash path, static-first/intent-driven Agentic Video routing, streamed uploads, provider-expiry caching, stateful follow-ups, bounded concurrency and agentic budgets, and persisted provenance.
+- Mission Control: the shared `mc video-analyze` Gemini 3.8 Flash path, static-first/intent-driven Agentic Video routing, streamed uploads, provider-expiry caching, stateful follow-ups, bounded concurrency and request timeouts, and persisted provenance.
 - Shared render architecture: durable leases, atomic publishing, deterministic finishing, and output manifests.
 - Existing MCP/OAuth work: WorkOS/AuthKit identity, Streamable HTTP MCP, revocation, audit, and approval contracts.
 
