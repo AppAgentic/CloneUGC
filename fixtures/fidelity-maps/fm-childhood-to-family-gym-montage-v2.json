@@ -1,10 +1,10 @@
 {
   "schemaVersion": "0.1.0",
-  "id": "fm-childhood-to-family-gym-montage-v1",
+  "id": "fm-childhood-to-family-gym-montage-v2",
   "recipeId": "childhood-to-family-gym-montage",
   "family": "multi-take posing montage",
   "materializedFrom": {
-    "analyzerOutput": "output/source-analysis/instagram-DcyIWPYtZkV/gemini-static.json",
+    "analyzerOutput": "Gemini 3.8 Agentic source-only choreography passes recorded 2026-09-03T23:41:05Z through 2026-09-03T23:42:41Z",
     "sceneDetectLog": "output/source-analysis/instagram-DcyIWPYtZkV/scene-detect.log",
     "sourceProbe": {
       "sha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
@@ -20,6 +20,8 @@
       "The shared CLI output does not persist the prompt version; analysis-v10-capture-workflow is taken from the recipe provenance for this source.",
       "FFmpeg select=scene showinfo found 16 scene changes; those timestamps are the system of record for hard cuts and produce 17 segments matching the recipe's 17 shots.",
       "The static analyzer reported nine coarse shots at whole-second resolution; deterministic probes split its first 'photo' shot into five reframes of the printed photograph.",
+      "Three source-only Gemini 3.8 Agentic passes recovered exact per-take start, ordered movement and endpoint choreography after the earlier map collapsed all adult actions into a generic posing label.",
+      "The exact deterministic cut boundaries remain the timestamp system of record; Agentic Video supplies semantic choreography inside those intervals.",
       "The childhood photograph depicts minors; the minor risk is recorded as excluded and can never be authorized.",
       "Rights remain unverified; analysis-only until a durable rights record exists."
     ],
@@ -30,7 +32,8 @@
       "providerRequestedDurationSecondsPerUnit": 5,
       "finalDurationSeconds": 12.955011,
       "finalFps": 30
-    }
+    },
+    "parentFidelityMapHash": "e003a259a09975d209f22d633a0933375e202ce196f06b2864310b4a8cf505d3"
   },
   "artifacts": [
     {
@@ -83,6 +86,84 @@
         "processingCalls": 0
       },
       "structuredPayloadArtifactId": "output/source-analysis/instagram-DcyIWPYtZkV/scene-detect.log",
+      "summaryTruncated": false
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "id": "instagram-DcyIWPYtZkV:gemini38-agentic-choreography",
+      "workspaceId": "phase-0-evidence",
+      "sourceAssetId": "instagram-DcyIWPYtZkV",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "normalizedContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "durationMs": 12933,
+      "normalizedFps": 30,
+      "originalOffsetMs": 0,
+      "providerRun": {
+        "provider": "google-gemini",
+        "exactModel": "gemini-3.8-flash",
+        "mode": "agentic",
+        "runId": "mc-video-analyze-agentic-2026-09-03T23:41:05Z",
+        "promptVersion": "family-choreography-source-only-v1",
+        "latencyMs": 114536,
+        "inputTokens": 8147,
+        "outputTokens": 4446,
+        "thoughtTokens": 16298,
+        "toolUseTokens": 368485,
+        "processingCalls": 17
+      },
+      "structuredPayloadArtifactId": "mc-video-analyze-result:2026-09-03T23:41:05Z",
+      "summaryTruncated": true
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "id": "instagram-DcyIWPYtZkV:gemini38-agentic-takes-6-12",
+      "workspaceId": "phase-0-evidence",
+      "sourceAssetId": "instagram-DcyIWPYtZkV",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "normalizedContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "durationMs": 12933,
+      "normalizedFps": 30,
+      "originalOffsetMs": 0,
+      "providerRun": {
+        "provider": "google-gemini",
+        "exactModel": "gemini-3.8-flash",
+        "mode": "agentic",
+        "runId": "mc-video-analyze-agentic-2026-09-03T23:42:17Z",
+        "promptVersion": "family-choreography-takes-6-12-v1",
+        "latencyMs": 65407,
+        "inputTokens": 4740,
+        "outputTokens": 3122,
+        "thoughtTokens": 8042,
+        "toolUseTokens": 152357,
+        "processingCalls": 14
+      },
+      "structuredPayloadArtifactId": "mc-video-analyze-result:2026-09-03T23:42:17Z",
+      "summaryTruncated": true
+    },
+    {
+      "schemaVersion": "0.2.0",
+      "id": "instagram-DcyIWPYtZkV:gemini38-agentic-takes-9-12",
+      "workspaceId": "phase-0-evidence",
+      "sourceAssetId": "instagram-DcyIWPYtZkV",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "normalizedContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "durationMs": 12933,
+      "normalizedFps": 30,
+      "originalOffsetMs": 0,
+      "providerRun": {
+        "provider": "google-gemini",
+        "exactModel": "gemini-3.8-flash",
+        "mode": "agentic",
+        "runId": "mc-video-analyze-agentic-2026-09-03T23:42:41Z",
+        "promptVersion": "family-choreography-takes-9-12-v1",
+        "latencyMs": 18413,
+        "inputTokens": 1019,
+        "outputTokens": 1023,
+        "thoughtTokens": 2249,
+        "toolUseTokens": 18039,
+        "processingCalls": 5
+      },
+      "structuredPayloadArtifactId": "mc-video-analyze-result:2026-09-03T23:42:41Z",
       "summaryTruncated": false
     }
   ],
@@ -214,6 +295,60 @@
       }
     },
     {
+      "id": "action-exact-takes-1-5",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini38-agentic-choreography",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "action",
+      "statement": "Adult takes 1-5 are, in order: a static five-person frontal power stance; a static five-person profile triceps line; a five-person depth stack with a subtle forearm/finger pulse; an arms-lowered depth stack that sweeps outward and upward into a multi-arm fan; and a static ground-level inward arc with four visible subjects and the fifth off-frame.",
+      "status": "accepted",
+      "confidence": 0.94,
+      "directObservation": true,
+      "range": {
+        "startMs": 5000,
+        "endMs": 7800,
+        "originalStartMs": 5000,
+        "originalEndMs": 7800,
+        "normalizedStartFrame": 150,
+        "normalizedEndFrame": 234
+      }
+    },
+    {
+      "id": "action-exact-takes-6-8",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini38-agentic-takes-6-12",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "action",
+      "statement": "Adult takes 6-8 are three distinct multi-arm actions: a woman-alone start that reveals four aligned siblings through a sequential low-to-high fan; an already spread oblique stack with a continuous wrist-and-finger ripple; and an arms-lowered frontal stack that rapidly snaps upward tier by tier into a five-person flex.",
+      "status": "accepted",
+      "confidence": 0.94,
+      "directObservation": true,
+      "range": {
+        "startMs": 7800,
+        "endMs": 9467,
+        "originalStartMs": 7800,
+        "originalEndMs": 9467,
+        "normalizedStartFrame": 234,
+        "normalizedEndFrame": 284
+      }
+    },
+    {
+      "id": "action-exact-takes-9-12",
+      "artifactId": "instagram-DcyIWPYtZkV:gemini38-agentic-takes-9-12",
+      "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
+      "kind": "action",
+      "statement": "Adult takes 9-12 are, in order: a three-visible-person depth stack holding an angled flex while the woman lowers her hands; a five-person dumbbell-rack formation where the back-center man snaps into double biceps; a static five-person low-angle flex lineup; and the same lineup match-cut into loose streetwear for a neutral hold.",
+      "status": "accepted",
+      "confidence": 0.96,
+      "directObservation": true,
+      "range": {
+        "startMs": 9467,
+        "endMs": 12933,
+        "originalStartMs": 9467,
+        "originalEndMs": 12933,
+        "normalizedStartFrame": 284,
+        "normalizedEndFrame": 388
+      }
+    },
+    {
       "id": "action-final-lineup",
       "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
       "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
@@ -236,7 +371,7 @@
       "artifactId": "instagram-DcyIWPYtZkV:gemini-static",
       "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
       "kind": "continuity",
-      "statement": "The five adults correspond to the five children in the opening photograph; one female and four male siblings persist across shots.",
+      "statement": "One female-presenting and four male-presenting adult sibling identities form the persistent roster, although deliberate depth stacking or off-frame staging means not all five bodies are visibly separable in every take.",
       "status": "accepted",
       "confidence": 0.8,
       "directObservation": false,
@@ -468,8 +603,8 @@
   ],
   "map": {
     "schemaVersion": "0.2.0",
-    "id": "fm-childhood-to-family-gym-montage-v1",
-    "revision": 1,
+    "id": "fm-childhood-to-family-gym-montage-v2",
+    "revision": 2,
     "sourceAssetId": "instagram-DcyIWPYtZkV",
     "sourceContentSha256": "d97cca86c3050c1b53fdd45a088dc04cdcb073a7ed67e5c1422b035774e67204",
     "durationMs": 12933,
@@ -1142,7 +1277,7 @@
           ],
           "cameraSignature": "Static frontal mirror shot, arms fanning sequentially",
           "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
-          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "subjectState": "Five adult siblings aligned in one depth column with every arm lowered and tucked close to the bodies before the fan reveal",
           "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
           "lightingState": "Overhead directional spotlighting, dark ambient background",
           "evidenceIds": [
@@ -1158,7 +1293,7 @@
           ],
           "cameraSignature": "Static wide frontal, half-circle lineup",
           "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
-          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "subjectState": "Four visible adult siblings—one woman and three men—in an inward-facing arc looking down; the fifth roster member is deliberately off-frame",
           "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
           "lightingState": "Overhead directional spotlighting, dark ambient background",
           "evidenceIds": [
@@ -1174,7 +1309,7 @@
           ],
           "cameraSignature": "Static frontal, seated center subject with standing siblings",
           "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
-          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "subjectState": "Front woman visible with hands together at her waist; four men aligned directly behind with arms lowered and bodies largely concealed",
           "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
           "lightingState": "Overhead directional spotlighting, dark ambient background",
           "evidenceIds": [
@@ -1206,7 +1341,7 @@
           ],
           "cameraSignature": "Static frontal, seated fan-out pose",
           "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
-          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "subjectState": "Front woman prominent with arms lowered; four men tightly aligned behind with their arms tucked down before the upward ripple",
           "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
           "lightingState": "Overhead directional spotlighting, dark ambient background",
           "evidenceIds": [
@@ -1222,7 +1357,7 @@
           ],
           "cameraSignature": "Static frontal, vertical stacked flex",
           "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
-          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "subjectState": "Three visibly separable adult siblings in a tight depth stack, with other roster members occluded behind the front bodies",
           "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
           "lightingState": "Overhead directional spotlighting, dark ambient background",
           "evidenceIds": [
@@ -1238,7 +1373,7 @@
           ],
           "cameraSignature": "Static frontal, cluster holding dumbbells",
           "environmentSignature": "Dark commercial gym with mirrors and overhead spot lighting",
-          "subjectState": "Five adult siblings in coordinated flex or arm-flare pose",
+          "subjectState": "Five adult siblings pre-posed behind the dumbbell rack except the elevated blond man keeps both arms lowered before his double-biceps snap",
           "wardrobeState": "Black tank tops, compression shirts, baggy track pants",
           "lightingState": "Overhead directional spotlighting, dark ambient background",
           "evidenceIds": [
@@ -1581,6 +1716,11 @@
           "targetDurationMs": 700,
           "providerDurationMs": 5000,
           "anchorFrameStrategy": "edit_subject_anchor",
+          "endpointFrame": {
+            "anchorFrameStrategy": "edit_subject_anchor",
+            "prompt": "The exact same five siblings complete the graded multi-arm fan, with the rear man finishing in high double biceps",
+            "evidenceIds": ["action-exact-takes-1-5"]
+          },
           "motionStrategy": "image_to_video",
           "transitionIn": "hard_cut",
           "transitionDurationMs": 0,
@@ -1653,6 +1793,11 @@
           "targetDurationMs": 600,
           "providerDurationMs": 5000,
           "anchorFrameStrategy": "edit_subject_anchor",
+          "endpointFrame": {
+            "anchorFrameStrategy": "edit_subject_anchor",
+            "prompt": "The same aligned five siblings finish the sequential low-to-high reveal as one multi-arm flex tableau",
+            "evidenceIds": ["action-exact-takes-6-8"]
+          },
           "motionStrategy": "image_to_video",
           "transitionIn": "hard_cut",
           "transitionDurationMs": 0,
@@ -1725,6 +1870,11 @@
           "targetDurationMs": 600,
           "providerDurationMs": 5000,
           "anchorFrameStrategy": "edit_subject_anchor",
+          "endpointFrame": {
+            "anchorFrameStrategy": "edit_subject_anchor",
+            "prompt": "The same five siblings finish the rapid bottom-to-top ripple as a layered multi-arm flex",
+            "evidenceIds": ["action-exact-takes-6-8"]
+          },
           "motionStrategy": "image_to_video",
           "transitionIn": "hard_cut",
           "transitionDurationMs": 0,
@@ -1797,6 +1947,11 @@
           "targetDurationMs": 1034,
           "providerDurationMs": 5000,
           "anchorFrameStrategy": "edit_subject_anchor",
+          "endpointFrame": {
+            "anchorFrameStrategy": "edit_subject_anchor",
+            "prompt": "The exact same five siblings hold their positions while the elevated blond man finishes in a double-biceps flex",
+            "evidenceIds": ["action-exact-takes-9-12"]
+          },
           "motionStrategy": "image_to_video",
           "transitionIn": "hard_cut",
           "transitionDurationMs": 0,
@@ -1914,36 +2069,88 @@
         ]
       },
       {
-        "id": "beat-escalation",
+        "id": "beat-adult-01-static-frontal",
         "role": "escalation",
-        "range": {
-          "startMs": 5000,
-          "endMs": 11533,
-          "originalStartMs": 5000,
-          "originalEndMs": 11533,
-          "normalizedStartFrame": 150,
-          "normalizedEndFrame": 346
-        },
-        "description": "Beat-synced posing montage",
-        "evidenceIds": [
-          "action-posing"
-        ]
+        "range": {"startMs":5000,"endMs":5467,"originalStartMs":5000,"originalEndMs":5467,"normalizedStartFrame":150,"normalizedEndFrame":164},
+        "description": "Hold the already-posed five-person frontal power stance: one woman centered in front in a wide stance, four men flanking; no new pose or reveal",
+        "evidenceIds": ["action-exact-takes-1-5"]
       },
       {
-        "id": "beat-payoff",
+        "id": "beat-adult-02-static-profile",
+        "role": "escalation",
+        "range": {"startMs":5467,"endMs":5967,"originalStartMs":5467,"originalEndMs":5967,"normalizedStartFrame":164,"normalizedEndFrame":179},
+        "description": "Hold the already-posed five-person single-file profile line facing right with side-triceps flexes; no pose change",
+        "evidenceIds": ["action-exact-takes-1-5"]
+      },
+      {
+        "id": "beat-adult-03-forearm-pulse",
+        "role": "escalation",
+        "range": {"startMs":5967,"endMs":6600,"originalStartMs":5967,"originalEndMs":6600,"normalizedStartFrame":179,"normalizedEndFrame":198},
+        "description": "In the five-person depth stack, make one subtle outward forearm-and-finger tension pulse and finish in the downward-angled flex",
+        "evidenceIds": ["action-exact-takes-1-5"]
+      },
+      {
+        "id": "beat-adult-04-fan-reveal",
+        "role": "escalation",
+        "range": {"startMs":6600,"endMs":7300,"originalStartMs":6600,"originalEndMs":7300,"normalizedStartFrame":198,"normalizedEndFrame":219},
+        "description": "Start with arms lowered in one depth column, then sweep outward and upward together into a graded multi-arm fan, ending with the rear man in high double biceps",
+        "evidenceIds": ["action-exact-takes-1-5"]
+      },
+      {
+        "id": "beat-adult-05-four-visible-hold",
+        "role": "escalation",
+        "range": {"startMs":7300,"endMs":7800,"originalStartMs":7300,"originalEndMs":7800,"normalizedStartFrame":219,"normalizedEndFrame":234},
+        "description": "Hold the ground-level inward-facing arc with four visible siblings—one woman and three men—and the fifth deliberately off-frame; everyone looks down toward camera",
+        "evidenceIds": ["action-exact-takes-1-5"]
+      },
+      {
+        "id": "beat-adult-06-low-to-high-fan",
+        "role": "escalation",
+        "range": {"startMs":7800,"endMs":8400,"originalStartMs":7800,"originalEndMs":8400,"normalizedStartFrame":234,"normalizedEndFrame":252},
+        "description": "Begin with only the front woman visible and hands together at her waist, then reveal four aligned men as arms fan sequentially from low to high, ending in a five-person multi-arm tableau",
+        "evidenceIds": ["action-exact-takes-6-8"]
+      },
+      {
+        "id": "beat-adult-07-wrist-ripple",
+        "role": "escalation",
+        "range": {"startMs":8400,"endMs":8867,"originalStartMs":8400,"originalEndMs":8867,"normalizedStartFrame":252,"normalizedEndFrame":266},
+        "description": "Keep the oblique five-person arm fan deployed while one fluid ripple travels through hands, wrists and splayed fingers",
+        "evidenceIds": ["action-exact-takes-6-8"]
+      },
+      {
+        "id": "beat-adult-08-upward-ripple-snap",
+        "role": "escalation",
+        "range": {"startMs":8867,"endMs":9467,"originalStartMs":8867,"originalEndMs":9467,"normalizedStartFrame":266,"normalizedEndFrame":284},
+        "description": "Start with the front woman's arms down and rear arms concealed, then snap outward and upward tier by tier into a five-person layered flex",
+        "evidenceIds": ["action-exact-takes-6-8"]
+      },
+      {
+        "id": "beat-adult-09-three-visible-hold",
+        "role": "escalation",
+        "range": {"startMs":9467,"endMs":10033,"originalStartMs":9467,"originalEndMs":10033,"normalizedStartFrame":284,"normalizedEndFrame":301},
+        "description": "Hold the three-visible-person depth stack and angled flex while the front woman's hands settle from waist to thighs; other roster members remain occluded in depth",
+        "evidenceIds": ["action-exact-takes-9-12"]
+      },
+      {
+        "id": "beat-adult-10-double-biceps-snap",
+        "role": "escalation",
+        "range": {"startMs":10033,"endMs":11067,"originalStartMs":10033,"originalEndMs":11067,"normalizedStartFrame":301,"normalizedEndFrame":332},
+        "description": "Hold the five-person dumbbell-rack formation while the back-center man snaps both arms upward into a double-biceps flex, then hold the endpoint",
+        "evidenceIds": ["action-exact-takes-9-12"]
+      },
+      {
+        "id": "beat-adult-11-static-flex",
+        "role": "escalation",
+        "range": {"startMs":11067,"endMs":11533,"originalStartMs":11067,"originalEndMs":11533,"normalizedStartFrame":332,"normalizedEndFrame":346},
+        "description": "Hold the already-posed five-person ground-level wide flex lineup without adding a new action",
+        "evidenceIds": ["action-exact-takes-9-12"]
+      },
+      {
+        "id": "beat-adult-12-streetwear-payoff",
         "role": "payoff",
-        "range": {
-          "startMs": 11533,
-          "endMs": 12933,
-          "originalStartMs": 11533,
-          "originalEndMs": 12933,
-          "normalizedStartFrame": 346,
-          "normalizedEndFrame": 388
-        },
-        "description": "Neutral hoodie lineup",
-        "evidenceIds": [
-          "action-final-lineup"
-        ]
+        "range": {"startMs":11533,"endMs":12933,"originalStartMs":11533,"originalEndMs":12933,"normalizedStartFrame":346,"normalizedEndFrame":388},
+        "description": "Match the preceding five-person lineup exactly but now in loose pump covers and streetwear; hold a relaxed deadpan stance with only subtle breathing",
+        "evidenceIds": ["action-exact-takes-9-12", "action-final-lineup"]
       }
     ],
     "directives": [
@@ -2056,5 +2263,5 @@
       }
     ]
   },
-  "fidelityMapHash": "e003a259a09975d209f22d633a0933375e202ce196f06b2864310b4a8cf505d3"
+  "fidelityMapHash": "6317c4c350d015162e006d4ed9e5a36d69fb107498284620ecacf733e53085d0"
 }

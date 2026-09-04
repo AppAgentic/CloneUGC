@@ -6,7 +6,7 @@
   "description": "Five hard-cut crops of one childhood sibling photo reveal into twelve independently recorded adult gym formations with the same fictional family identity lineage.",
   "provenance": {
     "sourceAssetId": "instagram-DcyIWPYtZkV",
-    "sourceFidelityMapHash": "e003a259a09975d209f22d633a0933375e202ce196f06b2864310b4a8cf505d3",
+    "sourceFidelityMapHash": "6317c4c350d015162e006d4ed9e5a36d69fb107498284620ecacf733e53085d0",
     "sourceRunManifestSha256": "a65edb59ce637f68a8156f82722c2bb563cb29fe3c4c92e9dc24040650c1170b",
     "extractionPromptVersion": "analysis-v10-capture-workflow",
     "rightsTransferPolicy": "structure_only"
@@ -112,7 +112,8 @@
     "qaMode": "hybrid",
     "sourceOutputId": "instagram-DcyIWPYtZkV-run-v1-gymlevels",
     "notes": [
-      "Linked on 2026-09-03 to validator-accepted Fidelity Map fm-childhood-to-family-gym-montage-v1 (fixtures/fidelity-maps/fm-childhood-to-family-gym-montage-v1.json), materialized from the persisted analyzer output and deterministic scene detection for this source.",
+      "Revision 2 links to validator-accepted Fidelity Map fm-childhood-to-family-gym-montage-v2 (fixtures/fidelity-maps/fm-childhood-to-family-gym-montage-v2.json), combining deterministic cut boundaries with three source-only Gemini 3.8 Agentic choreography passes.",
+      "The earlier map compressed twelve distinct adult actions into one generic posing label; revision 2 preserves each take's observed start, ordered movement, endpoint, visible subject count and camera state.",
       "Validated through 14 setup images, twelve independent five-second motion generations, exact source frame-count finishing and zero automatic retries.",
       "Manual full-timeline review confirmed stable fictional sibling identities, source-specific subject counts, hard cuts, formation variety and dark directional lighting.",
       "The childhood image is generated once and reframed deterministically; all adult takes use separate setup and motion units.",

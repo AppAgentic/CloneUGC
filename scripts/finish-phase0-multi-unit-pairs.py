@@ -92,8 +92,15 @@ def finish_family(root: Path, source: Path, crops: Path, slot: str, run_name: st
         command += ["-i", str(root / run_name / unit_id / f"slot-{slot}" / f"candidate-{slot}.mp4")]
     filters = []
     for index, frames in enumerate(FAMILY_FRAME_COUNTS):
+        timing = ""
+        if index >= 5:
+            # H3 emits five seconds per independently recorded take. Preserve the
+            # complete generated action, including its endpoint, by retiming all
+            # five seconds into the source take's exact frame interval. Trimming
+            # the first N frames instead silently discards late choreography.
+            timing = f"setpts=PTS*{frames / (5 * FPS):.12f},"
         filters.append(
-            f"[{index}:v]fps={FPS},scale={WIDTH}:{HEIGHT}:force_original_aspect_ratio=increase,"
+            f"[{index}:v]{timing}fps={FPS},scale={WIDTH}:{HEIGHT}:force_original_aspect_ratio=increase,"
             f"crop={WIDTH}:{HEIGHT},trim=end_frame={frames},setpts=PTS-STARTPTS,format=yuv420p[v{index}]"
         )
     filters.append("".join(f"[v{i}]" for i in range(17)) + "concat=n=17:v=1:a=0[video]")
@@ -136,6 +143,12 @@ def main() -> None:
     parser.add_argument("workspace", type=Path)
     parser.add_argument("--run-name", default="run")
     parser.add_argument("--suffix", default="")
+    parser.add_argument(
+        "--target",
+        choices=("all", "hand-wipe", "family"),
+        default="all",
+        help="Finish both evidence pairs or only one independently runnable pair.",
+    )
     args = parser.parse_args()
     workspace = args.workspace.resolve()
     hand_root = workspace / "tmp/phase0e-2026-09-03/hand-wipe"
@@ -146,20 +159,22 @@ def main() -> None:
     family_crops = workspace / "output/source-analysis/instagram-DcyIWPYtZkV/run-v1/photo-crops"
     outputs: dict[str, dict[str, dict]] = {"handWipe": {}, "family": {}}
     for slot in ("A", "B"):
-        hand = finish_hand_wipe(hand_root, hand_source, hand_overlay, slot, args.run_name, args.suffix)
-        hand_comparison = hand_root / f"comparison-original-left-candidate-{slot}{args.suffix}-right.mp4"
-        comparison(hand_source, hand, hand_comparison, 305)
-        family = finish_family(family_root, family_source, family_crops, slot, args.run_name, args.suffix)
-        family_comparison = family_root / f"comparison-original-left-candidate-{slot}{args.suffix}-right.mp4"
-        comparison(family_source, family, family_comparison, 388)
-        outputs["handWipe"][slot] = {
-            "candidate": {"path": str(hand), "sha256": sha256(hand), "probe": probe(hand)},
-            "comparison": {"path": str(hand_comparison), "sha256": sha256(hand_comparison), "probe": probe(hand_comparison)},
-        }
-        outputs["family"][slot] = {
-            "candidate": {"path": str(family), "sha256": sha256(family), "probe": probe(family)},
-            "comparison": {"path": str(family_comparison), "sha256": sha256(family_comparison), "probe": probe(family_comparison)},
-        }
+        if args.target in ("all", "hand-wipe"):
+            hand = finish_hand_wipe(hand_root, hand_source, hand_overlay, slot, args.run_name, args.suffix)
+            hand_comparison = hand_root / f"comparison-original-left-candidate-{slot}{args.suffix}-right.mp4"
+            comparison(hand_source, hand, hand_comparison, 305)
+            outputs["handWipe"][slot] = {
+                "candidate": {"path": str(hand), "sha256": sha256(hand), "probe": probe(hand)},
+                "comparison": {"path": str(hand_comparison), "sha256": sha256(hand_comparison), "probe": probe(hand_comparison)},
+            }
+        if args.target in ("all", "family"):
+            family = finish_family(family_root, family_source, family_crops, slot, args.run_name, args.suffix)
+            family_comparison = family_root / f"comparison-original-left-candidate-{slot}{args.suffix}-right.mp4"
+            comparison(family_source, family, family_comparison, 388)
+            outputs["family"][slot] = {
+                "candidate": {"path": str(family), "sha256": sha256(family), "probe": probe(family)},
+                "comparison": {"path": str(family_comparison), "sha256": sha256(family_comparison), "probe": probe(family_comparison)},
+            }
     manifest = {
         "schemaVersion": "0.1.0",
         "blindMappingStillSealed": True,

@@ -57,11 +57,14 @@ test("the hand-wipe map preserves two independent takes and one identity lineage
 });
 
 test("the multi-take montage map enforces one unit per deterministic cut and prohibits single generation", () => {
-  const family = fixtures.find((fixture) => fixture.id === "fm-childhood-to-family-gym-montage-v1")!;
+  const family = fixtures.find((fixture) => fixture.id === "fm-childhood-to-family-gym-montage-v2")!;
   assert.equal(family.map.editSegments.length, 17);
   assert.equal(family.map.creatorWorkflow.generationUnits.length, 17);
   assert.deepEqual(family.map.editSegments.slice(1).map((segment) => segment.range.startMs), [1733, 2233, 2833, 3800, 5000, 5467, 5967, 6600, 7300, 7800, 8400, 8867, 9467, 10033, 11067, 11533]);
   assert.ok(family.map.risks.some((risk) => risk.kind === "minor" && risk.disposition === "exclude"));
+  assert.equal(family.map.beats.filter((beat) => beat.range.startMs >= 5000).length, 12, "every adult take carries exact local choreography");
+  assert.ok(family.map.beats.some((beat) => beat.description.includes("four visible siblings")), "the map preserves deliberate off-frame staging instead of forcing five visible bodies");
+  assert.ok(family.map.beats.some((beat) => beat.description.includes("ripple travels through hands, wrists and splayed fingers")), "the map preserves dynamic arm choreography instead of a generic pose label");
   const revision = { schemaVersion: "0.1.0" as const, id: "rev-family", reconstructionId: "recon-family", revision: 1, fidelityMapHash: family.fidelityMapHash, sourceContentSha256: family.map.sourceContentSha256, userIntent: "Recreate with a fictional family", directives: [] };
   const plan = compilePlanFromFidelityMap({ map: family.map, evidence: family.evidence, revision });
   assertCompiledPlan(plan);
