@@ -42,7 +42,17 @@ The same source and prompt were also used to exercise the benchmark-only 5fps ro
 - Adapter-to-runner interaction after the explicit-zero telemetry fix: `v1_ChdUbW1hYW9QWEhzT1MzYm9Qc0pIRmtBRRIXVG1tYWFvUFhIc09TM2JvUHNKSEZrQUU`; unit `analysis-eedc72be3790326b0a704216`; 4,763 total tokens; lossless exchange SHA-256 `85f3893c5f000e98c9f3fe75e758a8ae0e58a761fe767b409de838632bf0b107`; structured payload SHA-256 `fcf84f3e986c59e86e01133b6c80e1bfc6ec2e0b87e673c28e1389d78d2820ad`; estimated cost $0.00746925.
 - The provider accepted `processing: {"type":"static","fps":5}`. CloneUGC preserved `samplingFps: 5`, correctly recorded zero Agentic processing calls, and marked the static output ineligible for Fidelity Map materialization and paid generation.
 
-Total estimated spend for all four transport canaries: $0.08053575.
+## Crash-durable restart canary
+
+- Unit: `analysis-3c0c97a2b1dbd38744ad69a7`
+- Provider interaction: `v1_ChdNbXFhYXFhbE9vamJ4czBQcGJQdC1RSRIXTW1xYWFxYWxPb2pieHMwUHBiUHQtUUk`
+- Mode: Agentic; three processing calls; 5,847 total tokens
+- Estimated cost: $0.00950325
+- Lossless exchange SHA-256: `9e4cee6320c36fa42aa3fd2d25bde9619a700c7089962f5a49ea6281f7796c0d`
+- Parsed structured payload SHA-256: `6fb2e4a2a3291b6e2f0774172691c6355712402e51d5531165130d8fca17457a`
+- The runner wrote the terminal record and both content-addressed artifacts to the filesystem store. A new runner then reopened the same unit with an intentionally nonexistent provider executable and returned the identical saved result; therefore restart recovery made no second provider call.
+
+Total estimated spend for all five transport/durability canaries: $0.09003900.
 
 ## What this proves
 
